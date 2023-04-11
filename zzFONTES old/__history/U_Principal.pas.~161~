@@ -1,0 +1,872 @@
+unit U_Principal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.ImageList, Vcl.ImgList, ShellAPI, IniFiles,
+  Vcl.ToolWin, Vcl.ComCtrls, System.Actions, Vcl.ActnList, Vcl.Menus,
+  Vcl.ExtCtrls, Vcl.AppEvnts, Vcl.Imaging.pngimage, Data.DB, Data.Win.ADODB;
+
+type
+  TF_Principal = class(TForm)
+    TBarPrincipal: TToolBar;
+    ImgHabilitado: TImageList;
+    imgDesabilitado: TImageList;
+    TBallo_DicaPrincipal: TBalloonHint;
+    MMenuPrincipal: TMainMenu;
+    ActionMenuPrincipal: TActionList;
+    stBarPrincipal: TStatusBar;
+    tmrDataHoraPrincipal: TTimer;
+    ApplicationEvents: TApplicationEvents;
+    CadUser: TAction;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    Sair: TAction;
+    pnlLogo: TPanel;
+    imgLogo: TImage;
+    Sistema1: TMenuItem;
+    CadastrodePerfil1: TMenuItem;
+    CadastrodeUsuarios1: TMenuItem;
+    Ferramentas1: TMenuItem;
+    Loogof1: TMenuItem;
+    Sair1: TMenuItem;
+    CadPerfil: TAction;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ADOQLogin: TADOQuery;
+    Logoff: TAction;
+    N1: TMenuItem;
+    Logs1: TMenuItem;
+    ActLogs: TAction;
+    actRelatorios: TAction;
+    Relatorios1: TMenuItem;
+    actPerfil_B: TAction;
+    PerfilBasico1: TMenuItem;
+    actPerfil_C: TAction;
+    PerfilCompleto1: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    actCadChacara: TAction;
+    CadastrodeContas1: TMenuItem;
+    actLuzMes: TAction;
+    CadastroContaGeral1: TMenuItem;
+    actConfiguracao: TAction;
+    Configuraao1: TMenuItem;
+    ToolButton9: TToolButton;
+    N5: TMenuItem;
+    CadastroContaGeral2: TMenuItem;
+    N6: TMenuItem;
+    actLeituraChacaras: TAction;
+    LeituradasChacaras1: TMenuItem;
+    ToolButton10: TToolButton;
+    actGerarContas: TAction;
+    N2: TMenuItem;
+    GerarContas1: TMenuItem;
+    ToolButton11: TToolButton;
+    ToolButton12: TToolButton;
+    actRelConfig: TAction;
+    ADOQLoginID: TAutoIncField;
+    ADOQLoginSTATUS: TStringField;
+    ADOQLoginINATIVO: TStringField;
+    ADOQLoginDATA_INC: TDateTimeField;
+    ADOQLoginDATA_ALT: TDateTimeField;
+    ADOQLoginDATA_HAB: TDateTimeField;
+    ADOQLoginDESC_USUARIO: TStringField;
+    ADOQLoginLOGIN: TStringField;
+    ADOQLoginSENHA: TStringField;
+    ADOQLoginID_PERFIL: TIntegerField;
+    ADOQLoginID_1: TAutoIncField;
+    ADOQLoginSTATUS_1: TStringField;
+    ADOQLoginINATIVO_1: TStringField;
+    ADOQLoginDATA_INC_1: TDateTimeField;
+    ADOQLoginDATA_ALT_1: TDateTimeField;
+    ADOQLoginDATA_HAB_1: TDateTimeField;
+    ADOQLoginDESC_PERFIL: TStringField;
+    ADOQLoginPERFIL_MENU: TStringField;
+    ADOQLoginPERFIL_INC: TStringField;
+    ADOQLoginPERFIL_ALT: TStringField;
+    ADOQLoginPERFIL_EXC: TStringField;
+    ADOQLoginPERFIL_MAR: TStringField;
+    ADOQLoginPERFIL_IMP: TStringField;
+    ADOQLoginPERFIL_INA: TStringField;
+    ADOQLoginPERFIL_HAB: TStringField;
+    ADOQLoginUSUARIO_MENU: TStringField;
+    ADOQLoginUSUARIO_INC: TStringField;
+    ADOQLoginUSUARIO_ALT: TStringField;
+    ADOQLoginUSUARIO_EXC: TStringField;
+    ADOQLoginUSUARIO_MAR: TStringField;
+    ADOQLoginUSUARIO_IMP: TStringField;
+    ADOQLoginUSUARIO_INA: TStringField;
+    ADOQLoginUSUARIO_HAB: TStringField;
+    ADOQLoginOCUTLTAR_C_OCULTO: TStringField;
+    ADOQLoginLOGOFF_MENU: TStringField;
+    ADOQLoginAJUDA_MENU: TStringField;
+    ADOQLoginSOBRE_MENU: TStringField;
+    ADOQLoginERRO_SISTEMA: TStringField;
+    ADOQLoginLOG_INICIAR: TStringField;
+    ADOQLoginLOG_ATIVIDADES: TStringField;
+    ADOQLoginLOG_INC: TStringField;
+    ADOQLoginLOG_ALT: TStringField;
+    ADOQLoginLOG_EXC: TStringField;
+    ADOQLoginLOG_MAR: TStringField;
+    ADOQLoginLOG_IMP: TStringField;
+    ADOQLoginLOG_INA: TStringField;
+    ADOQLoginLOG_HAB: TStringField;
+    ADOQLoginRELATORIOS_MENU: TStringField;
+    ADOQLoginRELATORIOS_PERFIL_BASICO: TStringField;
+    ADOQLoginRELATORIOS_PERFIL_COMP: TStringField;
+    ADOQLoginCADCHACA_MENU: TStringField;
+    ADOQLoginCADCHACA_INC: TStringField;
+    ADOQLoginCADCHACA_ALT: TStringField;
+    ADOQLoginCADCHACA_EXC: TStringField;
+    ADOQLoginCADCHACA_MAR: TStringField;
+    ADOQLoginCADCHACA_IMP: TStringField;
+    ADOQLoginCADCHACA_INA: TStringField;
+    ADOQLoginCADCHACA_HAB: TStringField;
+    ADOQLoginCONTAGERAL_MENU: TStringField;
+    ADOQLoginCONTAGERAL_INC: TStringField;
+    ADOQLoginCONTAGERAL_ALT: TStringField;
+    ADOQLoginCONTAGERAL_EXC: TStringField;
+    ADOQLoginCONTAGERAL_MAR: TStringField;
+    ADOQLoginCONTAGERAL_IMP: TStringField;
+    ADOQLoginCONTAGERAL_INA: TStringField;
+    ADOQLoginCONTAGERAL_HAB: TStringField;
+    ADOQLoginCONFIGURACAO_MENU: TStringField;
+    ADOQLoginCONFIGURACAO_INC: TStringField;
+    ADOQLoginCONFIGURACAO_ALT: TStringField;
+    ADOQLoginCONFIGURACAO_EXC: TStringField;
+    ADOQLoginCONFIGURACAO_MAR: TStringField;
+    ADOQLoginCONFIGURACAO_IMP: TStringField;
+    ADOQLoginCONFIGURACAO_INA: TStringField;
+    ADOQLoginCONFIGURACAO_HAB: TStringField;
+    ADOQLoginLEITURACHACARA_MENU: TStringField;
+    ADOQLoginLEITURACHACARA_INC: TStringField;
+    ADOQLoginLEITURACHACARA_ALT: TStringField;
+    ADOQLoginLEITURACHACARA_EXC: TStringField;
+    ADOQLoginLEITURACHACARA_MAR: TStringField;
+    ADOQLoginLEITURACHACARA_IMP: TStringField;
+    ADOQLoginLEITURACHACARA_INA: TStringField;
+    ADOQLoginLEITURACHACARA_HAB: TStringField;
+    ADOQLoginGERARCONTAS_MENU: TStringField;
+    ADOQLoginGERARCONTAS_INC: TStringField;
+    ADOQLoginGERARCONTAS_ALT: TStringField;
+    ADOQLoginGERARCONTAS_EXC: TStringField;
+    ADOQLoginGERARCONTAS_MAR: TStringField;
+    ADOQLoginGERARCONTAS_IMP: TStringField;
+    ADOQLoginGERARCONTAS_INA: TStringField;
+    ADOQLoginGERARCONTAS_HAB: TStringField;
+    ADOQLoginRELATORIOS_CONFIGERAL: TStringField;
+    actCaixaMov: TAction;
+    Financeiro1: TMenuItem;
+    ADOQLoginCONTPAGAR_MENU: TStringField;
+    ADOQLoginCONTPAGAR_INC: TStringField;
+    ADOQLoginCONTPAGAR_ALT: TStringField;
+    ADOQLoginCONTPAGAR_EXC: TStringField;
+    ADOQLoginCONTPAGAR_MAR: TStringField;
+    ADOQLoginCONTPAGAR_IMP: TStringField;
+    ADOQLoginCONTPAGAR_INA: TStringField;
+    ADOQLoginCONTPAGAR_HAB: TStringField;
+    ADOQLoginCONTRECEBER_MENU: TStringField;
+    ADOQLoginCONTRECEBER_INC: TStringField;
+    ADOQLoginCONTRECEBER_ALT: TStringField;
+    ADOQLoginCONTRECEBER_EXC: TStringField;
+    ADOQLoginCONTRECEBER_MAR: TStringField;
+    ADOQLoginCONTRECEBER_IMP: TStringField;
+    ADOQLoginCONTRECEBER_INA: TStringField;
+    ADOQLoginCONTRECEBER_HAB: TStringField;
+    ADOQLoginCAIXAMOVIMENTACAO_MENU: TStringField;
+    ADOQLoginCAIXAMOVIMENTACAO_INC: TStringField;
+    ADOQLoginCAIXAMOVIMENTACAO_ALT: TStringField;
+    ADOQLoginCAIXAMOVIMENTACAO_EXC: TStringField;
+    ADOQLoginCAIXAMOVIMENTACAO_MAR: TStringField;
+    ADOQLoginCAIXAMOVIMENTACAO_IMP: TStringField;
+    ADOQLoginCAIXAMOVIMENTACAO_INA: TStringField;
+    ADOQLoginCAIXAMOVIMENTACAO_HAB: TStringField;
+    actContaPagar: TAction;
+    ContasaPagar1: TMenuItem;
+    actContaReceber: TAction;
+    ContasaReceber1: TMenuItem;
+    actLiquidaContaPagar: TAction;
+    actLiquidaContaReceber: TAction;
+    actGeraContasRecPag: TAction;
+    N7: TMenuItem;
+    N8: TMenuItem;
+    LiquidarContasaPagar1: TMenuItem;
+    N9: TMenuItem;
+    LiquidarContasaReceber1: TMenuItem;
+    N10: TMenuItem;
+    GerarContas2: TMenuItem;
+    N11: TMenuItem;
+    CaixaMovimentacao2: TMenuItem;
+    ADOQLoginCAIXA_ABRIR: TStringField;
+    ADOQLoginCAIXA_FECHAR: TStringField;
+    actAbrirCaixa: TAction;
+    actFecharCaixa: TAction;
+    N12: TMenuItem;
+    AbrirCaixa1: TMenuItem;
+    FecharCaixa1: TMenuItem;
+    ADOQLoginGERACONTPAGREC_MENU: TStringField;
+    ADOQLoginCONTAPAGARLIQUIDAR_MENU: TStringField;
+    ADOQLoginCONTARECEBLIQUIDAR_MENU: TStringField;
+    ADOQLoginCREDITO_CLIENT_MENU: TStringField;
+    ADOQLoginCREDITO_CLIENT_INC: TStringField;
+    ADOQLoginCREDITO_CLIENT_ALT: TStringField;
+    ADOQLoginCREDITO_CLIENT_EXC: TStringField;
+    ADOQLoginCREDITO_CLIENT_MAR: TStringField;
+    ADOQLoginCREDITO_CLIENT_IMP: TStringField;
+    ADOQLoginCREDITO_CLIENT_INA: TStringField;
+    ADOQLoginCREDITO_CLIENT_HAB: TStringField;
+    actCreditoClient: TAction;
+    N13: TMenuItem;
+    N14: TMenuItem;
+    CreditodoCliente1: TMenuItem;
+    ADOQLoginFORNEC_MENU: TStringField;
+    ADOQLoginFORNEC_INC: TStringField;
+    ADOQLoginFORNEC_ALT: TStringField;
+    ADOQLoginFORNEC_EXC: TStringField;
+    ADOQLoginFORNEC_MAR: TStringField;
+    ADOQLoginFORNEC_IMP: TStringField;
+    ADOQLoginFORNEC_INA: TStringField;
+    ADOQLoginFORNEC_HAB: TStringField;
+    procedure tmrDataHoraPrincipalTimer(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure ApplicationEventsHint(Sender: TObject);
+    procedure SairExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure CadUserExecute(Sender: TObject);
+    procedure CadPerfilExecute(Sender: TObject);
+    procedure CadPerfilUpdate(Sender: TObject);
+    procedure CadUserUpdate(Sender: TObject);
+    procedure LogoffExecute(Sender: TObject);
+    procedure LogoffUpdate(Sender: TObject);
+    procedure ActLogsExecute(Sender: TObject);
+    procedure ActLogsUpdate(Sender: TObject);
+    procedure actRelatoriosUpdate(Sender: TObject);
+    procedure actPerfil_BUpdate(Sender: TObject);
+    procedure actPerfil_BExecute(Sender: TObject);
+    procedure actPerfil_CUpdate(Sender: TObject);
+    procedure actPerfil_CExecute(Sender: TObject);
+    procedure actCadChacaraExecute(Sender: TObject);
+    procedure actCadChacaraUpdate(Sender: TObject);
+    procedure actLuzMesExecute(Sender: TObject);
+    procedure actLuzMesUpdate(Sender: TObject);
+    procedure actConfiguracaoExecute(Sender: TObject);
+    procedure actConfiguracaoUpdate(Sender: TObject);
+    procedure actLeituraChacarasExecute(Sender: TObject);
+    procedure actLeituraChacarasUpdate(Sender: TObject);
+    procedure actGerarContasExecute(Sender: TObject);
+    procedure actGerarContasUpdate(Sender: TObject);
+    procedure actRelConfigUpdate(Sender: TObject);
+    procedure actCaixaMovUpdate(Sender: TObject);
+    procedure actCaixaMovExecute(Sender: TObject);
+    procedure actContaPagarUpdate(Sender: TObject);
+    procedure actContaPagarExecute(Sender: TObject);
+    procedure actContaReceberUpdate(Sender: TObject);
+    procedure actContaReceberExecute(Sender: TObject);
+    procedure actAbrirCaixaUpdate(Sender: TObject);
+    procedure actAbrirCaixaExecute(Sender: TObject);
+    procedure actFecharCaixaUpdate(Sender: TObject);
+    procedure actFecharCaixaExecute(Sender: TObject);
+    procedure actGeraContasRecPagUpdate(Sender: TObject);
+    procedure actGeraContasRecPagExecute(Sender: TObject);
+    procedure actLiquidaContaPagarExecute(Sender: TObject);
+    procedure actLiquidaContaPagarUpdate(Sender: TObject);
+    procedure actCreditoClientUpdate(Sender: TObject);
+    procedure actCreditoClientExecute(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure AbreForm (aClasseForm: TComponentClass; aForm:TForm);  { Procedimento para abri Forms}
+    procedure LerIni; // Procedure Para Ler Arquivos Ini
+  end;
+
+var
+  F_Principal: TF_Principal;
+
+  Servidor, BancoDelphi,NoEmpresa,senha, Pais, Empresa, CaminhoFotoProd,CaptionTelaInicial, Logo, LogoP, LogoG: string; // Variaveis de Arquivos Ini
+  NOMEEMPRESA, NomeClienteConta, CPF_Cliente, AtendimentoCPFL, PINCPFL, SeuCodigo: string;  // Variaveis de Arquivos Ini
+  caminhoRelBanco: string;   // Para Gerar o Relatorio
+  NumeroCaixa: Integer; // PARA PEGAR O NUMERO DO CAIXA
+implementation
+
+{$R *.dfm}
+
+uses U_FazerEmprestimo, U_Usuario, U_DMPrincipal, U_Login, U_Perfil, U_Logs, U_DMRelatorios, U_CadChacara,
+  U_ContaGeral, U_Configuracao, U_LeituraChacaras, U_GerarConta, U_CAIXAMOVIMENTO, U_ContaPagar, U_ContaReceber, U_CaixaAbrir, U_CaixaFechar, U_GeraParcelas_Pag_Recr, U_ContaPagarLiquidar,
+  U_CreditoCliente;
+
+procedure TF_Principal.AbreForm(aClasseForm: TComponentClass; aForm: TForm);
+begin
+    try
+        Application.CreateForm(aClasseForm, aForm);
+        aForm.ShowModal;
+    finally
+        FreeAndNil(aForm);
+    end;
+end;
+
+procedure TF_Principal.actAbrirCaixaExecute(Sender: TObject);
+begin
+// Criar o From Abrir Caixa
+  AbreForm(TF_CaixaAbrir, F_CaixaAbrir);
+end;
+
+procedure TF_Principal.actAbrirCaixaUpdate(Sender: TObject);
+var
+  qry: TADOQuery;
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Tela de Abrir Caixa
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('CAIXA_ABRIR').AsAnsiString = 'S');
+
+    // Verificando se o Caixa esta Aberto
+     try
+      // Criando Um ADOQUERY Em Tempo de Execução
+         qry:= TADOQuery.Create(nil);
+         qry.Connection:= DMPrincipal.ADOConnectionPrincipal;
+      // Usando o ADOQUERY Criado
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add(' select top 1 ID from TB_CAIXA_ABREFECHA where DATA_FINAL is null and HORA_FINAL is null');
+        qry.Open;
+          if (qry.RecordCount = 0) then
+            begin
+              actFecharCaixa.Visible:= False;
+              actAbrirCaixa.Visible:= True;
+            end
+          else
+            begin
+              actAbrirCaixa.Visible:= False;
+              actFecharCaixa.Visible:= True;
+            end;
+     finally
+        FreeAndNil(qry);
+     end;
+
+end;
+
+procedure TF_Principal.actCadChacaraExecute(Sender: TObject);
+begin
+// Criar o From Cadastro de Chacaras em tempo de Execucao
+  try
+    F_CadChacara:= TF_CadChacara.Create(Application);
+    F_CadChacara.ShowModal;
+  finally
+    FreeAndNil(F_CadChacara);
+  end;
+end;
+
+procedure TF_Principal.actCadChacaraUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Cadastro de chacaras
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('CADCHACA_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actCaixaMovExecute(Sender: TObject);
+begin
+// Criar o From Caixa movimentacao
+  AbreForm(TF_CaixaMovimento, F_CaixaMovimento);
+end;
+
+procedure TF_Principal.actCaixaMovUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir caixa movimentacao
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('CAIXAMOVIMENTACAO_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actConfiguracaoExecute(Sender: TObject);
+begin
+// Criar o From Configuracao em tempo de Execucao
+  try
+    F_Configuracao:= TF_Configuracao.Create(Application);
+    F_Configuracao.ShowModal;
+  finally
+    FreeAndNil(F_Configuracao);
+  end;
+end;
+
+procedure TF_Principal.actConfiguracaoUpdate(Sender: TObject);
+begin
+  // Verificando a Permissao Pra Ver se pode Abrir Configuracao
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('CONFIGURACAO_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actContaPagarExecute(Sender: TObject);
+begin
+// Criar o From Contas a Pagar
+  AbreForm(TF_ContaPagar, F_ContaPagar);
+end;
+
+procedure TF_Principal.actContaPagarUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Contas a Pagar
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('CONTPAGAR_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actContaReceberExecute(Sender: TObject);
+begin
+// Criar o From Contas a Receber
+  AbreForm(TF_ContaReceber, F_ContaReceber);
+end;
+
+procedure TF_Principal.actContaReceberUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Contas a Receber
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('CONTRECEBER_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actCreditoClientExecute(Sender: TObject);
+begin
+// Criar o From Credito do Cliente
+  AbreForm(TF_CreditoCliente, F_CreditoCliente);
+end;
+
+procedure TF_Principal.actCreditoClientUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Tela de Fechar Caixa
+   actCreditoClient.Visible:= (ADOQLogin.FieldByName('CREDITO_CLIENT_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actFecharCaixaExecute(Sender: TObject);
+begin
+// Criar o From Fechar Caixa
+  AbreForm(TF_CaixaFechar, F_CaixaFechar);
+end;
+
+procedure TF_Principal.actFecharCaixaUpdate(Sender: TObject);
+var
+  qry: TADOQuery;
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Tela de Fechar Caixa
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('CAIXA_FECHAR').AsAnsiString = 'S');
+
+    // Verificando se o Caixa esta Aberto
+      try
+      // Criando Um ADOQUERY Em Tempo de Execução
+         qry:= TADOQuery.Create(nil);
+         qry.Connection:= DMPrincipal.ADOConnectionPrincipal;
+      // Usando o ADOQUERY Criado
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add(' select top 1 ID from TB_CAIXA_ABREFECHA where DATA_FINAL is null and HORA_FINAL is null');
+        qry.Open;
+          if (qry.RecordCount = 0) then
+            begin
+              actFecharCaixa.Visible:= False;
+              actAbrirCaixa.Visible:= True;
+            end
+          else
+            begin
+              actAbrirCaixa.Visible:= False;
+              actFecharCaixa.Visible:= True;
+            end;
+      finally
+        FreeAndNil(qry);
+      end;
+end;
+
+procedure TF_Principal.actGeraContasRecPagExecute(Sender: TObject);
+begin
+// Criar o From Abrir TELA DE GERAR CONTAS A PAGAR E RECEBER
+  AbreForm(TF_GeraParcelas_Pag_Recr, F_GeraParcelas_Pag_Recr);
+end;
+
+procedure TF_Principal.actGeraContasRecPagUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Tela de Gerar Parcelas de contas a pagar e receber
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('GERACONTPAGREC_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actGerarContasExecute(Sender: TObject);
+begin
+// Criar o From Gerar Conta Geral das Chacaras em tempo de Execucao
+  AbreForm(TF_GerarConta, F_GerarConta);
+end;
+
+procedure TF_Principal.actGerarContasUpdate(Sender: TObject);
+begin
+ // Verificando a Permissao Pra Ver se pode Abrir Leitura das Chacaras
+   actGerarContas.Visible:= (ADOQLogin.FieldByName('GERARCONTAS_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actLeituraChacarasExecute(Sender: TObject);
+begin
+// Criar o From Leitura das Chacaras em tempo de Execucao
+  try
+    F_LeituraChacaras:= TF_LeituraChacaras.Create(Application);
+    F_LeituraChacaras.ShowModal;
+  finally
+    FreeAndNil(F_LeituraChacaras);
+  end;
+end;
+
+procedure TF_Principal.actLeituraChacarasUpdate(Sender: TObject);
+begin
+ // Verificando a Permissao Pra Ver se pode Abrir Leitura das Chacaras
+   actLuzMes.Visible:= (ADOQLogin.FieldByName('LEITURACHACARA_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actLiquidaContaPagarExecute(Sender: TObject);
+begin
+// Criar o From Abrir Liquida Contas a Pagar
+  AbreForm(TF_ContaPagarLiquidar, F_ContaPagarLiquidar);
+end;
+
+procedure TF_Principal.actLiquidaContaPagarUpdate(Sender: TObject);
+var
+  qry: TADOQuery;
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Tela de Abrir Liquidar contas a Pagar
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('CONTAPAGARLIQUIDAR_MENU').AsAnsiString = 'S');
+
+    // Verificando se o Caixa esta Aberto
+     try
+      // Criando Um ADOQUERY Em Tempo de Execução
+         qry:= TADOQuery.Create(nil);
+         qry.Connection:= DMPrincipal.ADOConnectionPrincipal;
+      // Usando o ADOQUERY Criado
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add(' select top 1 ID from TB_CAIXA_ABREFECHA where DATA_FINAL is null and HORA_FINAL is null');
+        qry.Open;
+          if (qry.RecordCount = 0) then
+            begin
+              actFecharCaixa.Visible:= False;
+              actAbrirCaixa.Visible:= True;
+            end
+          else
+            begin
+              actAbrirCaixa.Visible:= False;
+              actFecharCaixa.Visible:= True;
+            end;
+     finally
+        FreeAndNil(qry);
+     end;
+end;
+
+procedure TF_Principal.actLuzMesExecute(Sender: TObject);
+begin
+// Criar o From Conta Geral em tempo de Execucao
+  try
+    F_ContaGeral:= TF_ContaGeral.Create(Application);
+    F_ContaGeral.ShowModal;
+  finally
+    FreeAndNil(F_ContaGeral);
+  end;
+end;
+
+procedure TF_Principal.actLuzMesUpdate(Sender: TObject);
+begin
+ // Verificando a Permissao Pra Ver se pode Abrir Logs
+   actLuzMes.Visible:= (ADOQLogin.FieldByName('CONTAGERAL_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.ActLogsExecute(Sender: TObject);
+begin
+// Criar o From Logs em tempo de Execucao
+  try
+    F_Logs:= TF_Logs.Create(Application);
+    F_Logs.ShowModal;
+  finally
+    FreeAndNil(F_Logs);
+  end;
+end;
+
+procedure TF_Principal.ActLogsUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Logs
+   ActLogs.Visible:= (ADOQLogin.FieldByName('LOG_ATIVIDADES').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actPerfil_BExecute(Sender: TObject);
+begin
+ // Relatorio de Perfil Basico
+  caminhoRelBanco:= 'C:\Gerar_Contas_Chacaras\RELATORIO\';   // Caminho do Relatorio
+  DMRelatorios.frxReportPerfilTodos.LoadFromFile(caminhoRelBanco+'RelPerfilTodos.fr3'); // Lendo o Arquivo de Relatorio)
+  DMRelatorios.frxReportPerfilTodos.Variables['Nome_Empresa']:= QuotedStr(NOMEEMPRESA); // Colocando a Variavel do titulo do Relatorio
+  DMRelatorios.frxReportPerfilTodos.ShowReport();
+
+end;
+
+procedure TF_Principal.actPerfil_BUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Menu Relatorios Perfil Basico
+   actPerfil_B.Visible:= (ADOQLogin.FieldByName('RELATORIOS_PERFIL_BASICO').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actPerfil_CExecute(Sender: TObject);
+begin
+ // Relatorio de Perfil Completo
+  caminhoRelBanco:= 'C:\Gerar_Contas_Chacaras\RELATORIO\';   // Caminho do Relatorio
+  DMRelatorios.FRXPerfilTodosC.LoadFromFile(caminhoRelBanco+'RelPerfilTodosC.fr3'); // Lendo o Arquivo de Relatorio)
+  DMRelatorios.FRXPerfilTodosC.Variables['Nome_Empresa']:= QuotedStr(NoEmpresa); // Colocando a Variavel do titulo do Relatorio
+  DMRelatorios.FRXPerfilTodosC.ShowReport();
+end;
+
+procedure TF_Principal.actPerfil_CUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Menu Relatorios Perfil Completo
+   actPerfil_C.Visible:= (ADOQLogin.FieldByName('RELATORIOS_PERFIL_COMP').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actRelatoriosUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Menu Relatorios
+   actRelatorios.Visible:= (ADOQLogin.FieldByName('RELATORIOS_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.actRelConfigUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Menu Relatorios Configuracao Geral
+   actPerfil_C.Visible:= (ADOQLogin.FieldByName('RELATORIOS_CONFIGERAL').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.ApplicationEventsHint(Sender: TObject);
+begin
+  // Mostrando as Dicas no Status Bar
+  stbarPrincipal.Panels[3].Text:= ' '+ application.Hint;     // Mostrando os Hint no Status Bar
+end;
+
+procedure TF_Principal.CadPerfilExecute(Sender: TObject);
+begin
+// Criar o From Perfil em tempo de Execucao
+  try
+    F_Perfil:= TF_Perfil.Create(Application);
+    F_Perfil.ShowModal;
+  finally
+    FreeAndNil(F_Perfil);
+  end;
+end;
+
+procedure TF_Principal.CadPerfilUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Perfil
+   CadPerfil.Visible:= (ADOQLogin.FieldByName('PERFIL_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.CadUserExecute(Sender: TObject);
+begin
+// Criar o From Usuario em tempo de Execucao
+  try
+    F_Usuario:= TF_Usuario.Create(Application);
+    F_Usuario.ShowModal;
+  finally
+    FreeAndNil(F_Usuario);
+  end;
+end;
+
+procedure TF_Principal.CadUserUpdate(Sender: TObject);
+begin
+// Verificando a Permissao Pra Ver se pode Abrir Usuarios
+    CadUser.Visible:= (ADOQLogin.FieldByName('USUARIO_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.FormActivate(Sender: TObject);
+Var
+  KeyState: TKeyboardState;
+  qry: TADOQuery;
+begin
+    // Configurando a Data
+    stBarPrincipal.Panels[1].Text:= FormatDateTime(' dddddd',Now);   // Configurar Data
+    stbarPrincipal.Panels[4].Text:= NoEmpresa;  // Arquivo INI -- Nome da Empresa
+    imgLOGO.Picture.LoadFromFile(Logo);      // Colocar o Logo Na Tela Principal
+
+ // Verificar se a Tecla CapsLook esta Acionada, se nao acionar
+   GetKeyboardState(KeyState);
+  if(KeyState[VK_CAPITAL] = 0) then
+    begin
+      Keybd_Event(VK_CAPITAL, 1, KEYEVENTF_EXTENDEDKEY or 0, 0);
+      Keybd_Event(VK_CAPITAL, 1, KEYEVENTF_EXTENDEDKEY or KEYEVENTF_KEYUP, 0);
+    end;
+
+{$REGION 'Caixa Aberto ? '} // Verificando se Existe caixa Aberto
+      try
+      // Criando Um ADOQUERY Em Tempo de Execução
+         qry:= TADOQuery.Create(nil);
+         qry.Connection:= DMPrincipal.ADOConnectionPrincipal;
+      // Usando o ADOQUERY Criado
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add(' select top 1 ID from TB_CAIXA_ABREFECHA where DATA_FINAL is null and HORA_FINAL is null');
+        qry.Open;
+          if (qry.RecordCount = 0) then
+            begin
+              MensageAppMesBox:= '   ABRIR  CAIXA  ';
+              mensagem:= '   NÃO EXISTE CAIXA ABERTO,'    +#13 +#13
+                       +' DESEJA ABRIR O CAIXA AGORA?' +#13;
+            // Para Abrir o caixa neste momento ou nao
+              if Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_YESNO+MB_ICONINFORMATION) = mrYes then
+                begin
+                  AbrirCaixaBTNFechar:= 0;
+                  AbrirCaixa1.Click;
+                end;
+            end
+          else
+            begin
+              NumeroCaixa:= qry.Fields[0].Value;
+            end;
+      finally
+        FreeAndNil(qry);
+      end;
+ {$ENDREGION} // Fim
+
+end;
+
+procedure TF_Principal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+    // Somente Para Verificar se Quer Sair do Sistema Realmente
+    if Application.MessageBox('          Deseja   Realmente   Fechar   a   Aplicação?          ',PChar('NoEmpresa'), MB_YESNO+MB_ICONQUESTION) = mrYes then
+       begin
+         // Abrir a Tabela de Gravar Login
+                  DMPrincipal.ADOGrava_Login.Open;
+          // Inserindo as Informações
+                  DMPrincipal.ADOGrava_Login.Append;
+          // Grava na Tabela de GravarLogins as informações de quem esta logando e que horas logou
+                  DMPrincipal.ADOGrava_LoginCOD_USUARIO.Value:=F_Principal.ADOQLoginID.Value ;   // Pega o Codigo do Usuario
+                  DMPrincipal.ADOGrava_LoginLOGIN.Value:= F_Principal.ADOQLoginLOGIN.Value;                            // Pega o Nome De Login
+                  DMPrincipal.ADOGrava_LoginDT_LOGIN.Value:= (Now); // Pegar a Data do Login
+                  DMPrincipal.ADOGrava_LoginHR_LOGIN.Value:= FormatDateTime('hh:mm:ss',Now); // Pega a Hora do Login
+                  DMPrincipal.ADOGrava_LoginENTRADA_SAIDA.Value:= 'S';
+                  DMPrincipal.ADOGrava_Login.Post;                   // Salvar
+                  DMPrincipal.ADOGrava_Login.Close;                 // Fechar a Tabela
+
+          Application.Terminate;
+       end
+    else
+      Abort;
+end;
+
+procedure TF_Principal.FormCreate(Sender: TObject);
+begin
+ // Lendo  a Procedure de /Ler o Arquivo INI
+LerIni;
+    // Fazendo a Conexao
+    if (Trim(Servidor) <> '') and (Trim(Servidor) <> '') then
+    Begin
+      DMPrincipal.ADOConnectionPrincipal.Connected:= False;
+      DMPrincipal.ADOConnectionPrincipal.ConnectionString := 'Provider=SQLOLEDB.1;Password=' + senha + ';Persist Security Info=True;User ID=sa;Initial Catalog=' + BancoDelphi +
+         ';Data Source=' + Servidor + ';Use Procedure for Prepare=1;Auto Translate=True;Packet Size=4096;Workstation ID=' + Servidor +
+         ';Use Encryption for Data=False;Tag with column collation when possible=False';
+      Try
+         DMPrincipal.ADOConnectionPrincipal.Connected := true;
+      Except
+         on E:Exception do
+         Begin
+            Showmessage('Erro ao conectar ao banco. Erro: CONEXAO COM O BANCO: ' + E.Message);
+            Exit;
+         End;
+      End;
+    End
+    Else
+    Begin
+       Showmessage('Erro ao conectar ao servidor! Verifique seu arquivo .ini!');
+       Exit;
+    End;
+
+     F_Principal.Caption:= '   ' + NoEmpresa;
+end;
+
+procedure TF_Principal.FormShow(Sender: TObject);
+begin
+// Chamando a Tela de Login
+    F_Login.ShowModal;
+end;
+
+procedure TF_Principal.LerIni;
+var               // Ler Arquivo Ini
+  arqIni: string; // Pegar o Nome do Arquivo
+  fileIni: TIniFile; // Ler o Arquivo
+begin
+
+   arqIni:= 'C:\Gerar_Contas_Chacaras\ContaChacaras.ini';
+   fileIni:= TIniFile.Create(arqIni);
+
+   // Lendo as Propriedade do Arquivo Ini
+   with fileIni do
+        begin
+           Servidor:= ReadString('BANCO','SERVIDOR','');
+           BancoDelphi:= ReadString('BANCO','BANCO','');
+           NoEmpresa:=   ReadString('EMPRESA','NEmpresa','');
+           senha    :=   ReadString('BANCO','senha ','');
+           Pais     :=   ReadString('PRODUTO','PAISS','');
+           Empresa  :=   ReadString('PRODUTO','EMPRESAS','');
+           CaminhoFotoProd:= ReadString('PRODUTO','CAMINHOFOTO','');
+           CaptionTelaInicial:= ReadString('EMPRESA','NEmpresa','');
+           Logo     :=   ReadString('EMPRESA','LogoEmp','');
+           LogoP     :=   ReadString('EMPRESA','LogoEmpP','');
+           LogoG     :=   ReadString('EMPRESA','LogoEmpG','');
+           NomeClienteConta := ReadString('CONTALUZ','NomeClienteConta','');
+           CPF_Cliente :=      ReadString('CONTALUZ','CPF_Cliente','');
+           AtendimentoCPFL :=  ReadString('CONTALUZ','AtendimentoCPFL','');
+           PINCPFL :=          ReadString('CONTALUZ','PINCPFL','');
+           SeuCodigo :=        ReadString('CONTALUZ','SeuCodigo','');
+           Free;
+        end;
+end;
+
+procedure TF_Principal.LogoffExecute(Sender: TObject);
+begin
+// Fazendo o Logof - Abrindo uma nova instancia da tela de login
+  ShellExecute(Handle, '', PChar(Application.ExeName), '', '', SW_SHOW);
+  WinExec(PAnsiChar(Application.ExeName), SW_NORMAL);
+
+  // Abrir a Tabela de Gravar Login
+                  DMPrincipal.ADOGrava_Login.Open;
+  // Inserindo as Informações
+                  DMPrincipal.ADOGrava_Login.Append;
+  // Grava na Tabela de GravarLogins as informações de quem esta logando e que horas logou
+                  DMPrincipal.ADOGrava_LoginCOD_USUARIO.Value:=F_Principal.ADOQLoginID.Value ;   // Pega o Codigo do Usuario
+                  DMPrincipal.ADOGrava_LoginLOGIN.Value:= F_Principal.ADOQLoginLOGIN.Value;                            // Pega o Nome De Login
+                  DMPrincipal.ADOGrava_LoginDT_LOGIN.Value:= (Now); // Pegar a Data do Login
+                  DMPrincipal.ADOGrava_LoginHR_LOGIN.Value:= FormatDateTime('hh:mm:ss',Now); // Pega a Hora do Login
+                  DMPrincipal.ADOGrava_LoginENTRADA_SAIDA.Value:= 'L';
+                  DMPrincipal.ADOGrava_Login.Post;                   // Salvar
+                  DMPrincipal.ADOGrava_Login.Close;                 // Fechar a Tabela
+
+  Application.Terminate;
+end;
+
+procedure TF_Principal.LogoffUpdate(Sender: TObject);
+begin
+ // Verificando a Permissao Pra Ver se pode Abrir Perfil
+   Logoff.Visible:= (ADOQLogin.FieldByName('LOGOFF_MENU').AsAnsiString = 'S');
+end;
+
+procedure TF_Principal.SairExecute(Sender: TObject);
+begin
+    // Somente Para Verificar se Quer Sair do Sistema Realmente
+    if Application.MessageBox('          Deseja   Realmente   Fechar   a   Aplicação?          ',PChar(NoEmpresa), MB_YESNO+MB_ICONQUESTION) = mrYes then
+       begin
+          // Abrir a Tabela de Gravar Login
+                  DMPrincipal.ADOGrava_Login.Open;
+          // Inserindo as Informações
+                  DMPrincipal.ADOGrava_Login.Append;
+          // Grava na Tabela de GravarLogins as informações de quem esta logando e que horas logou
+                  DMPrincipal.ADOGrava_LoginCOD_USUARIO.Value:=F_Principal.ADOQLoginID.Value ;   // Pega o Codigo do Usuario
+                  DMPrincipal.ADOGrava_LoginLOGIN.Value:= F_Principal.ADOQLoginLOGIN.Value;                            // Pega o Nome De Login
+                  DMPrincipal.ADOGrava_LoginDT_LOGIN.Value:= (Now); // Pegar a Data do Login
+                  DMPrincipal.ADOGrava_LoginHR_LOGIN.Value:= FormatDateTime('hh:mm:ss',Now); // Pega a Hora do Login
+                  DMPrincipal.ADOGrava_LoginENTRADA_SAIDA.Value:= 'S';
+                  DMPrincipal.ADOGrava_Login.Post;                   // Salvar
+                  DMPrincipal.ADOGrava_Login.Close;                 // Fechar a Tabela
+
+          Application.Terminate;
+       end
+    else
+      Abort;
+end;
+
+procedure TF_Principal.tmrDataHoraPrincipalTimer(Sender: TObject);
+begin
+  // Configuara a Hora do Panel 0
+     stbarPrincipal.Panels[0].Text:= '  ' + FormatDateTime(' hh:nn:ss',Now); // Configurar Hora
+end;
+
+end.

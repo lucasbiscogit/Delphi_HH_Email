@@ -1,0 +1,28 @@
+program P_EmprestimoGeral;
+
+uses
+  Vcl.Forms,
+  U_Principal in 'U_Principal.pas' {F_Principal},
+  U_DMPrincipal in 'U_DMPrincipal.pas' {DMPrincipal: TDataModule},
+  U_Modelo1 in 'U_Modelo1.pas' {F_Modelo1},
+  U_PesqData in 'U_PesqData.pas' {F_PesqData},
+  U_Login in 'U_Login.pas' {F_Login},
+  U_Usuario in 'U_Usuario.pas' {F_Usuario},
+  U_Perfil in 'U_Perfil.pas' {F_Perfil},
+  U_Logs in 'U_Logs.pas' {F_Logs},
+  U_PesqString in 'U_PesqString.pas' {F_PesqString},
+  U_Client in 'U_Client.pas' {F_Cliente};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TDMPrincipal, DMPrincipal);
+  Application.CreateForm(TF_Principal, F_Principal);
+  Application.CreateForm(TF_Login, F_Login);
+  Application.CreateForm(TF_PesqData, F_PesqData);
+  Application.CreateForm(TF_PesqString, F_PesqString);
+  Application.CreateForm(TF_Cliente, F_Cliente);
+  Application.Run;
+end.

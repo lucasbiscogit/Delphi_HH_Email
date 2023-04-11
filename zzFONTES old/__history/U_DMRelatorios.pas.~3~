@@ -1,0 +1,70 @@
+unit U_DMRelatorios;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Data.Win.ADODB, frxClass, frxDBSet;
+
+type
+  TDMRelatorios = class(TDataModule)
+    frxReportPerfilTodos: TfrxReport;
+    frxDBDPerfilTodos: TfrxDBDataset;
+    ADOQWRelPerfilTodos: TADOQuery;
+    frxDBDLogin: TfrxDBDataset;
+    ADOQWRelPerfilTodosID: TAutoIncField;
+    ADOQWRelPerfilTodosSTATUS: TStringField;
+    ADOQWRelPerfilTodosINATIVO: TStringField;
+    ADOQWRelPerfilTodosDATA_INC: TDateTimeField;
+    ADOQWRelPerfilTodosDATA_ALT: TDateTimeField;
+    ADOQWRelPerfilTodosDATA_HAB: TDateTimeField;
+    ADOQWRelPerfilTodosDESC_PERFIL: TStringField;
+    ADOQWRelPerfilTodosPERFIL_MENU: TStringField;
+    ADOQWRelPerfilTodosPERFIL_INC: TStringField;
+    ADOQWRelPerfilTodosPERFIL_ALT: TStringField;
+    ADOQWRelPerfilTodosPERFIL_EXC: TStringField;
+    ADOQWRelPerfilTodosPERFIL_MAR: TStringField;
+    ADOQWRelPerfilTodosPERFIL_IMP: TStringField;
+    ADOQWRelPerfilTodosPERFIL_INA: TStringField;
+    ADOQWRelPerfilTodosPERFIL_HAB: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_MENU: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_INC: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_ALT: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_EXC: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_MAR: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_IMP: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_INA: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_HAB: TStringField;
+    ADOQWRelPerfilTodosEMPRESTAR_MENU: TStringField;
+    ADOQWRelPerfilTodosEMPRESTAR_INC: TStringField;
+    ADOQWRelPerfilTodosEMPRESTAR_ALT: TStringField;
+    ADOQWRelPerfilTodosEMPRESTAR_EXC: TStringField;
+    ADOQWRelPerfilTodosEMPRESTAR_MAR: TStringField;
+    ADOQWRelPerfilTodosEMPRESTAR_IMP: TStringField;
+    ADOQWRelPerfilTodosEMPRESTAR_INA: TStringField;
+    ADOQWRelPerfilTodosEMPRESTAR_HAB: TStringField;
+    ADOQWRelPerfilTodosOCUTLTAR_C_OCULTO: TStringField;
+    ADOQWRelPerfilTodosLOGOFF_MENU: TStringField;
+    ADOQWRelPerfilTodosAJUDA_MENU: TStringField;
+    ADOQWRelPerfilTodosSOBRE_MENU: TStringField;
+    ADOQWRelPerfilTodosLOG_INICIAR: TStringField;
+    ADOQWRelPerfilTodosLOG_ATIVIDADES: TStringField;
+    ADOQWRelPerfilTodosERRO_SISTEMA: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMRelatorios: TDMRelatorios;
+
+implementation
+
+uses
+  U_DMPrincipal;
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

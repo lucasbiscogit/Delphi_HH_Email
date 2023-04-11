@@ -1,0 +1,233 @@
+unit untLogin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Imaging.pngimage, Vcl.ExtCtrls,
+  Vcl.StdCtrls, Vcl.Buttons;
+
+type
+  TfrmLogin = class(TForm)
+    imgLoginFundo: TImage;
+    btnEntrar: TBitBtn;
+    btnSair: TBitBtn;
+    lblTitulo: TLabel;
+    edtSenha: TEdit;
+    edtUsuario: TEdit;
+    imgLogoPeq: TImage;
+    imgLogoGrande: TImage;
+    CheckSenha: TCheckBox;
+    CheckUser: TCheckBox;
+    procedure btnSairClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure edtUsuarioKeyPress(Sender: TObject; var Key: Char);
+    procedure edtSenhaKeyPress(Sender: TObject; var Key: Char);
+    procedure btnEntrarClick(Sender: TObject);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure CheckSenhaClick(Sender: TObject);
+    procedure CheckUserClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure WMNChitTest (var M: TWMNCHitTest ); message WM_NCHITTEST;     // habilitar mudar o form de login
+    procedure MSG; // Para Verificar se o Caps Lock esta ativa
+  end;
+
+var
+  frmLogin: TfrmLogin;
+
+implementation
+
+{$R *.dfm}
+
+
+
+procedure TfrmLogin.btnEntrarClick(Sender: TObject);
+var
+  mensagem, strSqlLog: string;
+begin
+  if edtUsuario.Text = '' then    // Verificando o Campo de Usuario se esta Vazio
+      begin
+        Application.MessageBox('  Informe  Seu  Usuário.  ','COLOCAR NOME DE USUÁRIO',MB_OK+MB_ICONWARNING);
+        edtUsuario.SetFocus;
+        Abort;
+      end;
+
+  if edtSenha.Text = '' then    // Verificando se o Campo senha esta Vazio
+      begin
+        Application.MessageBox('  Informe  Sua  Senha.  ','COLOCAR SENHA',MB_OK+MB_ICONWARNING);
+        edtSenha.SetFocus;
+        Abort;
+      end;
+// Buscando o usuario no Banco
+  strSqlLog:= 'select * from TB_USUARIO U, TB_PERFIL P, TB_DEPARTAMENTO DP, TB_FUNCIONARIO FUNC where U.ID_PERFIL_USER = P.ID and U.ID_FUNC = FUNC.ID AND FUNC.ID_DPTO = DP.ID';                            //' SELECT * FROM TB_USUARIO U, TB_PERFIL P WHERE U.ID_PERFIL_U = P.ID';
+  strSqlLog:= strSqlLog + ' AND U.LOGIN = ' + #39 + edtUsuario.Text + #39;
+  strSqlLog:= strSqlLog + ' AND U.SENHA = ' + #39 + edtSenha.Text + #39;
+  with frmPrincipal.FRMPADOLogin do                                       //*********** ADOQUERY = ADOTABELS **************************************
+    begin
+        Close;
+        SQL.Clear;
+        SQL.Add(strSqlLog);
+        open;
+    end;
+
+
+  // Verificando se o Usuario esta Bloqueado Para Usar o Sistema
+  if FrmPrincipal.FRMPADOLogin.FieldByName('STATUS').AsAnsiString = 'N' then         //*********** ADOQUERY = ADOTABELS **************************************
+        begin
+            mensagem:='     << ERRO 1021 >>     '    +#13 +#13 +
+            ' Você está cadastrado no Sistema mas não possui' +#13 +
+            ' autorização para usa-lo neste momento. ' + #13+  #13+
+            'Consulte o Administrador do Sistema.<< ERRO 1021 >>';
+            Application.MessageBox(PChar(mensagem), 'Login não Autorizado << ERRO 1021 >>',MB_OK + MB_ICONERROR);
+            Application.Terminate;
+        end
+  else
+ // Verificando se o Usuario e Senha Estao Corretos
+    if (FrmPrincipal.FRMPADOLogin.RecordCount) = 0 then                              //*********** ADOQUERY = ADOTABELS **************************************
+        begin  // Neste o Usuario ou Senha estao Errados
+            mensagem:='     << ERRO 1019 >>     '    +#13 +#13 +
+            ' Nome ou Senha do Usuario Invalido.' +#13 + #13 +
+            'Se voce esqueceu a Sua Senha, Consulte ' + #13+
+            'o Administrador do Sistema. << ERRO 1019 >>';
+
+            Application.MessageBox(PChar(mensagem), 'Login não Autorizado << ERRO 1019 >>', MB_OK + MB_ICONERROR);
+            edtUsuario.Text:='';
+            edtSenha.Text:='';
+            edtUsuario.SetFocus;
+        end;
+   if (FrmPrincipal.FRMPADOLogin.RecordCount) = 1 then                           //*********** ADOQUERY = ADOTABELS **************************************
+        begin   // Neste o Usuario e Senha estao OK
+            FrmPrincipal.stbarPrincipal.Panels[2].Text:=' U ' + frmLogin.edtUsuario.Text +
+            ' / D ' + FrmPrincipal.FRMPADOLogin.FieldByName('DESC_DPTO').AsAnsiString +
+            ' / P ' + FrmPrincipal.FRMPADOLogin.FieldByName('DESC_PERFIL').AsAnsiString ;
+            FrmPrincipal.actLogof.Caption:= ' Logof de: '+
+            FrmPrincipal.FRMPADOLogin.FieldByName('LOGIN').AsAnsiString;
+            FrmPrincipal.actLogof.Hint:=' Logof de: '+
+            FrmPrincipal.FRMPADOLogin.FieldByName('LOGIN').AsAnsiString;
+            //controle:= True;
+
+          // Abrir a Tabela de Gravar Login
+                  DMPrincipal.DMPADOGrava_Login.Open;
+          // Inserindo as Informações
+                  DMPrincipal.DMPADOGrava_Login.Append;
+          // Grava na Tabela de GravarLogins as informações de quem esta logando e que horas logou
+                  DMPrincipal.DMPADOGrava_LoginCOD_USUARIO.Value:=frmPrincipal.FRMPADOLoginID.Value ;   // Pega o Codigo do Usuario
+                  DMPrincipal.DMPADOGrava_LoginLOGIN.Value:= frmPrincipal.FRMPADOLoginLOGIN.Value;                            // Pega o Nome De Login
+                  DMPrincipal.DMPADOGrava_LoginDT_LOGIN.Value:= (Now); // Pegar a Data do Login
+                  DMPrincipal.DMPADOGrava_LoginHR_LOGIN.Value:= FormatDateTime('hh:mm:ss',Now); // Pega a Hora do Login
+                  DMPrincipal.DMPADOGrava_LoginENTRADASAIDA.Value:= 'E';
+                  DMPrincipal.DMPADOGrava_Login.Post;                   // Salvar
+                  DMPrincipal.DMPADOGrava_Login.Close;                 // Fechar a Tabela
+            frmLogin.Close;
+        end;
+end;
+
+procedure TfrmLogin.btnSairClick(Sender: TObject);
+begin
+  Sair:= '2';
+   Application.Terminate;       // Terminar a Aplicacao -- Cancelar
+end;
+
+procedure TfrmLogin.CheckSenhaClick(Sender: TObject);
+begin
+// Verificando se o Check de senha esta para mostrar a senha ou nao
+  if CheckSenha.Checked = True then
+    begin
+      edtSenha.PasswordChar:= #0;
+    end
+  else
+    begin
+       edtSenha.PasswordChar:= '*';
+    end;
+end;
+
+procedure TfrmLogin.CheckUserClick(Sender: TObject);
+begin
+// Verificando se o Check de Usuario esta para mostrar a senha ou nao
+  if CheckUser.Checked = True then
+    begin
+      edtUsuario.PasswordChar:= #0;
+    end
+  else
+    begin
+       edtUsuario.PasswordChar:= '*';
+    end;
+end;
+
+procedure TfrmLogin.edtSenhaKeyPress(Sender: TObject; var Key: Char);
+begin
+ //ENTER No Lugar de TAB
+    if key = #13 then
+       Perform(WM_NEXTDLGCTL,0,0);
+end;
+
+procedure TfrmLogin.edtUsuarioKeyPress(Sender: TObject; var Key: Char);
+begin
+ //ENTER No Lugar de TAB
+    if key = #13 then
+       Perform(WM_NEXTDLGCTL,0,0);
+end;
+
+procedure TfrmLogin.FormActivate(Sender: TObject);
+begin
+    lblTitulo.Caption:= NoEmpresa;     // Colocar o Nome da Empresa no Login
+    edtUsuario.SetFocus;              // Colocar o Focu no Edt de Usuario
+   MSG;// vERIFICANDO A TECLA CAPS LOCK
+
+   imgLogoPeq.Picture.LoadFromFile(LogoP);      // Colocar o Logo Na Tela Principal
+   imgLogoGrande.Picture.LoadFromFile(LogoG);      // Colocar o Logo Na Tela Principal
+
+// Verificando se o Check de senha esta para mostrar a senha ou nao
+  if CheckSenha.Checked = True then
+    begin
+      edtSenha.PasswordChar:= #0;
+    end
+  else
+    begin
+       edtSenha.PasswordChar:= '*';
+    end;
+// Verificando se o Check de Usuario esta para mostrar a senha ou nao
+  if CheckUser.Checked = True then
+    begin
+      edtUsuario.PasswordChar:= #0;
+    end
+  else
+    begin
+       edtUsuario.PasswordChar:= '*';
+    end;
+end;
+
+procedure TfrmLogin.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+    if Key = VK_CAPITAL then
+      begin
+      MSG;
+      end;
+end;
+
+procedure TfrmLogin.MSG;
+// Para Verificar se o Caps Lock esta ativa
+begin
+  if getkeystate(VK_CAPITAL) = 1 then
+      begin
+        ShowMessage('A tecla Caps Lock está ativada');
+        edtSenha.Color:= clRed;
+      end
+  else
+  edtSenha.Color:= clInfoBk;
+end;
+
+procedure TfrmLogin.WMNChitTest(var M: TWMNCHitTest);
+begin          // Habilitar ARRASTAR o Form do Login
+   inherited;
+      if (M.Result=HTCLIENT) then
+        begin
+            M.Result:= HTCAPTION;
+        end;
+end;
+
+end.

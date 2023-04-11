@@ -1,0 +1,929 @@
+object F_ContaPagarLiquidar: TF_ContaPagarLiquidar
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Liquidar Contas a Pagar'
+  ClientHeight = 662
+  ClientWidth = 704
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnlGrid: TPanel
+    Left = 0
+    Top = 0
+    Width = 704
+    Height = 315
+    Align = alTop
+    TabOrder = 0
+    object GridCpagar: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 702
+      Height = 313
+      Align = alClient
+      Color = clBtnFace
+      DataSource = DSContasPagar
+      Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDrawColumnCell = GridCpagarDrawColumnCell
+      OnDblClick = GridCpagarDblClick
+      OnTitleClick = GridCpagarTitleClick
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NUMDOC'
+          Title.Caption = 'Numero Documento'
+          Width = 106
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ClienteC'
+          Title.Caption = 'Cliente'
+          Width = 105
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'ClassCont'
+          Title.Caption = 'Classe Contabil'
+          Width = 91
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DATA_VENC'
+          Title.Caption = 'Data Venc.'
+          Width = 89
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NUMPARCELA'
+          Title.Caption = 'Parcela'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'TOTALPARCELA'
+          Title.Caption = 'Total de Parcelas'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VALORPARCELA'
+          Title.Caption = 'Valor Parcela'
+          Width = 68
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'VLTOTAL'
+          Title.Caption = 'Valor Total'
+          Width = 74
+          Visible = True
+        end>
+    end
+  end
+  object pnlLabels: TPanel
+    Left = 0
+    Top = 360
+    Width = 704
+    Height = 194
+    Align = alClient
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 30
+      Top = 16
+      Width = 134
+      Height = 15
+      Caption = 'Data do Lan'#231'amento'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 211
+      Top = 16
+      Width = 149
+      Height = 15
+      Caption = 'Numero do Documento'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 30
+      Top = 76
+      Width = 47
+      Height = 15
+      Caption = 'Cliente'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 395
+      Top = 16
+      Width = 102
+      Height = 15
+      Caption = 'Classe Contabil'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 587
+      Top = 136
+      Width = 71
+      Height = 15
+      Caption = 'Valor Total'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label7: TLabel
+      Left = 176
+      Top = 136
+      Width = 108
+      Height = 15
+      Caption = 'Valor da Parcela'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label8: TLabel
+      Left = 30
+      Top = 136
+      Width = 51
+      Height = 15
+      Caption = 'Parcela'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label9: TLabel
+      Left = 379
+      Top = 136
+      Width = 113
+      Height = 15
+      Caption = 'Total de Parcelas'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label10: TLabel
+      Left = 577
+      Top = 16
+      Width = 78
+      Height = 15
+      Caption = 'Vencimento'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clMaroon
+      Font.Height = -13
+      Font.Name = 'Arial Rounded MT Bold'
+      Font.Style = []
+      ParentFont = False
+    end
+    object lblDtLancamento: TLabel
+      Left = 30
+      Top = 41
+      Width = 93
+      Height = 15
+      Caption = 'lblDtLancamento'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblNumDoc: TLabel
+      Left = 211
+      Top = 41
+      Width = 61
+      Height = 15
+      Caption = 'lblNumDoc'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblClassContabil: TLabel
+      Left = 395
+      Top = 41
+      Width = 91
+      Height = 15
+      Caption = 'lblClassContabil'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ShowAccelChar = False
+    end
+    object lblFornec: TLabel
+      Left = 30
+      Top = 101
+      Width = 52
+      Height = 15
+      Caption = 'lblFornec'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblNumParcela: TLabel
+      Left = 30
+      Top = 161
+      Width = 82
+      Height = 15
+      Caption = 'lblNumParcela'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblValorParcela: TLabel
+      Left = 198
+      Top = 161
+      Width = 86
+      Height = 15
+      Alignment = taRightJustify
+      Caption = 'lblValorParcela'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblTotalParcela: TLabel
+      Left = 395
+      Top = 161
+      Width = 83
+      Height = 15
+      Caption = 'lblTotalParcela'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblValorTotal: TLabel
+      Left = 587
+      Top = 161
+      Width = 71
+      Height = 15
+      Alignment = taRightJustify
+      Caption = 'lblValorTotal'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblVencimento: TLabel
+      Left = 577
+      Top = 41
+      Width = 78
+      Height = 15
+      Caption = 'lblVencimento'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblRs2: TLabel
+      Left = 565
+      Top = 161
+      Width = 16
+      Height = 15
+      Alignment = taCenter
+      Caption = 'R$'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblRs: TLabel
+      Left = 176
+      Top = 161
+      Width = 16
+      Height = 15
+      Alignment = taCenter
+      Caption = 'R$'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+  end
+  object pnlDetalhes: TPanel
+    Left = 0
+    Top = 315
+    Width = 704
+    Height = 45
+    Align = alTop
+    TabOrder = 2
+    object Label11: TLabel
+      Left = 24
+      Top = 6
+      Width = 83
+      Height = 13
+      Caption = 'QTDE de Contas:'
+    end
+    object Label12: TLabel
+      Left = 461
+      Top = 6
+      Width = 84
+      Height = 13
+      Caption = 'Total em Parcelas'
+    end
+    object Label13: TLabel
+      Left = 611
+      Top = 6
+      Width = 52
+      Height = 13
+      Caption = 'Total Geral'
+    end
+    object Label14: TLabel
+      Left = 58
+      Top = 21
+      Width = 6
+      Height = 13
+      Caption = '0'
+    end
+    object Label15: TLabel
+      Left = 488
+      Top = 21
+      Width = 13
+      Height = 13
+      Caption = 'R$'
+    end
+    object Label16: TLabel
+      Left = 630
+      Top = 21
+      Width = 13
+      Height = 13
+      Caption = 'R$'
+    end
+    object Label5: TLabel
+      Left = 461
+      Top = 21
+      Width = 13
+      Height = 13
+      Caption = 'R$'
+    end
+    object Label17: TLabel
+      Left = 611
+      Top = 21
+      Width = 13
+      Height = 13
+      Caption = 'R$'
+    end
+  end
+  object pnlGrava: TPanel
+    Left = 0
+    Top = 554
+    Width = 704
+    Height = 108
+    Align = alBottom
+    BevelOuter = bvNone
+    BevelWidth = 2
+    TabOrder = 3
+    Visible = False
+    object lblValorPago: TLabel
+      Left = 296
+      Top = 27
+      Width = 55
+      Height = 13
+      Caption = 'Valor Pago:'
+      Visible = False
+    end
+    object edtValorPago: TEdit
+      Left = 357
+      Top = 24
+      Width = 121
+      Height = 21
+      TabOrder = 0
+      Visible = False
+      OnEnter = edtValorPagoEnter
+      OnExit = edtValorPagoExit
+      OnKeyPress = edtValorPagoKeyPress
+    end
+    object btnGravar: TBitBtn
+      Left = 553
+      Top = 13
+      Width = 90
+      Height = 44
+      Caption = 'Gravar'
+      Glyph.Data = {
+        AE060000424DAE06000000000000360000002800000017000000170000000100
+        1800000000007806000000000000000000000000000000000000FFFFFFFFFFFF
+        F5FFFF9E7F6F784B3A5C4E4955494455484353464152443E4A3C374639334537
+        3249363575696C2C65271D6E060F6600226907265D22806C6171696DD7D9DA00
+        0000FFFFFFF2FFFFA85B28C3640ED1731693918FB3BAC0B4BEC6C3CCD5C4CED7
+        FFFFFFFFFFFFFDF9FFD4E0D5008D00009A000094000095000D87002F6E001569
+        009B7A476F686C000000FCFFFFAF6124C36B17C47628CB721D85898BA4794ECD
+        7012C97018CA6805B9C2CCFFFFFFFFFBFF008B0000A00804A91A9CE4B600A105
+        0096000099002A7400156A007F685C000000E5B68DBE620DC17126C17024C86D
+        1A8D9092A47C58C87221C57527C76E16B5BFC9FCF4FC70B8700EAE2300A30AF3
+        F0F6FFFEFFEDFFFB00A003009700009A00336D00245D21000000E9BD93BA6315
+        BF6D22BF6C22C468169C9FA2AA825EC56E1EC37225C66C15AAB4BEF4E7F339AC
+        430AA81BE5E2E3FFF4FFE9EFE8FFFFFFEDFFFB009F04009900128700226B0600
+        0000EBBF93B85F12BC6920BD6921BF6412ACAEB0B18660C36613C36C1DC8680F
+        9FAAB3E6D8E432B03F17AA2AFFE6FE67BE6A00A203A7DDAFFFFFFFECFFFB009F
+        010094000E6800000000EBC094B75B10BA661EBB671FBC5E0EBABBBCA89482B4
+        8459B3865DAA784B969DA2D2C6D249B6564BD17300A81B1ABD4427BE4E00AB1A
+        A6DBACFFFFFFE7FAF600A2041D6F02000000ECC094B3580DB8621CB9641DBB5D
+        0FA1A1A2C3CBD1B6C0C8A9B2BA99A3AB8B8E91938E9956AA617EE6A528CA5F32
+        CB642BC45624BD4A00A814A1D6A8FFFFFF2BBA3F26651E000000EDC194B1550B
+        B65F1AB7601BB7611BBA5B0EB9590BBB5C0DBD5F0FC06212C26614C56410D488
+        4938C25B76E3A127C95D2DC95F25BE4D1EB64000A71608AC1F008F008A696100
+        0000EDC294AF520AB45C19B55D19B55E1AB65F1AB7611BB8621CB9641DBA661E
+        BC671FBD6A21C36519B5914E3AC35B79E9AB46D27627C25217B73B11B531009A
+        0BC8A662743829000000EDC295AD4E07B25917B25A17B35B18B45C18B55D19B6
+        5F1AB7611CB9631DBA651EBC671FBD6921C36519D2894C69A7484AB85836B84F
+        3CAE4668A047DF9D60DC81266D3D2D000000EDC395AB4B04B05615B05615B154
+        0FB04D05B15005B25107B45308B55509B7590BB95B0CBB5D0EBD6110BF610DCD
+        6313DC7A34E38442E28746D67A2DCC7B28D4842A6E3E2E000000EEC395A74703
+        AE5213AE500CAC7249C0C0C1C0BAB7BFBAB6C2BBB8C0BBB7BFBAB5BDB8B4BBB6
+        B2BAB5B1B7B3ADB5AFABB1ABA6ADABAAB27E4ACA7724CA7D2CD4832A6E3E2E00
+        0000EEC395A64301AB4F11AC4C09A76F49EAF3F9EAECEDEDEEF0F0F2F3F1F3F4
+        F0F1F3EDEFF0EBEDEEE8EAEBE5E6E8DFE1E2DADCDDD5DDE4AD7B4CC97624C97B
+        2CD281296E3E2E000000EEC496A44000A94C0FAA4907A86E47EBF1F6EBEBEBEC
+        ECECC9C9C9CDCDCDCECECECDCDCDCDCDCDCDCDCDCBCBCBDBDBDBD9D9D9D5DBE1
+        AD7B4BC87523C87A2BD280286F3E2E000000EEC496A23D00A7490DA74506A86E
+        48EFF6FBEFEFEFF1F1F1D1D1D1D5D5D5D5D5D5D4D4D4D3D3D3D2D2D2D0D0D0DC
+        DCDCDCDCDCD7DDE3AD7B4CC77322C87929D17F286F3E2E000000EEC6969F3900
+        A5460BA54203A86E49F4FBFFF3F3F3F6F6F6EDEDEDEFEFEFEEEEEEECECECE9E9
+        E9E5E5E5E1E1E1E2E2E2DEDEDEDAE0E5AE7A4CC67222C7782ACF7E276F3E2E00
+        0000EFC6969D3600A34309A33F01A96E49F7FEFFF8F8F8FAFAFAB9B9B9C1C1C1
+        C1C1C1C1C1C1C4C4C4C5C5C5C3C3C3DFDFDFE0E0E0DAE1E6AE7A4CC57120C677
+        28CF7C276F3E2E000000F0C697993200A14007A23C00A96D49FAFFFFFAFAFAFF
+        FFFFFDFDFDFFFFFFFDFDFDFAFAFAF4F4F4EFEFEFE9E9E9E5E5E5E0E0E0DCE2E7
+        AD7A4CC97221CE7B2BCF7C26703F2E000000F0C796982F009F3D069F3900AA6D
+        4AFBFFFFFCFCFCFFFFFFD1D1D1D7D7D7D7D7D7D5D5D5D5D5D5D4D4D4D0D0D0E2
+        E2E2E0E0E0DCE2E8B07C4DAD631B87511CD47F2772402C000000EFC596932800
+        9D3A059E3600A96C4AFAFFFFFBFBFBFFFFFFCDCDCDD3D3D3D2D2D2D2D2D2D1D1
+        D1D0D0D0CECECEE1E1E1E1E1E1DCE2E8B17D4CA95F1B824E1AD27A218B5D4600
+        0000FFFFFFBC4E00972A00982A00A6653EF8FFFFF7F8F9FFFFFFFFFFFFFFFFFF
+        FFFFFFFCFDFDF7F8F9F1F2F3ECEDEEE4E5E6E0E1E2D9E0E7AA7341C3670FC96D
+        15AB4500D8DBDE000000FFFFFFFFFFFFF1CDA4F0C99CECD3B5DFDCD9E0DAD4E0
+        D9D3DED8D2DDD7D0DBD5CFDAD4CED8D2CCD7D1CCD5CFC9D5CEC9D2CCC6D1CFCB
+        E3C8AFE5BC99E1BB9FF7FAFCFFFFFF000000}
+      TabOrder = 1
+      Visible = False
+      OnClick = btnGravarClick
+    end
+    object rbDinheiro: TRadioButton
+      Left = 135
+      Top = 26
+      Width = 76
+      Height = 17
+      Caption = 'Dinheiro'
+      TabOrder = 2
+      OnClick = rbDinheiroClick
+    end
+  end
+  object ADOFornec: TADOQuery
+    Connection = DMPrincipal.ADOConnectionPrincipal
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'select * from TB_FORNECEDOR'
+      '')
+    Left = 596
+    Top = 36
+    object ADOFornecID: TAutoIncField
+      FieldName = 'ID'
+      ReadOnly = True
+    end
+    object ADOFornecSTATUS: TStringField
+      FieldName = 'STATUS'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOFornecINATIVO: TStringField
+      FieldName = 'INATIVO'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOFornecDATA_INC: TDateTimeField
+      FieldName = 'DATA_INC'
+    end
+    object ADOFornecDATA_ALT: TDateTimeField
+      FieldName = 'DATA_ALT'
+    end
+    object ADOFornecDATA_HAB: TDateTimeField
+      FieldName = 'DATA_HAB'
+    end
+    object ADOFornecRAZAO_SOCIAL: TStringField
+      FieldName = 'RAZAO_SOCIAL'
+      Size = 100
+    end
+    object ADOFornecNOME_FANTASIA: TStringField
+      FieldName = 'NOME_FANTASIA'
+      Size = 100
+    end
+    object ADOFornecCNPJ: TStringField
+      FieldName = 'CNPJ'
+      Size = 18
+    end
+    object ADOFornecIE: TStringField
+      FieldName = 'IE'
+      Size = 18
+    end
+    object ADOFornecTELEF_COMERCIAL: TStringField
+      FieldName = 'TELEF_COMERCIAL'
+      Size = 13
+    end
+    object ADOFornecATENDENTE: TStringField
+      FieldName = 'ATENDENTE'
+      Size = 100
+    end
+    object ADOFornecSITE: TStringField
+      FieldName = 'SITE'
+      Size = 100
+    end
+  end
+  object ADOClasse: TADOQuery
+    Connection = DMPrincipal.ADOConnectionPrincipal
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'select *  from TB_CLASSCONTABIL'
+      '')
+    Left = 606
+    Top = 111
+    object ADOClasseID: TAutoIncField
+      FieldName = 'ID'
+      ReadOnly = True
+    end
+    object ADOClasseSTATUS: TStringField
+      FieldName = 'STATUS'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOClasseINATIVO: TStringField
+      FieldName = 'INATIVO'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOClasseDATA_INC: TDateTimeField
+      FieldName = 'DATA_INC'
+    end
+    object ADOClasseDATA_ALT: TDateTimeField
+      FieldName = 'DATA_ALT'
+    end
+    object ADOClasseDATA_HAB: TDateTimeField
+      FieldName = 'DATA_HAB'
+    end
+    object ADOClasseDESC_CLASSCONT: TStringField
+      FieldName = 'DESC_CLASSCONT'
+      Size = 100
+    end
+  end
+  object ADOContasPagar: TADOQuery
+    Connection = DMPrincipal.ADOConnectionPrincipal
+    CursorType = ctStatic
+    Parameters = <
+      item
+        Name = 'Data_Final_Busca'
+        Attributes = [paNullable]
+        DataType = ftDateTime
+        NumericScale = 3
+        Precision = 23
+        Size = 16
+        Value = Null
+      end>
+    SQL.Strings = (
+      
+        'SELECT * FROM TB_CONTAPAGAR where LIQUIDADO = '#39'N'#39' AND DATA_VENC ' +
+        '<= :Data_Final_Busca order by DATA_VENC')
+    Left = 417
+    Top = 110
+    object ADOContasPagarID: TAutoIncField
+      FieldName = 'ID'
+      ReadOnly = True
+    end
+    object ADOContasPagarSTATUS: TStringField
+      FieldName = 'STATUS'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOContasPagarINATIVO: TStringField
+      FieldName = 'INATIVO'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOContasPagarDATA_INC: TDateTimeField
+      FieldName = 'DATA_INC'
+    end
+    object ADOContasPagarDATA_ALT: TDateTimeField
+      FieldName = 'DATA_ALT'
+    end
+    object ADOContasPagarDATA_HAB: TDateTimeField
+      FieldName = 'DATA_HAB'
+    end
+    object ADOContasPagarNUMDOC: TStringField
+      FieldName = 'NUMDOC'
+      Size = 200
+    end
+    object ADOContasPagarID_CLIENTE: TIntegerField
+      FieldName = 'ID_CLIENTE'
+    end
+    object ADOContasPagarID_CLASSCONT: TIntegerField
+      FieldName = 'ID_CLASSCONT'
+    end
+    object ADOContasPagarNUMPARCELA: TStringField
+      FieldName = 'NUMPARCELA'
+      FixedChar = True
+      Size = 3
+    end
+    object ADOContasPagarTOTALPARCELA: TStringField
+      FieldName = 'TOTALPARCELA'
+      FixedChar = True
+      Size = 3
+    end
+    object ADOContasPagarVLTOTAL: TBCDField
+      FieldName = 'VLTOTAL'
+      Precision = 12
+      Size = 2
+    end
+    object ADOContasPagarVALORPARCELA: TBCDField
+      FieldName = 'VALORPARCELA'
+      Precision = 12
+      Size = 2
+    end
+    object ADOContasPagarLIQUIDADO: TStringField
+      FieldName = 'LIQUIDADO'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOContasPagarDTPAGMENTO: TWideStringField
+      FieldName = 'DTPAGMENTO'
+      Size = 27
+    end
+    object ADOContasPagarFORMA_PGTO: TStringField
+      FieldName = 'FORMA_PGTO'
+      Size = 50
+    end
+    object ADOContasPagarVLPAGO: TBCDField
+      FieldName = 'VLPAGO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOContasPagarDATA_VENC: TDateTimeField
+      FieldName = 'DATA_VENC'
+    end
+    object ADOContasPagarOBS: TMemoField
+      FieldName = 'OBS'
+      BlobType = ftMemo
+    end
+    object ADOContasPagarClienteC: TStringField
+      FieldKind = fkLookup
+      FieldName = 'ClienteC'
+      LookupDataSet = ADOFornec
+      LookupKeyFields = 'ID'
+      LookupResultField = 'NOME_FANTASIA'
+      KeyFields = 'ID_CLIENTE'
+      Size = 100
+      Lookup = True
+    end
+    object ADOContasPagarClassCont: TStringField
+      FieldKind = fkLookup
+      FieldName = 'ClassCont'
+      LookupDataSet = ADOClasse
+      LookupKeyFields = 'ID'
+      LookupResultField = 'DESC_CLASSCONT'
+      KeyFields = 'ID_CLASSCONT'
+      Size = 100
+      Lookup = True
+    end
+  end
+  object DSContasPagar: TDataSource
+    DataSet = ADOContasPagar
+    Left = 415
+    Top = 39
+  end
+  object TimerBtnGravar: TTimer
+    Enabled = False
+    Interval = 2500
+    OnTimer = TimerBtnGravarTimer
+    Left = 506
+    Top = 561
+  end
+  object ADOCaixaHistorico: TADOQuery
+    Connection = DMPrincipal.ADOConnectionPrincipal
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'select * from TB_CAIXAMOVIMENTACAO')
+    Left = 61
+    Top = 63
+    object ADOCaixaHistoricoID: TAutoIncField
+      FieldName = 'ID'
+      ReadOnly = True
+    end
+    object ADOCaixaHistoricoID_CAIXAMOV: TIntegerField
+      FieldName = 'ID_CAIXAMOV'
+    end
+    object ADOCaixaHistoricoSTATUS: TStringField
+      FieldName = 'STATUS'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOCaixaHistoricoINATIVO: TStringField
+      FieldName = 'INATIVO'
+      FixedChar = True
+      Size = 1
+    end
+    object ADOCaixaHistoricoDATA_INC: TDateTimeField
+      FieldName = 'DATA_INC'
+    end
+    object ADOCaixaHistoricoDATA_ALT: TDateTimeField
+      FieldName = 'DATA_ALT'
+    end
+    object ADOCaixaHistoricoDATA_HAB: TDateTimeField
+      FieldName = 'DATA_HAB'
+    end
+    object ADOCaixaHistoricoSERVICO: TStringField
+      FieldName = 'SERVICO'
+      Size = 100
+    end
+    object ADOCaixaHistoricoCLIENTE: TStringField
+      FieldName = 'CLIENTE'
+      Size = 100
+    end
+    object ADOCaixaHistoricoHISTORICO: TStringField
+      FieldName = 'HISTORICO'
+      Size = 100
+    end
+    object ADOCaixaHistoricoVLMOVIMENTO: TBCDField
+      FieldName = 'VLMOVIMENTO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaHistoricoESPECIE: TStringField
+      FieldName = 'ESPECIE'
+      Size = 100
+    end
+    object ADOCaixaHistoricoTIPO_MOVIMENTO: TStringField
+      FieldName = 'TIPO_MOVIMENTO'
+      FixedChar = True
+      Size = 1
+    end
+  end
+  object ADOCaixa: TADOQuery
+    Connection = DMPrincipal.ADOConnectionPrincipal
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      
+        'select * from TB_CAIXA_ABREFECHA where DATA_FINAL is null and HO' +
+        'RA_FINAL is null')
+    Left = 37
+    Top = 127
+    object ADOCaixaID: TAutoIncField
+      FieldName = 'ID'
+      ReadOnly = True
+    end
+    object ADOCaixaDATA_INICIO: TDateTimeField
+      FieldName = 'DATA_INICIO'
+    end
+    object ADOCaixaDATA_FINAL: TDateTimeField
+      FieldName = 'DATA_FINAL'
+    end
+    object ADOCaixaHORA_INICIO: TWideStringField
+      FieldName = 'HORA_INICIO'
+      Size = 16
+    end
+    object ADOCaixaHORA_FINAL: TWideStringField
+      FieldName = 'HORA_FINAL'
+      Size = 16
+    end
+    object ADOCaixaUSER_INICIO: TIntegerField
+      FieldName = 'USER_INICIO'
+    end
+    object ADOCaixaUSER_FINAL: TIntegerField
+      FieldName = 'USER_FINAL'
+    end
+    object ADOCaixaVL_INICIO: TBCDField
+      FieldName = 'VL_INICIO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaVL_FECHAMENTO: TBCDField
+      FieldName = 'VL_FECHAMENTO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaVLTOTALRECEBIDO: TBCDField
+      FieldName = 'VLTOTALRECEBIDO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaVLTOTALSAIDA: TBCDField
+      FieldName = 'VLTOTALSAIDA'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaVLTOTALGERAL: TBCDField
+      FieldName = 'VLTOTALGERAL'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaVLSAIDACONTAS: TBCDField
+      FieldName = 'VLSAIDACONTAS'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaSALDO_DINHEIRO: TBCDField
+      FieldName = 'SALDO_DINHEIRO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaSALDO_BOLETO: TBCDField
+      FieldName = 'SALDO_BOLETO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaSALDO_CHEQUE: TBCDField
+      FieldName = 'SALDO_CHEQUE'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaSALDO_CARTAO: TBCDField
+      FieldName = 'SALDO_CARTAO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaSAIDA_DINHEIRO: TBCDField
+      FieldName = 'SAIDA_DINHEIRO'
+      Precision = 12
+      Size = 2
+    end
+    object ADOCaixaSAIDA_CHEQUE: TBCDField
+      FieldName = 'SAIDA_CHEQUE'
+      Precision = 12
+      Size = 2
+    end
+  end
+end

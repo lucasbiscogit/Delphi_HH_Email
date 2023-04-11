@@ -1,0 +1,151 @@
+unit untCaixaAbrir;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
+  Vcl.Mask, Vcl.DBCtrls, Data.Win.ADODB;
+
+type
+  TfrmCaixaAbrir = class(TForm)
+    pnlGeral: TPanel;
+    pnlBotoes: TPanel;
+    pnlDados: TPanel;
+    btnFechar: TBitBtn;
+    btnAbrir: TBitBtn;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    Label3: TLabel;
+    edtValor: TDBEdit;
+    Label1: TLabel;
+    edtUser: TEdit;
+    lblCaixa: TLabel;
+    procedure btnFecharClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure edtValorEnter(Sender: TObject);
+    procedure edtValorExit(Sender: TObject);
+    procedure btnAbrirClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCaixaAbrir: TfrmCaixaAbrir;
+  AbrirCaixaBTNFechar: Integer;
+implementation
+
+{$R *.dfm}
+
+uses untDMPrincipal, untPrincipal;
+
+procedure TfrmCaixaAbrir.btnAbrirClick(Sender: TObject);
+var
+mensagem,MensageAppMesBox: string;
+begin
+   DMPrincipal.ADOCaixa_Abrir.Post;  // Gravar os Dados
+ // Mensagem para Fechar
+   mensagem:= ' O Caixa Foi Aberto... ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+              +'Com Sucesso.';
+   Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+   Close;
+end;
+
+procedure TfrmCaixaAbrir.btnFecharClick(Sender: TObject);
+begin
+  DMPrincipal.ADOCaixa_Abrir.Cancel;
+  Close;
+end;
+
+procedure TfrmCaixaAbrir.edtValorEnter(Sender: TObject);
+begin
+  edtValor.Color:= clMoneyGreen;
+end;
+
+procedure TfrmCaixaAbrir.edtValorExit(Sender: TObject);
+begin
+  if Trim(edtValor.Text) = '' then
+    begin
+       edtValor.Text:= '0,00';
+    end;
+
+
+  edtValor.Color:= clWindow;
+end;
+
+procedure TfrmCaixaAbrir.FormActivate(Sender: TObject);
+var
+  qry: TADOQuery;
+
+begin
+  DMPrincipal.ADOCaixa_Abrir.Open;     // Abrindo o Componente
+  DMPrincipal.ADOCaixa_Abrir.Insert;   // Colocando em modo de insercao
+  edtValor.SetFocus;                   // Colocando o Focu no edite
+
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('DATA_INICIO').AsDateTime:= Date;    // Colocando a Data atual
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('HORA_INICIO').Value:= FormatDateTime('hh:mm:ss',Now);  // Colocando o Valor Atual
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('USER_INICIO').AsInteger:= frmPrincipal.FRMPADOLoginID.Value; // Passando o Usuario
+  edtUser.Text:= frmPrincipal.FRMPADOLoginLOGIN.Value;  // Colocando o Login
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLTOTALRECEBIDO').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLTOTALSAIDA').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLTOTALGERAL').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLTOTALLAVA').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLTOTALESTAC').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLTOTALVENDAS').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLTOTALPARCELAS').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLSAIDACONTAS').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLSAIDAFUNCIONARIO').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('VLSAIDACOMPRAS').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('PROVI_LAVA').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('PROV_ESTAC').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('PROV_PRESTACOES').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('PROV_PGTCONTAS').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('PROV_PGTFUNC').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('SALDO_DINHEIRO').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('SALDO_BOLETO').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('SALDO_CHEQUE').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('SALDO_CARTAO').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('SAIDA_DINHEIRO').AsFloat:= 0.00;
+  DMPrincipal.ADOCaixa_Abrir.FieldByName('SAIDA_CHEQUE').AsFloat:= 0.00;
+
+   // Verificando se o Caixa esta Aberto
+      try
+      // Criando Um ADOQUERY Em Tempo de Execução
+         qry:= TADOQuery.Create(nil);
+         qry.Connection:= DMPrincipal.ADOConexao;
+      // Usando o ADOQUERY Criado
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add(' select top 1 ID from TB_CAIXA_ABREFECHA where DATA_FINAL is null and HORA_FINAL is null');
+        qry.Open;
+          if (qry.RecordCount = 0) then
+            begin
+             btnAbrir.Visible:= True;
+            end
+          else
+            begin
+              btnAbrir.Visible:= False;
+              lblCaixa.Visible:= True;
+            end;
+        finally
+        FreeAndNil(qry);
+      end;
+
+ // Verificando quem esta abrindo a tela de abrir o caixa para desativar o botao de fechar
+    if AbrirCaixaBTNFechar = 1 then
+      begin
+        btnFechar.Visible:= False;
+        btnFechar.Enabled:= False;
+      end;
+
+end;
+
+procedure TfrmCaixaAbrir.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   DMPrincipal.ADOCaixa_Abrir.Close;
+end;
+
+end.

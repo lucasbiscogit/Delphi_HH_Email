@@ -1,0 +1,189 @@
+unit U_CaixaAbrir;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask,
+  Vcl.DBCtrls, Vcl.ExtCtrls, Data.DB, Data.Win.ADODB;
+
+type
+  TF_CaixaAbrir = class(TForm)
+    pnlBotoes: TPanel;
+    pnlCampos: TPanel;
+    DSAbreCaixa: TDataSource;
+    ADOAbreCaixa: TADOQuery;
+    ADOAbreCaixaID: TAutoIncField;
+    ADOAbreCaixaDATA_INICIO: TDateTimeField;
+    ADOAbreCaixaDATA_FINAL: TDateTimeField;
+    ADOAbreCaixaHORA_INICIO: TWideStringField;
+    ADOAbreCaixaHORA_FINAL: TWideStringField;
+    ADOAbreCaixaUSER_INICIO: TIntegerField;
+    ADOAbreCaixaUSER_FINAL: TIntegerField;
+    ADOAbreCaixaVL_INICIO: TFloatField;
+    ADOAbreCaixaVL_FECHAMENTO: TFloatField;
+    ADOAbreCaixaVLTOTALRECEBIDO: TFloatField;
+    ADOAbreCaixaVLTOTALSAIDA: TFloatField;
+    ADOAbreCaixaVLTOTALGERAL: TFloatField;
+    ADOAbreCaixaVLSAIDACONTAS: TFloatField;
+    ADOAbreCaixaSALDO_DINHEIRO: TFloatField;
+    ADOAbreCaixaSALDO_BOLETO: TFloatField;
+    ADOAbreCaixaSALDO_CHEQUE: TFloatField;
+    ADOAbreCaixaSALDO_CARTAO: TFloatField;
+    ADOAbreCaixaSAIDA_DINHEIRO: TFloatField;
+    ADOAbreCaixaSAIDA_CHEQUE: TFloatField;
+    btnFechar: TBitBtn;
+    btnAbrir: TBitBtn;
+    Label1: TLabel;
+    Label2: TLabel;
+    edtUser: TEdit;
+    Label3: TLabel;
+    DBEdit1: TDBEdit;
+    lblCaixa: TLabel;
+    edtValor: TDBEdit;
+    TimerPiscaLabel: TTimer;
+    procedure btnFecharClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure edtValorExit(Sender: TObject);
+    procedure edtValorEnter(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnAbrirClick(Sender: TObject);
+    procedure TimerPiscaLabelTimer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  F_CaixaAbrir: TF_CaixaAbrir;
+
+  // Variavel para controlar por onde esta abrindo o caixa
+  AbrirCaixaBTNFechar: Integer;
+
+implementation
+
+uses
+  U_DMPrincipal, U_Principal;
+  
+{$R *.dfm}
+
+procedure TF_CaixaAbrir.btnAbrirClick(Sender: TObject);
+var
+mensagem,MensageAppMesBox: string;
+begin
+   ADOAbreCaixa.Post;  // Gravar os Dados
+
+ // Mensagem para Fechar
+   MensageAppMesBox:= 'ABRIR CAIXA';
+   mensagem:= ' O Caixa Foi Aberto... ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+              +'Com Sucesso.' + #13 + ' Caixa Numero: ' + IntToStr(ADOAbreCaixaid.Value);
+   Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+   Close;
+end;
+
+procedure TF_CaixaAbrir.btnFecharClick(Sender: TObject);
+begin
+  ADOAbreCaixa.Cancel;
+  Close;
+end;
+
+procedure TF_CaixaAbrir.edtValorEnter(Sender: TObject);
+begin
+  edtValor.Color:= clMoneyGreen;
+end;
+
+procedure TF_CaixaAbrir.edtValorExit(Sender: TObject);
+begin
+  if Trim(edtValor.Text) = '' then
+    begin
+       edtValor.Text:= '0,00';
+    end;
+  edtValor.Color:= clWindow;
+end;
+
+procedure TF_CaixaAbrir.FormActivate(Sender: TObject);
+var
+  qry: TADOQuery;
+
+begin
+  ADOAbreCaixa.Open;     // Abrindo o Componente
+  ADOAbreCaixa.Insert;   // Colocando em modo de insercao
+
+
+  with ADOAbreCaixa do
+    begin
+      FieldByName('DATA_INICIO').AsDateTime:= Date;    // Colocando a Data atual
+      FieldByName('HORA_INICIO').Value:= FormatDateTime('hh:mm:ss',Now);  // Colocando o Valor Atual
+      FieldByName('USER_INICIO').AsInteger:= F_Principal.ADOQLoginID.Value; // Passando o Usuario
+      edtUser.Text:= F_Principal.ADOQLoginLOGIN.Value;  // Colocando o Login
+      FieldByName('VLTOTALRECEBIDO').AsFloat:= 0.00;
+      FieldByName('VLTOTALSAIDA').AsFloat:= 0.00;
+      FieldByName('VLTOTALGERAL').AsFloat:= 0.00;
+      FieldByName('VLSAIDACONTAS').AsFloat:= 0.00;
+      FieldByName('SALDO_DINHEIRO').AsFloat:= 0.00;
+      FieldByName('SALDO_BOLETO').AsFloat:= 0.00;
+      FieldByName('SALDO_CHEQUE').AsFloat:= 0.00;
+      FieldByName('SALDO_CARTAO').AsFloat:= 0.00;
+      FieldByName('SAIDA_DINHEIRO').AsFloat:= 0.00;
+      FieldByName('SAIDA_CHEQUE').AsFloat:= 0.00;
+    end;
+
+   // Verificando se o Caixa esta Aberto
+      try
+      // Criando Um ADOQUERY Em Tempo de Execução
+         qry:= TADOQuery.Create(nil);
+         qry.Connection:= DMPrincipal.ADOConnectionPrincipal;
+      // Usando o ADOQUERY Criado
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add(' select top 1 ID from TB_CAIXA_ABREFECHA where DATA_FINAL is null and HORA_FINAL is null');
+        qry.Open;
+          if (qry.RecordCount = 0) then
+            begin
+             btnAbrir.Visible:= True;
+             edtValor.SetFocus;                   // Colocando o Focu no edite
+            end
+          else
+            begin
+              btnAbrir.Visible:= False;
+              lblCaixa.Visible:= True;
+              edtValor.Enabled:= False;
+              btnFechar.SetFocus;
+              TimerPiscaLabel.Enabled:= True;
+              lblCaixa.Caption:= lblCaixa.Caption + ' Caixa Numero: '+ IntToStr(qry.Fields[0].Value); // Colocando o numero do caixa
+            end;
+      finally
+        FreeAndNil(qry);
+      end;
+
+ // Verificando quem esta abrindo a tela de abrir o caixa para desativar o botao de fechar
+    if AbrirCaixaBTNFechar = 1 then
+      begin
+        btnFechar.Visible:= False;
+        btnFechar.Enabled:= False;
+      end;
+end;
+
+procedure TF_CaixaAbrir.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  ADOAbreCaixa.Close;
+end;
+
+procedure TF_CaixaAbrir.TimerPiscaLabelTimer(Sender: TObject);
+begin
+  with lblCaixa do
+    begin
+      if (visible = false) then
+        begin
+         visible := true;
+        end
+      else
+        begin
+         visible := false;
+         application.ProcessMessages;
+        end;
+    end;
+end;
+
+end.

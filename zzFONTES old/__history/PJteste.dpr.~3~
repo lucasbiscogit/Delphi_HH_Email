@@ -1,0 +1,31 @@
+program PJteste;
+
+uses
+  Vcl.Forms,
+  UntExcluir in 'C:\Users\DellServer\Desktop\Nova pasta\UntExcluir.pas' {frmexcluir},
+  U_DMPrincipal in 'U_DMPrincipal.pas' {DMPrincipal: TDataModule},
+  U_Login in 'U_Login.pas' {F_Login},
+  U_Modelo1 in 'U_Modelo1.pas' {F_Modelo1},
+  U_Perfil in 'U_Perfil.pas' {F_Perfil},
+  U_Principal in 'U_Principal.pas' {F_Principal},
+  U_Usuario in 'U_Usuario.pas' {F_Usuario};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(Tfrmexcluir, frmexcluir);
+  Application.CreateForm(TDMPrincipal, DMPrincipal);
+  Application.CreateForm(TF_Login, F_Login);
+  Application.CreateForm(TF_Modelo1, F_Modelo1);
+  Application.CreateForm(TF_Perfil, F_Perfil);
+  Application.CreateForm(TF_Principal, F_Principal);
+  Application.CreateForm(TF_Usuario, F_Usuario);
+  Application.CreateForm(TF_Login, F_Login);
+  Application.CreateForm(TF_Modelo1, F_Modelo1);
+  Application.CreateForm(TF_Perfil, F_Perfil);
+  Application.CreateForm(TF_Principal, F_Principal);
+  Application.CreateForm(TF_Usuario, F_Usuario);
+  Application.Run;
+end.

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2017/03/11 19:51:29.000.020,C:\Emprestimo\FONTES\U_Principal.pas=C:\Users\DellServer\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/03/11 19:51:29.000.020,C:\Emprestimo\FONTES\U_Principal.dfm=C:\Users\DellServer\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2017/03/11 19:52:41.000.042,C:\Emprestimo\FONTES\P_EmprestimoGeral.dproj=C:\Users\DellServer\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2017/03/13 15:19:59.000.605,C:\Emprestimo\FONTES\U_FazerEmprestimo.dfm=C:\Emprestimo\FONTES\Unit1.dfm</Transaction>
+    <Transaction>2017/03/17 21:05:32.000.352,C:\Emprestimo\FONTES\Unit1.dfm=C:\Emprestimo\FONTES\U_DMPrincipal.dfm</Transaction>
+    <Transaction>2017/03/17 21:21:40.000.711,C:\Emprestimo\FONTES\Unit1.dfm=C:\Emprestimo\FONTES\U_Modelo1.dfm</Transaction>
+    <Transaction>2017/03/21 18:24:22.000.994,C:\Emprestimo\FONTES\P_EmprestimoGeral.dproj=C:\Emprestimo\FONTES\P_EmprestimoGeral.dproj</Transaction>
+    <Transaction>2017/04/13 21:26:59.000.536,C:\Emprestimo\FONTES\U_Client.dfm=C:\Emprestimo\FONTES\U_Empresas.dfm</Transaction>
+    <Transaction>2017/04/18 20:50:28.000.858,C:\Emprestimo\FONTES\U_DMRelatorios.pas=C:\Emprestimo\FONTES\Unit1.pas</Transaction>
+    <Transaction>2017/04/18 20:50:28.000.858,C:\Emprestimo\FONTES\U_DMRelatorios.dfm=C:\Emprestimo\FONTES\Unit1.dfm</Transaction>
+    <Transaction>2017/05/19 11:30:26.000.954,C:\Gerar_Contas_Chacaras\FONTES\P_EmprestimoGeral.dproj=C:\Gerar_Contas_Chacaras\FONTES\GerarContasChacaras.dproj</Transaction>
+    <Transaction>2017/08/03 20:33:58.000.163,C:\Gerar_Contas_Chacaras\FONTES\Unit1.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_MesReferencia.dfm</Transaction>
+    <Transaction>2017/12/19 17:55:28.000.654,C:\Gerar_Contas_Chacaras\FONTES\U_CAIXAMOVIMENTO.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_Modelo1.dfm</Transaction>
+    <Transaction>2017/12/19 20:45:51.000.539,C:\Gerar_Contas_Chacaras\FONTES\U_ContaReceber.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_Modelo1.dfm</Transaction>
+    <Transaction>2017/12/21 15:05:39.000.899,C:\Gerar_Contas_Chacaras\FONTES\U_CaixaAbrir.dfm=C:\Gerar_Contas_Chacaras\FONTES\Unit1.dfm</Transaction>
+    <Transaction>2017/12/21 15:48:12.000.420,C:\Gerar_Contas_Chacaras\FONTES\Unit1.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_CaixaFechar.dfm</Transaction>
+    <Transaction>2017/12/22 20:42:14.000.894,C:\Gerar_Contas_Chacaras\FONTES\untGerarCPagar.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_GeraParcelas_Pag_Recr.dfm</Transaction>
+    <Transaction>2017/12/30 20:02:49.000.981,C:\Gerar_Contas_Chacaras\FONTES\untCPagarLiquidar.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_ContaPagarLiquidar.dfm</Transaction>
+    <Transaction>2018/01/02 21:29:36.000.991,C:\Gerar_Contas_Chacaras\FONTES\U_Modelo1.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_CreditoCliente.dfm</Transaction>
+    <Transaction>2018/01/17 15:04:02.000.964,C:\Gerar_Contas_Chacaras\FONTES\Unit1.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_Pagamentos.dfm</Transaction>
+    <Transaction>2022/10/05 21:31:49.000.743,C:\HH_ADD_Email\FONTES\HH_ADDEmail.dproj=C:\HH_ADD_Email\FONTES\GerarContasChacaras.dproj</Transaction>
+    <Transaction>2022/10/05 21:31:51.000.226,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_CreditoCliente\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:51.000.795,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_PesqString\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:51.000.913,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_Perfil\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:51.000.137,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:52.000.711,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_Logs\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:52.000.964,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_ContaPagarLiquidar\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:52.000.497,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_GerarConta\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:52.000.258,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_ContaReceber\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:52.000.844,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\HH_ADDEmail\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:52.000.802,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_PesqData\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:53.000.386,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_DMPrincipal\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:53.000.091,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_CaixaFechar\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:53.000.988,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_MesReferencia\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:53.000.614,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_GeraParcelas_Pag_Recr\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:53.000.782,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_Fornecedor\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:53.000.481,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_CaixaAbrir\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:53.000.172,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_DMRelatorios\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:54.000.847,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_PesCEP\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:54.000.447,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_Principal\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:54.000.700,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_Pagamentos\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:54.000.118,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_LeituraChacaras\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:55.000.276,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_ContaGeral\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:55.000.008,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_Usuario\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:56.000.282,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_Login\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:56.000.160,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_Configuracao\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:56.000.755,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_CadChacara\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:56.000.476,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_ContaPagar\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:57.000.189,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\U_CaixaMovimento\default.txvpck</Transaction>
+    <Transaction>2022/10/05 21:31:58.000.041,=C:\HH_ADD_Email\FONTES\ModelSupport_HH_ADDEmail\default.txaPackage</Transaction>
+    <Transaction>2022/10/06 20:06:04.000.102,C:\HH_ADD_Email\FONTES\U_DMRelatorios.pas=</Transaction>
+    <Transaction>2022/10/06 20:06:48.000.846,C:\HH_ADD_Email\FONTES\U_Configuracao.pas=</Transaction>
+  </Transactions>
+</BorlandProject>

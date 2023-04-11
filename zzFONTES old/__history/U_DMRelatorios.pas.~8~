@@ -1,0 +1,118 @@
+unit U_DMRelatorios;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Data.Win.ADODB, frxClass, frxDBSet;
+
+type
+  TDMRelatorios = class(TDataModule)
+    frxReportPerfilTodos: TfrxReport;
+    frxDBDPerfilTodos: TfrxDBDataset;
+    ADOQWRelPerfilTodos: TADOQuery;
+    frxDBDLogin: TfrxDBDataset;
+    FRXPerfilTodosC: TfrxReport;
+    frxBDPerfilTodosC: TfrxDBDataset;
+    ADOPerfilTodosC: TADOQuery;
+    ADOQWRelPerfilTodosID: TAutoIncField;
+    ADOQWRelPerfilTodosSTATUS: TStringField;
+    ADOQWRelPerfilTodosINATIVO: TStringField;
+    ADOQWRelPerfilTodosDATA_INC: TDateTimeField;
+    ADOQWRelPerfilTodosDATA_ALT: TDateTimeField;
+    ADOQWRelPerfilTodosDATA_HAB: TDateTimeField;
+    ADOQWRelPerfilTodosDESC_PERFIL: TStringField;
+    ADOQWRelPerfilTodosPERFIL_MENU: TStringField;
+    ADOQWRelPerfilTodosPERFIL_INC: TStringField;
+    ADOQWRelPerfilTodosPERFIL_ALT: TStringField;
+    ADOQWRelPerfilTodosPERFIL_EXC: TStringField;
+    ADOQWRelPerfilTodosPERFIL_MAR: TStringField;
+    ADOQWRelPerfilTodosPERFIL_IMP: TStringField;
+    ADOQWRelPerfilTodosPERFIL_INA: TStringField;
+    ADOQWRelPerfilTodosPERFIL_HAB: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_MENU: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_INC: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_ALT: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_EXC: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_MAR: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_IMP: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_INA: TStringField;
+    ADOQWRelPerfilTodosUSUARIO_HAB: TStringField;
+    ADOQWRelPerfilTodosOCUTLTAR_C_OCULTO: TStringField;
+    ADOQWRelPerfilTodosLOGOFF_MENU: TStringField;
+    ADOQWRelPerfilTodosAJUDA_MENU: TStringField;
+    ADOQWRelPerfilTodosSOBRE_MENU: TStringField;
+    ADOQWRelPerfilTodosERRO_SISTEMA: TStringField;
+    ADOQWRelPerfilTodosLOG_INICIAR: TStringField;
+    ADOQWRelPerfilTodosLOG_ATIVIDADES: TStringField;
+    ADOQWRelPerfilTodosLOG_INC: TStringField;
+    ADOQWRelPerfilTodosLOG_ALT: TStringField;
+    ADOQWRelPerfilTodosLOG_EXC: TStringField;
+    ADOQWRelPerfilTodosLOG_MAR: TStringField;
+    ADOQWRelPerfilTodosLOG_IMP: TStringField;
+    ADOQWRelPerfilTodosLOG_INA: TStringField;
+    ADOQWRelPerfilTodosLOG_HAB: TStringField;
+    ADOQWRelPerfilTodosRELATORIOS_MENU: TStringField;
+    ADOQWRelPerfilTodosRELATORIOS_PERFIL_BASICO: TStringField;
+    ADOQWRelPerfilTodosRELATORIOS_PERFIL_COMP: TStringField;
+    ADOPerfilTodosCID: TAutoIncField;
+    ADOPerfilTodosCSTATUS: TStringField;
+    ADOPerfilTodosCINATIVO: TStringField;
+    ADOPerfilTodosCDATA_INC: TDateTimeField;
+    ADOPerfilTodosCDATA_ALT: TDateTimeField;
+    ADOPerfilTodosCDATA_HAB: TDateTimeField;
+    ADOPerfilTodosCDESC_PERFIL: TStringField;
+    ADOPerfilTodosCPERFIL_MENU: TStringField;
+    ADOPerfilTodosCPERFIL_INC: TStringField;
+    ADOPerfilTodosCPERFIL_ALT: TStringField;
+    ADOPerfilTodosCPERFIL_EXC: TStringField;
+    ADOPerfilTodosCPERFIL_MAR: TStringField;
+    ADOPerfilTodosCPERFIL_IMP: TStringField;
+    ADOPerfilTodosCPERFIL_INA: TStringField;
+    ADOPerfilTodosCPERFIL_HAB: TStringField;
+    ADOPerfilTodosCUSUARIO_MENU: TStringField;
+    ADOPerfilTodosCUSUARIO_INC: TStringField;
+    ADOPerfilTodosCUSUARIO_ALT: TStringField;
+    ADOPerfilTodosCUSUARIO_EXC: TStringField;
+    ADOPerfilTodosCUSUARIO_MAR: TStringField;
+    ADOPerfilTodosCUSUARIO_IMP: TStringField;
+    ADOPerfilTodosCUSUARIO_INA: TStringField;
+    ADOPerfilTodosCUSUARIO_HAB: TStringField;
+    ADOPerfilTodosCOCUTLTAR_C_OCULTO: TStringField;
+    ADOPerfilTodosCLOGOFF_MENU: TStringField;
+    ADOPerfilTodosCAJUDA_MENU: TStringField;
+    ADOPerfilTodosCSOBRE_MENU: TStringField;
+    ADOPerfilTodosCERRO_SISTEMA: TStringField;
+    ADOPerfilTodosCLOG_INICIAR: TStringField;
+    ADOPerfilTodosCLOG_ATIVIDADES: TStringField;
+    ADOPerfilTodosCLOG_INC: TStringField;
+    ADOPerfilTodosCLOG_ALT: TStringField;
+    ADOPerfilTodosCLOG_EXC: TStringField;
+    ADOPerfilTodosCLOG_MAR: TStringField;
+    ADOPerfilTodosCLOG_IMP: TStringField;
+    ADOPerfilTodosCLOG_INA: TStringField;
+    ADOPerfilTodosCLOG_HAB: TStringField;
+    ADOPerfilTodosCRELATORIOS_MENU: TStringField;
+    ADOPerfilTodosCRELATORIOS_PERFIL_BASICO: TStringField;
+    ADOPerfilTodosCRELATORIOS_PERFIL_COMP: TStringField;
+    frxRContaLuzPrimeira: TfrxReport;
+    frxDBDContaLuzPrimeira: TfrxDBDataset;
+    ADOQRelConfigGeral: TADOQuery;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMRelatorios: TDMRelatorios;
+
+implementation
+
+uses
+  U_DMPrincipal, U_GerarConta;
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

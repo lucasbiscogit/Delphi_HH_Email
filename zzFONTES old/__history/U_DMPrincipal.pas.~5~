@@ -1,0 +1,42 @@
+unit U_DMPrincipal;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Data.Win.ADODB;
+
+type
+  TDMPrincipal = class(TDataModule)
+    ADOConnectionPrincipal: TADOConnection;
+    ADOGrava_Login: TADOQuery;
+    ADOGrava_LoginID_GRAVALOGIN: TIntegerField;
+    ADOGrava_LoginCOD_USUARIO: TIntegerField;
+    ADOGrava_LoginLOGIN: TStringField;
+    ADOGrava_LoginDT_LOGIN: TDateTimeField;
+    ADOGrava_LoginHR_LOGIN: TStringField;
+    ADOGrava_LoginENTRADA_SAIDA: TStringField;
+    DSGrava_Login: TDataSource;
+    DSLog_Operacoes: TDataSource;
+    ADOLog_Operacoes: TADOQuery;
+    ADOLog_OperacoesID: TAutoIncField;
+    ADOLog_OperacoesUSUARIO: TIntegerField;
+    ADOLog_OperacoesDATA: TDateTimeField;
+    ADOLog_OperacoesHORA: TWideStringField;
+    ADOLog_OperacoesTABELA: TStringField;
+    ADOLog_OperacoesOPERACAO: TStringField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMPrincipal: TDMPrincipal;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

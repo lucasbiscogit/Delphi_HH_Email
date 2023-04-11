@@ -1,0 +1,64 @@
+unit untPesqString;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
+  Vcl.Imaging.pngimage;
+
+type
+  TfrmPesqString = class(TForm)
+    pnlFundo: TPanel;
+    lblJanela: TLabel;
+    Label1: TLabel;
+    pnlImagem: TPanel;
+    Image1: TImage;
+    btnSair: TBitBtn;
+    btnPesquisar: TBitBtn;
+    RadioGroup1: TRadioGroup;
+    edtValor: TEdit;
+    procedure FormActivate(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPesqString: TfrmPesqString;
+
+implementation
+
+{$R *.dfm}
+
+uses untDMPrincipal, untFuncoes, untModelo, untPrincipal;
+
+procedure TfrmPesqString.btnPesquisarClick(Sender: TObject);
+begin
+    if edtValor.Text = '' then  // Verificando se o campo Valor esta Vazio
+      begin
+          beep;
+          ShowMessage('O Campo Valor Não Pode Ficar Em Branco');
+          edtValor.SetFocus;
+      end;
+    if edtValor.Text <> '' then
+      close;
+end;
+
+procedure TfrmPesqString.btnSairClick(Sender: TObject);
+begin
+  Close; // FEchar Tela de Pesquisa
+end;
+
+procedure TfrmPesqString.FormActivate(Sender: TObject);
+begin
+    lblJanela.Caption:= nomeJanela;  /// Carregando o Nome da Tela que esta pesquisando
+    frmPesqString.Caption:= NoEmpresa;  /// Carregando o Nome da Tela que esta pesquisando
+    edtValor.Clear;    // Limpar se tiver algum conteudo
+    edtValor.SetFocus; // Colocar o Foco.
+end;
+
+end.

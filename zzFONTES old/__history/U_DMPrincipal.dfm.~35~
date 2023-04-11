@@ -1,0 +1,88 @@
+object DMPrincipal: TDMPrincipal
+  OldCreateOrder = False
+  Height = 271
+  Width = 308
+  object ADOConnectionPrincipal: TADOConnection
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Password=alex3103;Persist Security Info=True' +
+      ';User ID=sa;Initial Catalog=CONTASCHACARAS;Data Source=SERVERDES' +
+      'K\DESPR;Use Procedure for Prepare=1;Auto Translate=True;Packet S' +
+      'ize=4096;Workstation ID=DELLSERVER;Use Encryption for Data=False' +
+      ';Tag with column collation when possible=False'
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Left = 128
+    Top = 24
+  end
+  object ADOGrava_Login: TADOQuery
+    Connection = ADOConnectionPrincipal
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'select * from tb_grava_login')
+    Left = 47
+    Top = 95
+    object ADOGrava_LoginID_GRAVALOGIN: TIntegerField
+      FieldName = 'ID_GRAVALOGIN'
+    end
+    object ADOGrava_LoginCOD_USUARIO: TIntegerField
+      FieldName = 'COD_USUARIO'
+    end
+    object ADOGrava_LoginLOGIN: TStringField
+      FieldName = 'LOGIN'
+    end
+    object ADOGrava_LoginDT_LOGIN: TDateTimeField
+      FieldName = 'DT_LOGIN'
+    end
+    object ADOGrava_LoginHR_LOGIN: TStringField
+      FieldName = 'HR_LOGIN'
+      Size = 8
+    end
+    object ADOGrava_LoginENTRADA_SAIDA: TStringField
+      FieldName = 'ENTRADA_SAIDA'
+      FixedChar = True
+      Size = 1
+    end
+  end
+  object DSGrava_Login: TDataSource
+    DataSet = ADOGrava_Login
+    Left = 135
+    Top = 95
+  end
+  object DSLog_Operacoes: TDataSource
+    DataSet = ADOLog_Operacoes
+    Left = 134
+    Top = 143
+  end
+  object ADOLog_Operacoes: TADOQuery
+    Connection = ADOConnectionPrincipal
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'select * from TB_LOG_OPERACOES')
+    Left = 39
+    Top = 143
+    object ADOLog_OperacoesID: TAutoIncField
+      FieldName = 'ID'
+      ReadOnly = True
+    end
+    object ADOLog_OperacoesUSUARIO: TIntegerField
+      FieldName = 'USUARIO'
+    end
+    object ADOLog_OperacoesDATA: TDateTimeField
+      FieldName = 'DATA'
+    end
+    object ADOLog_OperacoesHORA: TWideStringField
+      FieldName = 'HORA'
+      Size = 16
+    end
+    object ADOLog_OperacoesTABELA: TStringField
+      FieldName = 'TABELA'
+      Size = 50
+    end
+    object ADOLog_OperacoesOPERACAO: TStringField
+      FieldName = 'OPERACAO'
+      Size = 100
+    end
+  end
+end

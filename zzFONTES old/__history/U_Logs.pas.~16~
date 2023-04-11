@@ -1,0 +1,702 @@
+unit U_Logs;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls,
+  Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids, Data.DB, Data.Win.ADODB, Vcl.Menus;
+
+type
+  TF_Logs = class(TForm)
+    PageControlLog: TPageControl;
+    TabSheetLog: TTabSheet;
+    TabSheetLogin: TTabSheet;
+    DSLog: TDataSource;
+    ADOLog: TADOQuery;
+    DBGrid1: TDBGrid;
+    pnlSuperior: TPanel;
+    btnFechar: TBitBtn;
+    Label1: TLabel;
+    pnlMovimentacoes: TPanel;
+    Label2: TLabel;
+    btnLimpar: TBitBtn;
+    CheckBoxUltimocem: TCheckBox;
+    Panel2: TPanel;
+    Label3: TLabel;
+    btnLimpa2: TBitBtn;
+    CheckUltimo: TCheckBox;
+    DSAcesso: TDataSource;
+    ADOAcesso: TADOQuery;
+    DBGrid2: TDBGrid;
+    TimerbtnFechar: TTimer;
+    btnPesLog: TButton;
+    btnPesqAcesso: TButton;
+    PopupPesqLog: TPopupMenu;
+    LoginUsuario1: TMenuItem;
+    DataAcesso1: TMenuItem;
+    HoraAcesso1: TMenuItem;
+    Operacao1: TMenuItem;
+    PopupPesAcesso: TPopupMenu;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    abela1: TMenuItem;
+    ADOLogLOGIN: TStringField;
+    ADOLogID: TAutoIncField;
+    ADOLogUSUARIO: TIntegerField;
+    ADOLogDATA: TDateTimeField;
+    ADOLogHORA: TWideStringField;
+    ADOLogTABELA: TStringField;
+    ADOLogOPERACAO: TStringField;
+    ADOAcessoENTRADA_SAIDA: TStringField;
+    ADOAcessoID_GRAVALOGIN: TAutoIncField;
+    ADOAcessoCOD_USUARIO: TIntegerField;
+    ADOAcessoLOGIN: TStringField;
+    ADOAcessoDT_LOGIN: TDateTimeField;
+    ADOAcessoHR_LOGIN: TStringField;
+    procedure btnSairClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure CheckBoxUltimocemClick(Sender: TObject);
+    procedure btnLimparClick(Sender: TObject);
+    procedure btnLimpa2Click(Sender: TObject);
+    procedure TimerbtnFecharTimer(Sender: TObject);
+    procedure CheckUltimoClick(Sender: TObject);
+    procedure DataAcesso1Click(Sender: TObject);
+    procedure LoginUsuario1Click(Sender: TObject);
+    procedure Operacao1Click(Sender: TObject);
+    procedure abela1Click(Sender: TObject);
+    procedure MenuItem2Click(Sender: TObject);
+    procedure MenuItem3Click(Sender: TObject);
+    procedure MenuItem5Click(Sender: TObject);
+  private
+    { Private declarations }
+    procedure consLog;     // Procedure para dar Select em apenas 100 registro ou todos dos logs de movimentos
+    procedure consLogAcesso;     // Procedure para dar Select em apenas 100 registro ou todos dos logs de Acesso
+  public
+    { Public declarations }
+  end;
+
+var
+  F_Logs: TF_Logs;
+
+implementation
+
+uses
+  U_DMPrincipal, U_Modelo1, U_PesqData, U_Principal, U_PesqString;
+
+{$R *.dfm}
+
+
+
+
+procedure TF_Logs.abela1Click(Sender: TObject);
+begin
+  tarefa:= 'Pesquisa Alfanumerica por [TABELA] ';             // Mensagem no Rodape
+  F_PesqString.ShowModal; // Chamar a Tela de Pesquisa
+
+
+//Pesquisa por string que contem
+ if F_PesqString.RadioGroup1.ItemIndex = 0 then
+    begin
+        strSql:=' select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (TABELA) LIKE ' + #39 + '%' + F_PesqString.edtValor.Text + '%' + #39 + ' order by DATA desc';
+
+      with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+             if (ADOLog.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+ //Pesquisa por string que Inicia Com
+ if F_PesqString.RadioGroup1.ItemIndex = 1 then
+    begin
+        strSql:='select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (TABELA) LIKE ' + #39 + F_PesqString.edtValor.Text + '%' + #39 + ' order by DATA desc';
+
+        with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOLog.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+//Pesquisa por string que Termina Com
+ if F_PesqString.RadioGroup1.ItemIndex = 2 then
+    begin
+        strSql:='select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (TABELA) LIKE ' + #39 + '%' +  F_PesqString.edtValor.Text + #39 + ' order by DATA desc';
+
+        with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOLog.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+end;
+
+procedure TF_Logs.btnLimpa2Click(Sender: TObject);
+var
+  qry: TADOQuery;
+begin
+  try
+  // Criando Um ADOQUERY Em Tempo de Execução
+   qry:= TADOQuery.Create(nil);
+   qry.Connection:= DMPrincipal.ADOConnectionPrincipal;
+
+    IF MessageDlg ('Deseja Realmente Excluir Todos Registros ? ', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    try
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add('delete from TB_GRAVA_LOGIN');
+        qry.ExecSQL;
+    finally
+        ADOAcesso.Close;
+        ADOAcesso.Open;
+        ShowMessage(' Logs Apagados Com Sucesso ');
+    end;
+  finally
+    FreeAndNil(qry);
+  end;
+
+end;
+
+procedure TF_Logs.btnLimparClick(Sender: TObject);
+var
+  qry: TADOQuery;
+begin
+  try
+  // Criando Um ADOQUERY Em Tempo de Execução
+   qry:= TADOQuery.Create(nil);
+   qry.Connection:= DMPrincipal.ADOConnectionPrincipal;
+
+    IF MessageDlg ('Deseja Realmente Excluir Todos Registros ? ', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    try
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add('delete from TB_LOG_OPERACOES');
+        qry.ExecSQL;
+    finally
+        ADOLog.Close;
+        ADOLog.Open;
+        ShowMessage(' Logs Apagados Com Sucesso ');
+    end;
+  finally
+    FreeAndNil(qry);
+  end;
+
+end;
+
+procedure TF_Logs.btnSairClick(Sender: TObject);
+begin
+  Close; // Fechar a Tela
+end;
+
+procedure TF_Logs.CheckBoxUltimocemClick(Sender: TObject);
+begin
+  consLog; // Chamando o procedimento de selecionar todos ou os 100 ultimos registros;
+end;
+
+procedure TF_Logs.CheckUltimoClick(Sender: TObject);
+begin
+  consLogAcesso; // Chamar Procedimento para Fazer o Select
+end;
+
+procedure TF_Logs.consLog;
+begin       // Procedure para Vereficar o CheckBox para fazer o Select de 100 ou todos os registros  dos Logs de movimentacoes
+ if (CheckBoxUltimocem.Checked = True) then
+    begin
+      btnPesLog.Enabled:= False;
+      ADOLog.Close;
+      ADOLog.SQL.Clear;
+      ADOLog.SQL.Add('select top 100 U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO ORDER BY DATA desc');
+      ADOLog.Open;
+    end
+ else
+  if (CheckBoxUltimocem.Checked = False) then
+    begin
+      btnPesLog.Enabled:= True;
+      ADOLog.Close;
+      ADOLog.SQL.Clear;
+      ADOLog.SQL.Add('select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO ORDER BY DATA desc');
+      ADOLog.Open;
+    end;
+end;
+
+procedure TF_Logs.consLogAcesso;
+begin       // Procedure para Vereficar o CheckBox para fazer o Select de 100 ou todos os registros  dos Logs De Acesso
+ if (CheckUltimo.Checked = True) then
+    begin
+      btnPesqAcesso.Enabled:= False;
+      ADOAcesso.Close;
+      ADOAcesso.SQL.Clear;
+      ADOAcesso.SQL.Add('SELECT TOP 100 CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' WHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN order by DT_LOGIN desc');
+      ADOAcesso.Open;
+    end
+ else
+  if (CheckUltimo.Checked = False) then
+    begin
+      btnPesqAcesso.Enabled:= True;
+      ADOAcesso.Close;
+      ADOAcesso.SQL.Clear;
+      ADOAcesso.SQL.Add('SELECT CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' WHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN order by DT_LOGIN desc');
+      ADOAcesso.Open;
+    end;
+end;
+
+procedure TF_Logs.DataAcesso1Click(Sender: TObject);
+begin  // Pesquisa Log Por Data
+   tarefa:= 'Pesquisa de Registros incuidos no Periodo';
+   F_PesqData.ShowModal;
+
+  if tarefaClick = 1 then    // Para tirar o erro ao sair da tela de Pesquisa por DAta
+    begin
+       strSql:= 'select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L  WHERE U.ID = L.USUARIO';
+      //strSql:= 'SELECT * FROM ' + nomeTabela;
+      strSql:= strSql + ' AND DATA >= ' + #39 + VAL1 + #39;
+      strSql:= strSql + ' AND DATA <= ' + #39 + VAL2 + #39;
+
+      with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOLog.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+end;
+
+procedure TF_Logs.FormActivate(Sender: TObject);
+begin
+  ADOTabela:= DMPrincipal.ADOLog_Operacoes;   // Definindo o Valor da Variavel que ira Receber o ADOQuery   //*********** ADOQUERY = ADOTABELS **************************************
+  nomeTabela:= 'TB_LOG_OPERACOES'; // Definindo a Tabela para trabalhar
+  DescPrincipal:= 'OPERACAO';   // Define o Campo que ira Fazer a Pesquisa Padrao por Desc.
+  nomeJanela:= 'Logs Do Sistema';  // Nome que ira aparecer
+  // Caption dos ApplicationMessageBox  Do EXECUTAR SentencaSQL
+  MensageAppMesBox:= 'Logs do Sistema';
+  ModoEdicao:= F_Principal.ADOQLogin.FieldByName('LOG_INC').AsAnsiString +
+               F_Principal.ADOQLogin.FieldByName('LOG_ALT').AsAnsiString +
+               F_Principal.ADOQLogin.FieldByName('LOG_EXC').AsAnsiString +
+               F_Principal.ADOQLogin.FieldByName('LOG_MAR').AsAnsiString +
+               F_Principal.ADOQLogin.FieldByName('LOG_IMP').AsAnsiString +
+               F_Principal.ADOQLogin.FieldByName('LOG_INA').AsAnsiString +
+               F_Principal.ADOQLogin.FieldByName('LOG_HAB').AsAnsiString;
+
+  PageControlLog.ActivePageIndex:=0; // Sempre Abrir na Aba de Logs de Movimentacoes
+  consLog; // Chamando o procedimento de selecionar todos ou os 100 ultimos registros;
+  consLogAcesso; // Chamar o Procedimento de Selecionar todos ou os 100 Ultimos Registros
+// Verificar e Dar Permissao no Botao Limpar
+   if (copy(ModoEdicao,1,1) = 'S')  and (copy(ModoEdicao,2,1) = 'S') and (copy(ModoEdicao,3,1) = 'S') then
+    begin
+
+        btnLimpar.Visible:= True;
+        btnLimpar.Enabled:= True;
+        btnLimpa2.Visible:= True;
+        btnLimpa2.Enabled:= True;
+
+    end
+   else
+      begin
+        btnLimpar.Visible:= False;
+        btnLimpa2.Visible:= False;
+      end;
+// Verificando permissao para Fazer as Pesquisas  (Aba de Logs)
+   if (copy(ModoEdicao,4,1) = 'S') then
+    begin
+        LoginUsuario1.Visible:= True;
+        DataAcesso1.Visible:= True;
+        HoraAcesso1.Visible:= True;
+        Operacao1.Visible:= True;
+        abela1.Visible:= True;
+    end
+   else
+      begin
+          btnPesLog.Visible:= False;
+      end;
+// Verificando permissao para Fazer as Pesquisas  (Aba de Acessos)
+   if (copy(ModoEdicao,7,1) = 'S') then
+    begin
+        MenuItem2.Visible:= True;
+        MenuItem3.Visible:= True;
+        MenuItem4.Visible:= True;
+        MenuItem5.Visible:= True;
+    end
+   else
+      begin
+          btnPesqAcesso.Visible:= False;
+      end;
+end;
+
+procedure TF_Logs.LoginUsuario1Click(Sender: TObject);
+begin
+  tarefa:= 'Pesquisa Alfanumerica por [LOGIN] ';             // Mensagem no Rodape
+  F_PesqString.ShowModal; // Chamar a Tela de Pesquisa
+
+//Pesquisa por string que contem
+ if F_PesqString.RadioGroup1.ItemIndex = 0 then
+    begin
+        strSql:=' select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (LOGIN) LIKE ' + #39 + '%' + F_PesqString.edtValor.Text + '%' + #39 + ' order by DATA desc';
+
+      with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+             if (ADOLog.RecordCount = 0)then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+ //Pesquisa por string que Inicia Com
+ if F_PesqString.RadioGroup1.ItemIndex = 1 then
+    begin
+        strSql:='select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (LOGIN) LIKE ' + #39 + F_PesqString.edtValor.Text + '%' + #39 + ' order by DATA desc';
+
+        with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOLog.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+//Pesquisa por string que Termina Com
+ if F_PesqString.RadioGroup1.ItemIndex = 2 then
+    begin
+        strSql:='select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (LOGIN) LIKE ' + #39 + '%' +  F_PesqString.edtValor.Text + #39 + ' order by DATA desc';
+
+        with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOLog.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+end;
+
+procedure TF_Logs.MenuItem2Click(Sender: TObject);
+begin
+ tarefa:= 'Pesquisa Alfanumerica por [LOGIN DE USUARIO] ';             // Mensagem no Rodape
+  F_PesqString.ShowModal; // Chamar a Tela de Pesquisa
+
+//Pesquisa por string que contem
+ if F_PesqString.RadioGroup1.ItemIndex = 0 then
+    begin
+        strSql:='SELECT CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' wHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN';
+        strSql:= strSql + ' WHERE UPPER (LOGIN) LIKE ' + #39 + '%' + F_PesqString.edtValor.Text + '%' + #39 + ' order by DT_LOGIN desc';
+
+      with ADOAcesso do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+             if (ADOAcesso.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+ //Pesquisa por string que Inicia Com
+ if F_PesqString.RadioGroup1.ItemIndex = 1 then
+    begin
+        strSql:='SELECT CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' wHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN';
+        strSql:= strSql + ' WHERE UPPER (LOGIN) LIKE ' + #39 + F_PesqString.edtValor.Text + '%' + #39 + ' order by DT_LOGIN desc';
+
+        with ADOAcesso do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOAcesso.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+//Pesquisa por string que Termina Com
+ if F_PesqString.RadioGroup1.ItemIndex = 2 then
+    begin
+        strSql:='SELECT CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' wHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN';
+        strSql:= strSql + ' WHERE UPPER (LOGIN) LIKE ' + #39 + '%' +  F_PesqString.edtValor.Text + #39 + ' order by DT_LOGIN desc';
+
+        with ADOAcesso do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOAcesso.RecordCount = 0)  then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+end;
+
+procedure TF_Logs.MenuItem3Click(Sender: TObject);
+begin
+// Pesquisa Log Por Data
+
+   tarefa:= 'Pesquisa de Registros incuidos no Periodo';
+   F_PesqData.ShowModal;
+
+  if tarefaClick = 1 then    // Para tirar o erro ao sair da tela de Pesquisa por DAta
+    begin
+      strSql:= 'SELECT CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' WHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN';
+      strSql:= strSql + ' WHERE DT_LOGIN >= ' + #39 + VAL1 + #39;
+      strSql:= strSql + ' AND DT_LOGIN <= ' + #39 + VAL2 + #39 + 'ORDER BY DT_LOGIN DESC';
+
+      with ADOAcesso do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOAcesso.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+end;
+
+procedure TF_Logs.MenuItem5Click(Sender: TObject);
+begin
+ tarefa:= 'Pesquisa Alfanumerica por [LOGIN DE USUARIO] ';             // Mensagem no Rodape
+  F_PesqString.ShowModal; // Chamar a Tela de Pesquisa
+
+//Pesquisa por string que contem
+ if F_PesqString.RadioGroup1.ItemIndex = 0 then
+    begin
+        strSql:='SELECT CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' WHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN';
+        strSql:= strSql + ' WHERE UPPER (ENTRADASAIDA) LIKE ' + #39 + '%' + F_PesqString.edtValor.Text + '%' + #39 + ' order by DT_LOGIN desc';
+
+      with ADOAcesso do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+             if (ADOAcesso.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+ //Pesquisa por string que Inicia Com
+ if F_PesqString.RadioGroup1.ItemIndex = 1 then
+    begin
+        strSql:='SELECT CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' wHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN';
+        strSql:= strSql + ' WHERE UPPER (ENTRADASAIDA) LIKE ' + #39 + F_PesqString.edtValor.Text + '%' + #39 + ' order by DT_LOGIN desc';
+
+        with ADOAcesso do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOAcesso.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+//Pesquisa por string que Termina Com
+ if F_PesqString.RadioGroup1.ItemIndex = 2 then
+    begin
+        strSql:='SELECT CASE WHEN ENTRADA_SAIDA = ''E'' THEN ''ENTRADA'' wHEN ENTRADA_SAIDA = ''S'' THEN ''SAIDA'' WHEN ENTRADA_SAIDA = ''L'' THEN ''LOGOFF'' END AS ENTRADA_SAIDA, ID_GRAVALOGIN, COD_USUARIO, LOGIN, DT_LOGIN, HR_LOGIN FROM TB_GRAVA_LOGIN';
+        strSql:= strSql + ' WHERE UPPER (ENTRADASAIDA) LIKE ' + #39 + '%' +  F_PesqString.edtValor.Text + #39 + ' order by DT_LOGIN desc';
+
+        with ADOAcesso do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOAcesso.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+end;
+
+procedure TF_Logs.Operacao1Click(Sender: TObject);
+begin
+ tarefa:= 'Pesquisa Alfanumerica por [OPERAÇÃO] ';             // Mensagem no Rodape
+  F_PesqString.ShowModal; // Chamar a Tela de Pesquisa
+
+//Pesquisa por string que contem
+ if F_PesqString.RadioGroup1.ItemIndex = 0 then
+    begin
+        strSql:=' select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (OPERACAO) LIKE ' + #39 + '%' + F_PesqString.edtValor.Text + '%' + #39 + ' order by DATA desc';
+
+      with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+             if (ADOLog.RecordCount = 0)  then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+ //Pesquisa por string que Inicia Com
+ if F_PesqString.RadioGroup1.ItemIndex = 1 then
+    begin
+        strSql:='select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (OPERACAO) LIKE ' + #39 + F_PesqString.edtValor.Text + '%' + #39 + ' order by DATA desc';
+
+        with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOLog.RecordCount = 0) then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+
+//Pesquisa por string que Termina Com
+ if F_PesqString.RadioGroup1.ItemIndex = 2 then
+    begin
+        strSql:='select U.LOGIN, L.* from TB_USUARIO U, TB_LOG_OPERACOES L WHERE U.ID = L.USUARIO';
+        strSql:= strSql + ' and UPPER (OPERACAO) LIKE ' + #39 + '%' +  F_PesqString.edtValor.Text + #39 + ' order by DATA desc';
+
+        with ADOLog do
+          begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+
+             if (ADOLog.RecordCount = 0)  then
+              begin
+                  mensagem:= ' Não foi encontrado nenhum Registro que ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+                             +'Satisfaça a sua Pesquisa.';
+                  Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+              end;
+          end;
+    end;
+end;
+
+procedure TF_Logs.TimerbtnFecharTimer(Sender: TObject);
+begin
+    btnFechar.Visible:= True;   // Fazer o Botao Fechar Aparecer
+    btnLimpar.Visible:= True;
+end;
+
+end.

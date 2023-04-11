@@ -1,0 +1,42 @@
+program GerarContasChacaras;
+
+uses
+  Vcl.Forms,
+  U_Principal in 'U_Principal.pas' {F_Principal},
+  U_DMPrincipal in 'U_DMPrincipal.pas' {DMPrincipal: TDataModule},
+  U_PesqData in 'U_PesqData.pas' {F_PesqData},
+  U_Login in 'U_Login.pas' {F_Login},
+  U_Usuario in 'U_Usuario.pas' {F_Usuario},
+  U_Perfil in 'U_Perfil.pas' {F_Perfil},
+  U_Logs in 'U_Logs.pas' {F_Logs},
+  U_PesqString in 'U_PesqString.pas' {F_PesqString},
+  U_DMRelatorios in 'U_DMRelatorios.pas' {DMRelatorios: TDataModule},
+  U_CadChacara in 'U_CadChacara.pas' {F_CadChacara},
+  U_PesCEP in 'U_PesCEP.pas' {F_PesqCEP},
+  U_ContaGeral in 'U_ContaGeral.pas' {F_ContaGeral},
+  U_Configuracao in 'U_Configuracao.pas' {F_Configuracao},
+  U_LeituraChacaras in 'U_LeituraChacaras.pas' {F_LeituraChacaras},
+  U_MesReferencia in 'U_MesReferencia.pas' {F_MesReferencia},
+  U_GerarConta in 'U_GerarConta.pas' {F_GerarConta},
+  U_CAIXAMOVIMENTO in 'U_CAIXAMOVIMENTO.pas' {F_CaixaMovimento},
+  U_ContaPagar in 'U_ContaPagar.pas' {F_ContaPagar},
+  U_ContaReceber in 'U_ContaReceber.pas' {F_ContaReceber},
+  U_Modelo1 in 'U_Modelo1.pas' {F_Modelo1},
+  U_CaixaAbrir in 'U_CaixaAbrir.pas' {F_CaixaAbrir},
+  U_CaixaFechar in 'U_CaixaFechar.pas' {F_CaixaFechar};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TDMPrincipal, DMPrincipal);
+  Application.CreateForm(TDMRelatorios, DMRelatorios);
+  Application.CreateForm(TF_Principal, F_Principal);
+  Application.CreateForm(TF_Login, F_Login);
+  Application.CreateForm(TF_PesqData, F_PesqData);
+  Application.CreateForm(TF_PesqString, F_PesqString);
+  Application.CreateForm(TF_PesqCEP, F_PesqCEP);
+  Application.CreateForm(TF_MesReferencia, F_MesReferencia);
+  Application.Run;
+end.

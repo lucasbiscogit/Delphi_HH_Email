@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2017/03/11 19:51:29.000.020,C:\Users\DellServer\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Emprestimo\FONTES\U_Principal.pas</Transaction>
+    <Transaction>2017/03/11 19:51:29.000.020,C:\Users\DellServer\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Emprestimo\FONTES\U_Principal.dfm</Transaction>
+    <Transaction>2017/03/11 19:52:41.000.042,C:\Users\DellServer\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Emprestimo\FONTES\P_EmprestimoGeral.dproj</Transaction>
+    <Transaction>2017/03/13 15:19:59.000.605,C:\Emprestimo\FONTES\Unit1.dfm=C:\Emprestimo\FONTES\U_FazerEmprestimo.dfm</Transaction>
+    <Transaction>2017/03/17 21:05:32.000.352,C:\Emprestimo\FONTES\U_DMPrincipal.dfm=C:\Emprestimo\FONTES\Unit1.dfm</Transaction>
+    <Transaction>2017/03/17 21:21:40.000.711,C:\Emprestimo\FONTES\U_Modelo1.dfm=C:\Emprestimo\FONTES\Unit1.dfm</Transaction>
+    <Transaction>2017/03/21 18:24:22.000.994,C:\Emprestimo\FONTES\P_EmprestimoGeral.dproj=C:\Emprestimo\FONTES\P_EmprestimoGeral.dproj</Transaction>
+    <Transaction>2017/04/13 21:26:59.000.536,C:\Emprestimo\FONTES\U_Empresas.dfm=C:\Emprestimo\FONTES\U_Client.dfm</Transaction>
+    <Transaction>2017/04/18 20:50:28.000.858,C:\Emprestimo\FONTES\Unit1.dfm=C:\Emprestimo\FONTES\U_DMRelatorios.dfm</Transaction>
+    <Transaction>2017/04/18 20:50:28.000.858,C:\Emprestimo\FONTES\Unit1.pas=C:\Emprestimo\FONTES\U_DMRelatorios.pas</Transaction>
+    <Transaction>2017/05/19 11:30:26.000.954,C:\Gerar_Contas_Chacaras\FONTES\GerarContasChacaras.dproj=C:\Gerar_Contas_Chacaras\FONTES\P_EmprestimoGeral.dproj</Transaction>
+    <Transaction>2017/08/03 20:33:58.000.163,C:\Gerar_Contas_Chacaras\FONTES\U_MesReferencia.dfm=C:\Gerar_Contas_Chacaras\FONTES\Unit1.dfm</Transaction>
+    <Transaction>2017/12/19 17:55:28.000.654,C:\Gerar_Contas_Chacaras\FONTES\U_Modelo1.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_CAIXAMOVIMENTO.dfm</Transaction>
+    <Transaction>2017/12/19 20:45:51.000.539,C:\Gerar_Contas_Chacaras\FONTES\U_Modelo1.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_ContaReceber.dfm</Transaction>
+    <Transaction>2017/12/21 15:05:39.000.899,C:\Gerar_Contas_Chacaras\FONTES\Unit1.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_CaixaAbrir.dfm</Transaction>
+    <Transaction>2017/12/21 15:48:12.000.420,C:\Gerar_Contas_Chacaras\FONTES\U_CaixaFechar.dfm=C:\Gerar_Contas_Chacaras\FONTES\Unit1.dfm</Transaction>
+    <Transaction>2017/12/22 20:42:14.000.894,C:\Gerar_Contas_Chacaras\FONTES\U_GeraParcelas_Pag_Recr.dfm=C:\Gerar_Contas_Chacaras\FONTES\untGerarCPagar.dfm</Transaction>
+    <Transaction>2017/12/30 20:02:49.000.981,C:\Gerar_Contas_Chacaras\FONTES\U_ContaPagarLiquidar.dfm=C:\Gerar_Contas_Chacaras\FONTES\untCPagarLiquidar.dfm</Transaction>
+    <Transaction>2018/01/02 21:29:36.000.991,C:\Gerar_Contas_Chacaras\FONTES\U_CreditoCliente.dfm=C:\Gerar_Contas_Chacaras\FONTES\U_Modelo1.dfm</Transaction>
+    <Transaction>2018/01/17 15:04:02.000.964,C:\Gerar_Contas_Chacaras\FONTES\U_Pagamentos.dfm=C:\Gerar_Contas_Chacaras\FONTES\Unit1.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

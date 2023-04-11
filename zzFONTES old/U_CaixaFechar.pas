@@ -1,0 +1,149 @@
+unit U_CaixaFechar;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Data.DB, Data.Win.ADODB,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask, Vcl.DBCtrls;
+
+type
+  TF_CaixaFechar = class(TForm)
+    pnlCampos: TPanel;
+    pnlBotoes: TPanel;
+    DSFecharCaixa: TDataSource;
+    ADOFecharCaixa: TADOQuery;
+    ADOFecharCaixaID: TAutoIncField;
+    ADOFecharCaixaDATA_INICIO: TDateTimeField;
+    ADOFecharCaixaDATA_FINAL: TDateTimeField;
+    ADOFecharCaixaHORA_INICIO: TWideStringField;
+    ADOFecharCaixaHORA_FINAL: TWideStringField;
+    ADOFecharCaixaUSER_INICIO: TIntegerField;
+    ADOFecharCaixaUSER_FINAL: TIntegerField;
+    ADOFecharCaixaVL_INICIO: TFloatField;
+    ADOFecharCaixaVL_FECHAMENTO: TFloatField;
+    ADOFecharCaixaVLTOTALRECEBIDO: TFloatField;
+    ADOFecharCaixaVLTOTALSAIDA: TFloatField;
+    ADOFecharCaixaVLTOTALGERAL: TFloatField;
+    ADOFecharCaixaVLSAIDACONTAS: TFloatField;
+    ADOFecharCaixaSALDO_DINHEIRO: TFloatField;
+    ADOFecharCaixaSALDO_BOLETO: TFloatField;
+    ADOFecharCaixaSALDO_CHEQUE: TFloatField;
+    ADOFecharCaixaSALDO_CARTAO: TFloatField;
+    ADOFecharCaixaSAIDA_DINHEIRO: TFloatField;
+    ADOFecharCaixaSAIDA_CHEQUE: TFloatField;
+    BitBtn1: TBitBtn;
+    btnFechar: TBitBtn;
+    lblCaixa: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    edtVlInicial: TDBEdit;
+    DBEdit4: TDBEdit;
+    edtUser: TEdit;
+    TimerPiscaLabel: TTimer;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormActivate(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
+    procedure TimerPiscaLabelTimer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  F_CaixaFechar: TF_CaixaFechar;
+
+implementation
+
+uses
+  U_DMPrincipal, U_Principal;
+
+{$R *.dfm}
+
+procedure TF_CaixaFechar.BitBtn1Click(Sender: TObject);
+begin
+  ADOFecharCaixa.Cancel;
+  Close;
+end;
+
+procedure TF_CaixaFechar.btnFecharClick(Sender: TObject);
+var
+mensagem,MensageAppMesBox: string;
+begin
+   ADOFecharCaixa.Post;  // Gravar os Dados
+
+ // Mensagem para Fechar
+   MensageAppMesBox:= 'FECHAR CAIXA';
+   mensagem:= ' O Caixa Foi Fechado... ' + #13    // #13 Pular Linha   ' INFORMAÇÂO '
+              +'Com Sucesso.' + #13 + ' Caixa Numero: ' + IntToStr(ADOFecharCaixaID.Value);
+   Application.MessageBox(PChar(mensagem), PChar(MensageAppMesBox) , MB_OK + MB_ICONINFORMATION);   // Variavel Configuravel
+   Close;
+end;
+
+procedure TF_CaixaFechar.FormActivate(Sender: TObject);
+var
+  qry: TADOQuery;
+begin
+ // Verificando se o Caixa esta Aberto
+      try
+      // Criando Um ADOQUERY Em Tempo de Execução
+         qry:= TADOQuery.Create(nil);
+         qry.Connection:= DMPrincipal.ADOConnectionPrincipal;
+      // Usando o ADOQUERY Criado
+        qry.Close;
+        qry.SQL.Clear;
+        qry.SQL.Add(' select top 1 ID from TB_CAIXA_ABREFECHA where DATA_FINAL is null and HORA_FINAL is null');
+        qry.Open;
+          if (qry.RecordCount = 0) then
+            begin
+             btnFechar.Visible:= False;
+             lblCaixa.Visible:= True;
+             TimerPiscaLabel.Enabled:= True;
+             Exit;
+            end
+          else
+            begin
+              btnFechar.Visible:= True;
+            end;
+      finally
+        FreeAndNil(qry);
+      end;
+
+  ADOFecharCaixa.Open;    // Abrindo o componente
+  ADOFecharCaixa.Edit; // Colocando em modo de insert
+
+  ADOFecharCaixa.FieldByName('DATA_FINAL').AsDateTime:= Date;    // Colocando a Data atual
+  ADOFecharCaixa.FieldByName('HORA_FINAL').Value:= FormatDateTime('hh:mm:ss',Now);  // Colocando o Valor Atual
+  ADOFecharCaixa.FieldByName('USER_FINAL').AsInteger:= F_Principal.ADOQLoginID.Value; // Passando o Usuario
+  edtUser.Text:= F_Principal.ADOQLoginLOGIN.Value;  // Colocando o Login
+end;
+
+procedure TF_CaixaFechar.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  ADOFecharCaixa.Close;
+end;
+
+procedure TF_CaixaFechar.TimerPiscaLabelTimer(Sender: TObject);
+begin
+  with lblCaixa do
+    begin
+      if (visible = false) then
+        begin
+         visible := true;
+        end
+      else
+        begin
+         visible := false;
+         application.ProcessMessages;
+        end;
+    end;
+end;
+
+end.

@@ -1,0 +1,260 @@
+unit U_PesCEP;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
+  Vcl.Imaging.pngimage, Vcl.Grids, Vcl.DBGrids, Data.DB, Data.Win.ADODB,
+  Vcl.DBCtrls, Vcl.ComCtrls;
+
+type
+  TF_PesqCEP = class(TForm)
+    pnlFundo: TPanel;
+    lblJanela: TLabel;
+    Label1: TLabel;
+    pnlImagem: TPanel;
+    Image1: TImage;
+    btnSair: TBitBtn;
+    RadioGroup1: TRadioGroup;
+    edtValor: TEdit;
+    pnlGrid: TPanel;
+    GridPesqCep: TDBGrid;
+    ADOCep: TADOQuery;
+    ADOCepID: TAutoIncField;
+    ADOCepSTATUS: TStringField;
+    ADOCepMARCAR: TStringField;
+    ADOCepINATIVO: TStringField;
+    ADOCepDATA_INC: TDateTimeField;
+    ADOCepDATA_ALT: TDateTimeField;
+    ADOCepDATA_HAB: TDateTimeField;
+    ADOCepUF: TStringField;
+    ADOCepESTADO: TStringField;
+    ADOCepCIDADE: TStringField;
+    ADOCepBAIRRO: TStringField;
+    ADOCepENDERECO: TStringField;
+    ADOCepCEP: TStringField;
+    ADOCepCAPITAL: TStringField;
+    ADOCepREGIAO: TStringField;
+    ADOCepN_DE: TIntegerField;
+    ADOCepN_ATE: TIntegerField;
+    DSCep: TDataSource;
+    CheckRefinar: TCheckBox;
+    CheckUF: TCheckBox;
+    CheckCidade: TCheckBox;
+    ComboUF: TDBLookupComboBox;
+    ComboCidade: TDBLookupComboBox;
+    ADOUF: TADOQuery;
+    DSUF: TDataSource;
+    DSCidade: TDataSource;
+    ADOCidade: TADOQuery;
+    StatusBarcEP: TStatusBar;
+    procedure btnSairClick(Sender: TObject);
+    procedure edtValorKeyPress(Sender: TObject; var Key: Char);
+    procedure FormActivate(Sender: TObject);
+    procedure CheckRefinarClick(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure CheckUFClick(Sender: TObject);
+    procedure CheckCidadeClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure GridPesqCepDblClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  F_PesqCEP: TF_PesqCEP;
+
+implementation
+
+{$R *.dfm}
+
+uses untTransportadora, untDMPrincipal, untFuncoes, untPrincipal, untModelo,
+  untCliFor, untLava_CliCar;
+
+procedure TF_PesqCEP.btnSairClick(Sender: TObject);
+begin
+  Close; // Fechar a Tela
+end;
+
+procedure TF_PesqCEP.CheckCidadeClick(Sender: TObject);
+begin
+  if CheckCidade.Checked = True then       // Verificando o Chec de Refinar Pesquisa
+     begin
+       strSql:=' SELECT CIDADE FROM TB_UF';
+       strSql:= strSql + ' WHERE UF LIKE ' + #39 + '%' + ComboUF.Text + '%' + #39 + 'group by CIDADE order by CIDADE';
+       with ADOCidade do
+          begin
+             Close;
+             SQL.Clear;
+             SQL.Add(strSql);
+             Open;
+             if (ADOCidade.RecordCount = 0) then
+                 begin
+                   mensagem:= ' Não Existe Este CEP ' + #13
+                             +'Precisa ser Cadastrado';
+                   Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+                 end;
+             ComboCidade.Visible:= True;    //Habilitando o Combo de Cidade
+          end;
+     end
+  else
+     ComboCidade.Visible:= False;    //Desabilitando o Combo de Cidade
+end;
+
+procedure TF_PesqCEP.CheckRefinarClick(Sender: TObject);
+begin
+  if CheckRefinar.Checked = True then       // Verificando o Chec de Refinar Pesquisa
+     begin
+       CheckUF.Visible:= True;    //Habilitando o Chec de UF
+     end
+  else
+     CheckUF.Visible:= False;    //Desabilitando o Chec de UF
+     CheckUF.Checked:= False; // Destivando os Check
+
+end;
+
+procedure TF_PesqCEP.CheckUFClick(Sender: TObject);
+begin
+  if CheckUF.Checked = True then     // Verificando o Chec de UF
+     begin
+      ADOUF.Open;
+      CheckCidade.Visible:= True; //Habilitando o Chec de Cidade
+      ComboUF.Visible:= True // Mostrando o Combo
+     end
+  else
+    begin
+     CheckCidade.Visible:= False; //Desabilitando o Chec de Cidade
+     CheckCidade.Checked:= False;
+     ComboUF.Visible:= False // Escondendo o Combo
+    end;
+end;
+
+procedure TF_PesqCEP.edtValorKeyPress(Sender: TObject; var Key: Char);
+begin
+IF KEY = #13 THEN
+  begin
+    if edtValor.Text = '' then  // Verificando se o campo Valor esta Vazio
+      begin
+          beep;
+          ShowMessage('O Campo Valor Não Pode Ficar Em Branco');
+          edtValor.SetFocus;
+          Exit;
+      end;
+
+//Pesquisa por string que contem
+
+  if RadioGroup1.ItemIndex = 0 then
+     begin
+      strSql:= '';
+          if edtValor.Text <> '' then    //Verificando o campo CEP
+            if CheckRefinar.Checked = True then     // Verificando se vai refinar a pesquisa
+                begin
+                   if CheckUF.Checked = True then    // Verificando se o check UF esta checado
+                      begin
+                         if CheckCidade.Checked = True then  // Verificando se O check da Cidade esta Checada
+                            begin
+                               strSql:=' SELECT * FROM TB_UF';
+                               strSql:= strSql + ' WHERE CIDADE LIKE ' + #39 + '%' + ComboCidade.Text + '%' + #39;
+                               strSql:= strSql + ' AND UF LIKE ' + #39 + '%' + ComboUF.Text + '%' + #39;
+                               strSql:= strSql + ' AND ENDERECO LIKE ' + #39 + '%' + edtValor.Text + '%' + #39;
+                            end
+                         else         // Se o check cidade nao estiver checado vem pra ka
+                            begin
+                               strSql:=' SELECT * FROM TB_UF';
+                               strSql:= strSql + ' WHERE UF LIKE ' + #39 + ComboUF.Text + #39;
+                               strSql:= strSql + ' AND ENDERECO LIKE ' + #39 + '%' + edtValor.Text + '%' + #39;
+                            end;
+                      end
+                   else
+                     begin
+                        strSql:=' SELECT * FROM TB_UF';
+                        strSql:= strSql + ' WHERE ENDERECO LIKE ' + #39 + '%' + edtValor.Text + '%' + #39;
+                     end;
+                end
+            else
+              begin
+                strSql:=' SELECT * FROM TB_UF';
+                strSql:= strSql + ' WHERE ENDERECO LIKE ' + #39 + '%' + edtValor.Text + '%' + #39;
+              end;
+
+         with ADOCep do
+                    begin
+                          Close;
+                          SQL.Clear;
+                          SQL.Add(strSql);
+                          Open;
+                          if (ADOCep.RecordCount = 0) then
+                              begin
+                                  mensagem:= ' Não Existe Este ENDEREÇO ' + #13
+                                             +'Precisa ser Cadastrado';
+                                  Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+                              end
+                          else
+
+
+                    end;
+           StatusBarcEP.Panels[0].Text:= 'A BUSCA REALIZADA ENCONTROU ' + IntToStr(ADOCep.RecordCount) + ' REGISTROS';   // MOSTRAR QUANTIDADE DE REGISTRO QUE A BUSCA ENCONTROU
+     //Pesquisa por string que Inicia Com
+ {
+ if frmPesqString.RadioGroup1.ItemIndex = 1 then
+    begin
+        statBarPadrao.Panels[2].Text:= ' Nome Inicia Com: ' + frmPesqString.edtValor.Text;
+        strSql:=' SELECT * FROM ' + nomeTabela;
+        strSql:= strSql + ' WHERE UPPER (NOME) LIKE ' + #39 +
+        frmPesqString.edtValor.Text + '%' + #39;
+    end;
+
+         //Pesquisa por string que Termina Com
+
+ if frmPesqString.RadioGroup1.ItemIndex = 2 then
+    begin
+        statBarPadrao.Panels[2].Text:= ' Nome Termina Com: ' + frmPesqString.edtValor.Text;
+        strSql:=' SELECT * FROM ' + nomeTabela;
+        strSql:= strSql + ' WHERE UPPER (NOME) LIKE ' + #39 + '%' +
+        frmPesqString.edtValor.Text + #39;
+    end;   }
+     end;
+  end;
+end;
+
+procedure TF_PesqCEP.FormActivate(Sender: TObject);
+begin
+  lblJanela.Caption:= nomeJanela;  /// Carregando o Nome da Tela que esta pesquisando
+  edtValor.SetFocus; // Colocando o Foco no edit
+
+ UF := '';
+ CIDADE:= '';
+ ENDERECO:= '';
+ BAIRRO:= '';
+end;
+
+procedure TF_PesqCEP.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  ADOUF.Close;
+  ADOCidade.Close; // Fechando o componente
+end;
+
+procedure TF_PesqCEP.GridPesqCepDblClick(Sender: TObject);
+begin
+ // Fechando a tela de pesquisa e jogando os dados nos campos
+  try
+    ADOCep.Locate('ID',ADOCepID.Value,[]);
+     UF := ADOCepUF.Value;
+     CIDADE:= ADOCepCIDADE.Value;
+     ENDERECO:= ADOCepENDERECO.Value;
+     BAIRRO:= ADOCepBAIRRO.Value;
+     CEP:= ADOCepCEP.Value;
+  finally
+    btnSair.Click;
+  end;
+end;
+
+procedure TF_PesqCEP.RadioGroup1Click(Sender: TObject);
+begin
+  edtValor.SetFocus; // Colocar o Foco
+end;
+
+end.
