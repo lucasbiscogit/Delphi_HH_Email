@@ -26,10 +26,13 @@ object F_Principal: TF_Principal
     Panels = <
       item
         Alignment = taCenter
-        Width = 400
+        Width = 280
       end
       item
         Alignment = taCenter
+        Width = 390
+      end
+      item
         Width = 50
       end>
   end
@@ -181,7 +184,7 @@ object F_Principal: TF_Principal
     Width = 927
     Height = 758
     Hint = 'Fechar'
-    ActivePage = SheetArqEmail
+    ActivePage = SheetPesquisa
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 2
@@ -260,75 +263,78 @@ object F_Principal: TF_Principal
           end
         end
         object pnlBotoes: TPanel
-          Left = 496
+          Left = 392
           Top = 1
-          Width = 422
+          Width = 526
           Height = 132
           Align = alRight
           TabOrder = 1
-          object btnExcluirEmail: TButton
-            Left = 223
-            Top = 37
-            Width = 199
-            Height = 25
-            Caption = 'Tirar e-mail de recebimento'
-            TabOrder = 0
-            OnClick = btnExcluirEmailClick
-          end
-          object btnAddEmail: TButton
-            Left = 0
-            Top = 68
-            Width = 422
-            Height = 25
-            Hint = 
-              'Para adicionar Pesquise para Verificar se n'#227'o existe o e-mail ca' +
-              'dastratado.'
-            Caption = 'Adicionar E-mail'
-            TabOrder = 1
-            OnClick = btnAddEmailClick
-          end
-          object btnADDNovoHH: TButton
-            Left = 240
-            Top = 6
-            Width = 183
-            Height = 25
-            Caption = 'ADD Novo HH'
-            Enabled = False
-            TabOrder = 2
-          end
           object btnArqCadastrado: TButton
-            Left = 0
-            Top = 99
-            Width = 422
-            Height = 25
-            Hint = 
-              'Para adicionar Pesquise para Verificar se n'#227'o existe o e-mail ca' +
-              'dastratado.'
-            Caption = 'Verificar Arquivos Cadastrados'
+            Left = 313
+            Top = 38
+            Width = 100
+            Height = 60
+            Hint = 'Verificar todos arquivos cadastrados'
+            Caption = 'Verificar Arquivos Cadastrados - Ok'
             TabOrder = 3
+            WordWrap = True
             OnClick = btnArqCadastradoClick
           end
-          object btnVoltarEmails: TButton
-            Left = 0
-            Top = 37
-            Width = 217
-            Height = 25
-            Caption = 'Voltar e-mail de recebimento'
+          object btnArqEmail: TButton
+            Left = 413
+            Top = 38
+            Width = 100
+            Height = 60
+            Caption = 'E-mails que Recebem o Hora-Hora - OK'
             TabOrder = 4
+            WordWrap = True
+            OnClick = btnArqEmailClick
+          end
+          object btnExcluirEmail: TButton
+            Left = 113
+            Top = 38
+            Width = 100
+            Height = 60
+            Caption = 'Tirar e-mail de recebimento'
+            TabOrder = 1
+            WordWrap = True
+            OnClick = btnExcluirEmailClick
+          end
+          object btnVoltarEmails: TButton
+            Left = 213
+            Top = 38
+            Width = 100
+            Height = 60
+            Caption = 'Voltar e-mail de recebimento'
+            TabOrder = 2
+            WordWrap = True
             OnClick = btnVoltarEmailsClick
+          end
+          object btnAddEmail: TButton
+            Left = 13
+            Top = 38
+            Width = 100
+            Height = 60
+            Hint = 
+              'Para adicionar Pesquise para Verificar se n'#227'o existe o e-mail ca' +
+              'dastratado.'
+            Caption = 'Adicionar E-mail Novo'
+            TabOrder = 0
+            WordWrap = True
+            OnClick = btnAddEmailClick
           end
         end
         object pnlModoPesquisa: TPanel
           Left = 1
           Top = 1
-          Width = 408
+          Width = 391
           Height = 132
           Align = alLeft
           TabOrder = 2
           object RGPesquisaGeral: TRadioGroup
             Left = 1
             Top = 1
-            Width = 406
+            Width = 389
             Height = 112
             Hint = 'Escolher o Tipo de Pesquisa'
             Align = alTop
@@ -351,15 +357,6 @@ object F_Principal: TF_Principal
             TabOrder = 0
             OnClick = RGPesquisaGeralClick
           end
-        end
-        object btnArqEmail: TButton
-          Left = 496
-          Top = 7
-          Width = 218
-          Height = 25
-          Caption = 'E-mails que Recebem o Hora-Hora'
-          TabOrder = 3
-          OnClick = btnArqEmailClick
         end
       end
       object pnlGridPEsquisa: TPanel
@@ -516,7 +513,6 @@ object F_Principal: TF_Principal
             item
               Expanded = False
               FieldName = 'Recebe'
-              Title.Caption = 'N'#227'o Recebe'
               Width = 75
               Visible = True
             end>
@@ -558,7 +554,7 @@ object F_Principal: TF_Principal
             BiDiMode = bdLeftToRight
             Caption = ' 00 Registros '
             ParentBiDiMode = False
-            ExplicitLeft = 851
+            Visible = False
             ExplicitHeight = 15
           end
         end
@@ -650,7 +646,7 @@ object F_Principal: TF_Principal
         end
         object btnExcluir: TButton
           Left = 403
-          Top = 59
+          Top = 56
           Width = 113
           Height = 28
           Caption = 'Desativar'
@@ -665,7 +661,7 @@ object F_Principal: TF_Principal
           OnClick = btnExcluirClick
         end
       end
-      object pnlGridEscluir: TPanel
+      object pnlGridExcluir: TPanel
         Left = 0
         Top = 481
         Width = 919
@@ -674,8 +670,6 @@ object F_Principal: TF_Principal
         ParentBackground = False
         TabOrder = 2
         Visible = False
-        ExplicitTop = 496
-        ExplicitHeight = 229
         object GridExcluir: TDBGrid
           Left = 1
           Top = 25
@@ -779,8 +773,8 @@ object F_Principal: TF_Principal
             Font.Style = [fsBold]
             ParentFont = False
             Visible = False
-            ExplicitLeft = 1145
-            ExplicitTop = -279
+            ExplicitWidth = 141
+            ExplicitHeight = 21
           end
         end
       end
@@ -1835,10 +1829,434 @@ object F_Principal: TF_Principal
         end
       end
     end
-    object SheetEdicao: TTabSheet
+    object TabSheetSheetEdicao: TTabSheet
       Caption = 'Editar'
       ImageIndex = 5
-      object pnlOpcaoExcluir1: TPanel
+      object pnlPosMudanca: TPanel
+        Left = 0
+        Top = 243
+        Width = 919
+        Height = 238
+        Align = alTop
+        ParentBackground = False
+        TabOrder = 2
+        Visible = False
+        object GridEditarResultado: TDBGrid
+          Left = 1
+          Top = 25
+          Width = 917
+          Height = 212
+          Align = alClient
+          Color = clHighlight
+          DataSource = DS_Excluir
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clHighlight
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+          ParentFont = False
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Segoe UI'
+          TitleFont.Style = []
+          OnDrawColumnCell = GridExcluir1DrawColumnCell
+          OnMouseMove = GridListaMouseMove
+          Columns = <
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ID'
+              Title.Caption = 'C'#243'digo'
+              Width = 62
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Nome'
+              Width = 115
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Email'
+              Title.Caption = 'E-mail'
+              Width = 198
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'HH_Excel'
+              Title.Caption = 'Arquivo Excel (HH)'
+              Width = 162
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'GCarteira'
+              Title.Caption = 'Grupo Carteira'
+              Width = 150
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Cliente'
+              Width = 112
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Recebe'
+              Width = 75
+              Visible = True
+            end>
+        end
+        object pnlLabelMudado1: TPanel
+          Left = 1
+          Top = 1
+          Width = 917
+          Height = 24
+          Align = alTop
+          BevelOuter = bvNone
+          TabOrder = 1
+          object lblMudanca1: TLabel
+            Left = 0
+            Top = 0
+            Width = 842
+            Height = 24
+            Align = alClient
+            Alignment = taCenter
+            Caption = 'Resultado da Mudan'#231'a'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ExplicitWidth = 174
+            ExplicitHeight = 21
+          end
+          object lblMudancaRegistros1: TLabel
+            AlignWithMargins = True
+            Left = 845
+            Top = 3
+            Width = 69
+            Height = 18
+            Align = alRight
+            Alignment = taCenter
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            BiDiMode = bdLeftToRight
+            Caption = ' 00 Registros '
+            ParentBiDiMode = False
+            Visible = False
+            ExplicitHeight = 15
+          end
+        end
+      end
+      object pnlVoltarporEmail: TPanel
+        Left = 0
+        Top = 49
+        Width = 919
+        Height = 97
+        Align = alTop
+        Enabled = False
+        TabOrder = 1
+        Visible = False
+        object lblEditarEmail: TLabel
+          Left = 38
+          Top = 6
+          Width = 34
+          Height = 15
+          Caption = 'E-mail'
+        end
+        object lblEditarCliente: TLabel
+          Left = 345
+          Top = 6
+          Width = 37
+          Height = 15
+          Caption = 'Cliente'
+        end
+        object lblEditarArqExcel: TLabel
+          Left = 540
+          Top = 6
+          Width = 72
+          Height = 15
+          Caption = 'Arquivo Excel'
+        end
+        object lblEditarGrupoCarteira: TLabel
+          Left = 735
+          Top = 6
+          Width = 77
+          Height = 15
+          Caption = 'Grupo Carteira'
+        end
+        object edtEditarPesq: TEdit
+          Left = 38
+          Top = 27
+          Width = 257
+          Height = 23
+          CharCase = ecLowerCase
+          TabOrder = 0
+          TextHint = 'pesquisa o e-mail para excluir'
+          OnEnter = edtEditarPesqEnter
+          OnExit = edtEditarPesqExit
+          OnKeyPress = edtEditarPesqKeyPress
+        end
+        object ComboBoxEditarEmailArqExcel: TComboBox
+          Left = 540
+          Top = 27
+          Width = 145
+          Height = 23
+          Style = csDropDownList
+          Enabled = False
+          TabOrder = 2
+          OnEnter = ComboBoxEditarEmailArqExcelEnter
+          OnExit = ComboBoxEditarEmailArqExcelExit
+          OnSelect = ComboBoxEditarEmailArqExcelSelect
+        end
+        object ComboBoxEditarEmailCliente: TComboBox
+          Left = 345
+          Top = 27
+          Width = 145
+          Height = 23
+          Style = csDropDownList
+          Enabled = False
+          TabOrder = 1
+          OnEnter = ComboBoxEditarEmailClienteEnter
+          OnExit = ComboBoxEditarEmailClienteExit
+          OnSelect = ComboBoxEditarEmailClienteSelect
+        end
+        object btnEmailReativar: TButton
+          Left = 403
+          Top = 56
+          Width = 113
+          Height = 28
+          Caption = 'Reativar'
+          Enabled = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+          OnClick = btnEmailReativarClick
+        end
+        object ComboBoxEditarEmailGrupoCarteira: TComboBox
+          Left = 735
+          Top = 27
+          Width = 145
+          Height = 23
+          Style = csDropDownList
+          Enabled = False
+          TabOrder = 4
+          OnEnter = ComboBoxEditarEmailGrupoCarteiraEnter
+          OnExit = ComboBoxEditarEmailGrupoCarteiraExit
+          OnSelect = ComboBoxEditarEmailGrupoCarteiraSelect
+        end
+      end
+      object pnlAntesMudanca: TPanel
+        Left = 0
+        Top = 481
+        Width = 919
+        Height = 244
+        Align = alClient
+        ParentBackground = False
+        TabOrder = 3
+        Visible = False
+        object GridEditarAntesMudanca: TDBGrid
+          Left = 1
+          Top = 25
+          Width = 917
+          Height = 218
+          Align = alClient
+          DataSource = DS_Pesquisa
+          Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Segoe UI'
+          TitleFont.Style = []
+          OnDrawColumnCell = GridExcluirDrawColumnCell
+          OnDblClick = GridExcluirDblClick
+          OnMouseMove = GridListaMouseMove
+          Columns = <
+            item
+              Alignment = taCenter
+              Expanded = False
+              FieldName = 'ID'
+              Title.Caption = 'C'#243'digo'
+              Width = 62
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Nome'
+              Width = 115
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Email'
+              Title.Caption = 'E-mail'
+              Width = 198
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'HH_Excel'
+              Title.Caption = 'Arquivo Excel (HH)'
+              Width = 162
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'GCarteira'
+              Title.Caption = 'Grupo Carteira'
+              Width = 150
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Cliente'
+              Width = 112
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Recebe'
+              Width = 75
+              Visible = True
+            end>
+        end
+        object pnlLabelMudado2: TPanel
+          Left = 1
+          Top = 1
+          Width = 917
+          Height = 24
+          Align = alTop
+          TabOrder = 1
+          object lblMudancaRegistrosAntes2: TLabel
+            AlignWithMargins = True
+            Left = 844
+            Top = 4
+            Width = 69
+            Height = 16
+            Align = alRight
+            Alignment = taCenter
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            BiDiMode = bdLeftToRight
+            Caption = ' 00 Registros '
+            ParentBiDiMode = False
+            Visible = False
+            ExplicitHeight = 15
+          end
+          object lblAntesMudanca1: TLabel
+            Left = 1
+            Top = 1
+            Width = 840
+            Height = 22
+            Align = alClient
+            Alignment = taCenter
+            Caption = 'Antes da Mudan'#231'a'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Segoe UI'
+            Font.Style = [fsBold]
+            ParentFont = False
+            Visible = False
+            ExplicitWidth = 141
+            ExplicitHeight = 21
+          end
+        end
+      end
+      object pnlVoltarporCliente: TPanel
+        Left = 0
+        Top = 146
+        Width = 919
+        Height = 97
+        Align = alTop
+        Enabled = False
+        TabOrder = 0
+        Visible = False
+        object lbl133: TLabel
+          Left = 170
+          Top = 4
+          Width = 37
+          Height = 15
+          Caption = 'Cliente'
+        end
+        object lbl143: TLabel
+          Left = 380
+          Top = 4
+          Width = 72
+          Height = 15
+          Caption = 'Arquivo Excel'
+        end
+        object lbl153: TLabel
+          Left = 590
+          Top = 4
+          Width = 77
+          Height = 15
+          Caption = 'Grupo Carteira'
+        end
+        object ComboBoxClienteCliente: TComboBox
+          Left = 170
+          Top = 25
+          Width = 160
+          Height = 23
+          Style = csDropDownList
+          TabOrder = 0
+          OnEnter = ComboBoxClienteClienteEnter
+          OnExit = ComboBoxClienteClienteExit
+          OnSelect = ComboBoxClienteClienteSelect
+        end
+        object ComboBoxClienteArqExcel: TComboBox
+          Left = 380
+          Top = 25
+          Width = 160
+          Height = 23
+          Style = csDropDownList
+          Enabled = False
+          TabOrder = 1
+          OnEnter = ComboBoxClienteArqExcelEnter
+          OnExit = ComboBoxClienteArqExcelExit
+          OnSelect = ComboBoxClienteArqExcelSelect
+        end
+        object ComboBoxClienteGrupoCarteira: TComboBox
+          Left = 589
+          Top = 25
+          Width = 160
+          Height = 23
+          Style = csDropDownList
+          Enabled = False
+          TabOrder = 2
+          OnEnter = ComboBoxClienteGrupoCarteiraEnter
+          OnExit = ComboBoxClienteGrupoCarteiraExit
+          OnSelect = ComboBoxClienteGrupoCarteiraSelect
+        end
+        object btnClienteReativar: TButton
+          Left = 403
+          Top = 54
+          Width = 113
+          Height = 28
+          Caption = 'Reativar'
+          Enabled = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+          OnClick = btnClienteReativarClick
+        end
+      end
+      object pnlEditarRadioButton: TPanel
         Left = 0
         Top = 0
         Width = 919
@@ -1847,23 +2265,24 @@ object F_Principal: TF_Principal
         BevelInner = bvSpace
         BevelKind = bkTile
         BevelOuter = bvLowered
-        TabOrder = 0
-        object rbVoltarEmail1: TRadioButton
-          Left = 245
+        TabOrder = 4
+        object RadioButtonVoltarporEmail: TRadioButton
+          Left = 244
           Top = 14
           Width = 113
           Height = 17
           Caption = 'Voltar Por E-mail'
           TabOrder = 0
-          OnClick = rbVoltarEmailClick
+          OnClick = RadioButtonVoltarporEmailClick
         end
-        object rbVoltarArquivo1: TRadioButton
-          Left = 558
+        object RadioButtonVoltCliente: TRadioButton
+          Left = 557
           Top = 14
           Width = 113
           Height = 17
           Caption = 'Voltar Por Cliente'
           TabOrder = 1
+          OnClick = RadioButtonVoltClienteClick
         end
       end
     end
@@ -5231,5 +5650,10 @@ object F_Principal: TF_Principal
   object DS_Excluir: TDataSource
     DataSet = AdoQ_Excluir
     Left = 792
+  end
+  object tmrDataHoraPrincipal: TTimer
+    OnTimer = tmrDataHoraPrincipalTimer
+    Left = 584
+    Top = 2
   end
 end

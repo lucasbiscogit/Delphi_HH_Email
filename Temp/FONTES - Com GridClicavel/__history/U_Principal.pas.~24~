@@ -1,0 +1,423 @@
+unit U_Principal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.Grids,
+  Vcl.DBGrids, Data.Win.ADODB, Vcl.Imaging.pngimage, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.Mask, Vcl.DBCtrls, Vcl.DBCGrids, System.Math;
+
+type
+  TF_Principal = class(TForm)
+    con_Geral: TADOConnection;
+    AdoQ_Pesquisa: TADOQuery;
+    DS_Pesquisa: TDataSource;
+    statPesquisa: TStatusBar;
+    pnlTopo: TPanel;
+    pnlImagemLogado: TPanel;
+    imgVermelho: TImage;
+    imgVerde: TImage;
+    pgc_Geral: TPageControl;
+    SheetPesquisa: TTabSheet;
+    pnlCabecPesquisa: TPanel;
+    pnlBotoesPesquisa: TPanel;
+    lblTotal: TLabel;
+    edtPesquisa: TEdit;
+    lblConexao: TLabel;
+    btn1: TButton;
+    pnlGridPEsquisa: TPanel;
+    GridLista: TDBGrid;
+    pnlBotoes: TPanel;
+    btnExcluirEmail: TButton;
+    btnAddEmail: TButton;
+    btnADDNovoHH: TButton;
+    pnlModoPesquisa: TPanel;
+    RGPesquisaGeral: TRadioGroup;
+    strngfldAdoQ_PesquisaNome: TStringField;
+    strngfldAdoQ_PesquisaEmail: TStringField;
+    strngfldAdoQ_PesquisaHH_Excel: TStringField;
+    strngfldAdoQ_PesquisaGrupo_Carteira: TStringField;
+    AdoQ_PesquisaONOFF: TBooleanField;
+    AdoQ_PesquisaID: TIntegerField;
+    TabSheet2: TTabSheet;
+    pnlGrid: TPanel;
+    GridEdit: TDBGrid;
+    ChekEdit: TCheckBox;
+    lblPesquisa: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure btn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure edtPesquisaKeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure AdoQ_PesquisaONOFFGetText(Sender: TField; var Text: string;
+      DisplayText: Boolean);
+    procedure GridEditDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure GridEditCellClick(Column: TColumn);
+    procedure GridEditKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure RGPesquisaGeralClick(Sender: TObject);
+  private
+    { Private declarations }
+    procedure BuscaDados; // Buscar os dados no banco pesquisa
+    Function GetNetUserName: string;   //Para Capturar o usuário Logado no Windows
+    Procedure GridZebrado (RecNo : LongInt; Grid : TDBGrid; Rect : TRect; Column : TColumn; State : TGridDrawState);   // Procedure para Pintar a Grid
+    procedure DoCheck;
+
+  public
+    { Public declarations }
+  end;
+
+var
+  F_Principal: TF_Principal;
+
+// Variavel para usar na busca
+  VarBusca: string;
+
+implementation
+
+{$R *.dfm}
+
+{ TForm1 }
+
+procedure TF_Principal.AdoQ_PesquisaONOFFGetText(Sender: TField;
+  var Text: string; DisplayText: Boolean);
+begin
+  text:= EmptyStr;
+end;
+
+procedure TF_Principal.btn1Click(Sender: TObject);
+begin
+  AdoQ_Pesquisa.Active:= True;
+end;
+
+procedure TF_Principal.BuscaDados;
+var
+  strsql: string;
+begin
+
+// Select Inicial
+  strsql:= 'select * from hh.lista_email ';
+
+  case RGPesquisaGeral.ItemIndex of
+    0:
+      begin
+         strsql:= strsql + ' where Nome like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+         strsql:= strsql + ' or email like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+         strsql:= strsql + ' or HH_Excel like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+         strsql:= strsql + ' or Grupo_Carteira like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+         //strsql:= strsql + ' or onoff = ' + edtPesquisa.Text;
+
+      end;
+
+    1:
+      begin
+        strsql:= strsql + ' where Nome like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+      end;
+
+    2:
+      begin
+        strsql:= strsql + ' where email like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+      end;
+
+    3:
+      begin
+        strsql:= strsql + ' where hh_excel like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+      end;
+
+    4:
+      begin
+        strsql:= strsql + ' where grupo_Carteira like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+      end;
+
+    5:
+      begin
+         strsql:= strsql + ' where onoff = ' + edtPesquisa.Text;
+      end;
+
+  end;
+
+
+
+        {
+
+
+  if VarBusca = 'Todas' then
+    begin
+     strsql:= 'select * from hh.lista_email ';
+     strsql:= strsql + ' where Nome like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+     strsql:= strsql + ' or Grupo_Carteira like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+     strsql:= strsql + ' or HH_Excel like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+    end
+  else
+     if VarBusca = 'email' then
+        begin
+         strsql:= 'select * from hh.lista_email ';
+         strsql:= strsql + ' where Nome like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+        end
+     else
+        if VarBusca = 'Gcarteira' then
+          begin
+           strsql:= 'select * from hh.lista_email ';
+           strsql:= strsql + ' where Grupo_Carteira like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+          end
+        else
+           if VarBusca = 'nome' then
+               begin
+                strsql:= 'select * from hh.lista_email ';
+                strsql:= strsql + ' where Nome like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+               end
+           else
+               if VarBusca = 'hhExcel' then
+                  begin
+                   strsql:= 'select * from hh.lista_email ';
+                   strsql:= strsql + ' where HH_Excel like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+                  end
+               else
+                  if VarBusca = 'onoff' then
+                     begin
+                      strsql:= 'select * from hh.lista_email ';
+                      strsql:= strsql + ' where Nome like ' +#39+'%'+ edtPesquisa.Text+'%'+#39;
+                     end;
+                                          }
+
+  // verificar se o campo nao esta vazio
+  if Trim(edtPesquisa.Text) <> '' then
+    begin
+      // Para nao ficar digitando o adoquery
+       with AdoQ_Pesquisa do
+          begin
+             Close;
+             SQL.clear;;
+             SQL.Add(strsql);
+             Open;
+             First;
+             lblTotal.Caption:= AdoQ_Pesquisa.RecordCount.ToString; // Mostrar quantidade de Registros
+             statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString; // Mostrar quantidade de Registros
+          end;
+    end;
+end;
+
+procedure TF_Principal.DoCheck;
+begin
+  with GridEdit do
+  begin
+      SelectedField.DataSet.Edit;
+      SelectedField.AsBoolean:= not SelectedField.AsBoolean;
+      SelectedField.DataSet.Post;
+  end;
+
+{
+    with Grid1 do
+    begin
+        SelectedField.DataSet.Edit;
+        SelectedField.AsBoolean:= not SelectedField.AsBoolean;
+        SelectedField.DataSet.Post;
+    end;
+}
+
+end;
+
+procedure TF_Principal.edtPesquisaKeyPress(Sender: TObject; var Key: Char);
+begin
+  // Buscar dados ao digitar.
+  BuscaDados;
+end;
+
+procedure TF_Principal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   AdoQ_Pesquisa.Close;
+end;
+
+procedure TF_Principal.FormCreate(Sender: TObject);
+var
+Servidor, senha, BancoDelphi: string;
+
+begin
+Servidor:= 'PCLUCAS\SERVERLUCAS';
+senha:= 'Lucas123';
+BancoDelphi:= 'Testesss';
+
+  lblConexao.Caption:= GetNetUserName;
+
+
+   // Fazendo a Conexao
+    if (Trim(Servidor) <> '') and (Trim(Servidor) <> '') then
+      Begin
+        con_Geral.Connected:= False;
+        con_Geral.ConnectionString := 'Provider=SQLOLEDB.1;Password=' + senha + ';Persist Security Info=True;User ID=sa;Initial Catalog=' + BancoDelphi +
+           ';Data Source=' + Servidor + ';Use Procedure for Prepare=1;Auto Translate=True;Packet Size=4096;Workstation ID=' + Servidor +
+           ';Use Encryption for Data=False;Tag with column collation when possible=False';
+        Try
+           con_Geral.Connected := true;
+           imgVerde.Visible:= True;
+        Except
+           on E:Exception do
+           Begin
+              imgVermelho.Visible:= True;
+              Showmessage('Erro ao conectar ao banco. Erro: CONEXAO COM O BANCO: ' + E.Message);
+              Exit;
+           End;
+        End;
+      End
+    Else
+      Begin
+         Showmessage('Erro ao conectar ao servidor! Verifique seu arquivo .ini!');
+         Exit;
+      End;
+
+ // Verificando o usuario para bloquear ou liberar o botao de ADD novo HH
+  if (lblConexao.Caption) = 'lucas' then
+    begin
+      btnADDNovoHH.Caption:= 'lucas';
+      btnADDNovoHH.Enabled:= False;
+    end;
+end;
+
+procedure TF_Principal.FormShow(Sender: TObject);
+begin
+ //Esconder aba que nao vai usar
+  pgc_Geral.Pages[0].TabVisible:= True; // Colocando a aba de Pesquisa Visivel
+//  pgc_Geral.Pages[1].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
+
+// Colcar a Forma que esta pesquisando no edit
+  edtPesquisa.TextHint:= 'Pesquisa Por: Nome, E-mail, HH_Excel, Grupo_Carteira, ONOFF';
+
+ // Jogar dados no rodape
+  statPesquisa.Panels[0].Text:= GetNetUserName;
+
+ AdoQ_Pesquisa.Open;
+end;
+
+function TF_Principal.GetNetUserName: string;
+Var
+  NetUserNameLength: DWord;
+Begin
+  NetUserNameLength:=50;
+  SetLength(Result, NetUserNameLength);
+  GetUserName(pChar(Result),NetUserNameLength);
+  SetLength(Result, StrLen(pChar(Result)));
+
+end;
+
+procedure TF_Principal.GridEditCellClick(Column: TColumn);
+begin
+ if ChekEdit.Checked then  // Deixar editar os valores
+   if GridEdit.SelectedField.DataType = ftBoolean then
+      DoCheck;
+end;
+
+procedure TF_Principal.GridEditDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+const
+  CtrlStat: array [Boolean] of Integer = (DFCS_BUTTONCHECK, DFCS_BUTTONCHECK or DFCS_CHECKED);
+
+var
+  chkRect : TRect;
+
+begin
+    GridZebrado (TDBGrid(Sender).DataSource.DataSet.RecNo, TDBGrid(Sender), Rect, Column, State); // Procedure para Pintar
+
+  // aqui
+
+   if Column.Field.DataType = ftBoolean then
+     begin
+
+      if (gdSelected in State) and
+         ((ActiveControl = GridEdit) or
+         ((dgAlwaysShowSelection in GridEdit.Options) and
+         (dgRowSelect in GridEdit.Options)))
+      then
+         GridEdit.Canvas.Brush.Color:= clSkyBlue
+      else
+         GridEdit.Canvas.Brush.Color:= GridEdit.Color; // Mudar cor de fundo grid 0
+
+
+       GridEdit.Canvas.FillRect(Rect);
+
+       chkRect.Left := Rect.Left +2;
+       chkRect.Right:= Rect.Right -2;
+       chkRect.Top := Rect.Top +2;
+       chkRect.Bottom:= Rect.Bottom -2;
+
+       DrawFrameControl(GridEdit.Canvas.Handle, chkRect,
+       DFC_BUTTON, CtrlStat[Column.Field.AsBoolean]);
+     end;
+
+end;
+
+procedure TF_Principal.GridEditKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+    if ChekEdit.Checked then
+    if GridEdit.SelectedField.DataType = ftBoolean then
+    if key = VK_SPACE then
+    DoCheck;
+end;
+
+procedure TF_Principal.GridZebrado(RecNo: LongInt; Grid: TDBGrid; Rect: TRect;
+  Column: TColumn; State: TGridDrawState);
+begin
+if gdSelected in State then
+    begin
+       Grid.Canvas.Font.Color := clRed; // Texto da linha selecionada
+       Grid.Canvas.Font.Style:= [fsBold]; // Negritando linha Selecionada
+      // Grid.Canvas.Font.Size:= 10;  // Mudando o tamanho da Fonte
+       Grid.Canvas.Brush.Color:= clMoneyGreen; //linha selecionada
+    end
+else
+    begin
+      If odd(RecNo) then
+         begin
+           Grid.Canvas.Font.Color := clNavy;    // Texto da Linha Impar
+           Grid.Canvas.Brush.Color:= clInfoBk; // Pintando a Linha Impar
+         end
+      else
+         begin
+           Grid.Canvas.Font.Color := clMaroon;  // TExto da Linha Par
+           Grid.Canvas.Brush.Color:= clSkyBlue;   // Pintando a Linha Par
+         end;
+    end;
+
+Grid.Canvas.FillRect(Rect);
+Grid.Canvas.TextOut(Rect.Left + 2,Rect.Top, Column.Field.AsString);
+end;
+
+procedure TF_Principal.RGPesquisaGeralClick(Sender: TObject);
+begin
+   if RGPesquisaGeral.ItemIndex = 0 then
+      begin
+         VarBusca:= 'Todas';
+         edtPesquisa.SetFocus;
+      end;
+   if RGPesquisaGeral.ItemIndex = 1 then
+      begin
+         VarBusca:= 'email';
+         edtPesquisa.SetFocus;
+      end;
+
+   if RGPesquisaGeral.ItemIndex = 2 then
+      begin
+         VarBusca:= 'Gcarteira';
+         edtPesquisa.SetFocus;
+      end;
+   if RGPesquisaGeral.ItemIndex = 3 then
+      begin
+         VarBusca:= 'nome';
+         edtPesquisa.SetFocus;
+      end;
+   if RGPesquisaGeral.ItemIndex = 4 then
+      begin
+         VarBusca:= 'hhExcel';
+         edtPesquisa.SetFocus;
+      end;
+
+   if RGPesquisaGeral.ItemIndex = 5 then
+      begin
+         VarBusca:= 'onoff';
+         edtPesquisa.SetFocus;
+      end;
+
+end;
+
+end.

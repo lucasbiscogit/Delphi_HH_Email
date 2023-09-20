@@ -25,9 +25,6 @@ type
     pnlGridPEsquisa: TPanel;
     GridLista: TDBGrid;
     pnlBotoes: TPanel;
-    btnExcluirEmail: TButton;
-    btnAddEmail: TButton;
-    btnADDNovoHH: TButton;
     pnlModoPesquisa: TPanel;
     RGPesquisaGeral: TRadioGroup;
     SheetExclusao: TTabSheet;
@@ -109,11 +106,9 @@ type
     lblemailmod: TLabel;
     pnlArqCadastrados: TPanel;
     GridArqCadastrados: TDBGrid;
-    btnArqCadastrado: TButton;
     SheetArqEmail: TTabSheet;
     pnlArqEmail: TPanel;
     MemoEmail: TMemo;
-    btnArqEmail: TButton;
     DS_Grid: TDataSource;
     AdoQ_Grid: TADOQuery;
     strngfldAdoQ_GridHH_Excel: TStringField;
@@ -167,7 +162,7 @@ type
     lbl5: TLabel;
     lbl6: TLabel;
     pnlPesqExcluir: TPanel;
-    pnlGridEscluir: TPanel;
+    pnlGridExcluir: TPanel;
     edtPesqExluir: TEdit;
     ComboExcluirHH: TComboBox;
     ComboExcluirCliente: TComboBox;
@@ -199,17 +194,50 @@ type
     strngfld5: TStringField;
     DS_Excluir: TDataSource;
     GridExcluir1: TDBGrid;
-    btnVoltarEmails: TButton;
-    SheetEdicao: TTabSheet;
-    pnlOpcaoExcluir1: TPanel;
-    rbVoltarEmail1: TRadioButton;
-    rbVoltarArquivo1: TRadioButton;
     pnlLabelMudado: TPanel;
     lblMudanca: TLabel;
     lblMudancaRegistros: TLabel;
     pnlRegistrosMudanca: TPanel;
     lblMudancaRegistrosAntes: TLabel;
     lblAntesMudanca: TLabel;
+    btnArqCadastrado: TButton;
+    btnArqEmail: TButton;
+    btnExcluirEmail: TButton;
+    tmrDataHoraPrincipal: TTimer;
+    TabSheetSheetEdicao: TTabSheet;
+    pnlPosMudanca: TPanel;
+    GridEditarResultado: TDBGrid;
+    pnlLabelMudado1: TPanel;
+    lblMudanca1: TLabel;
+    lblMudancaRegistros1: TLabel;
+    pnlVoltarporEmail: TPanel;
+    lblEditarEmail: TLabel;
+    lblEditarCliente: TLabel;
+    lblEditarArqExcel: TLabel;
+    lblEditarGrupoCarteira: TLabel;
+    edtEditarPesq: TEdit;
+    ComboBoxEditarEmailArqExcel: TComboBox;
+    ComboBoxEditarEmailCliente: TComboBox;
+    btnEmailReativar: TButton;
+    pnlAntesMudanca: TPanel;
+    GridEditarAntesMudanca: TDBGrid;
+    pnlLabelMudado2: TPanel;
+    lblMudancaRegistrosAntes2: TLabel;
+    lblAntesMudanca1: TLabel;
+    pnlVoltarporCliente: TPanel;
+    lbl133: TLabel;
+    lbl143: TLabel;
+    lbl153: TLabel;
+    ComboBoxClienteCliente: TComboBox;
+    ComboBoxClienteArqExcel: TComboBox;
+    ComboBoxClienteGrupoCarteira: TComboBox;
+    btnClienteReativar: TButton;
+    pnlEditarRadioButton: TPanel;
+    RadioButtonVoltarporEmail: TRadioButton;
+    RadioButtonVoltCliente: TRadioButton;
+    ComboBoxEditarEmailGrupoCarteira: TComboBox;
+    btnVoltarEmails: TButton;
+    btnAddEmail: TButton;
     procedure FormCreate(Sender: TObject);
     procedure btnPesqMemoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -332,6 +360,33 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure GridListaAdicaoDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure tmrDataHoraPrincipalTimer(Sender: TObject);
+    procedure RadioButtonVoltarporEmailClick(Sender: TObject);
+    procedure btnAddEmail1Click(Sender: TObject);
+    procedure RadioButtonVoltClienteClick(Sender: TObject);
+    procedure edtEditarPesqEnter(Sender: TObject);
+    procedure edtEditarPesqExit(Sender: TObject);
+    procedure edtEditarPesqKeyPress(Sender: TObject; var Key: Char);
+    procedure ComboBoxEditarEmailClienteEnter(Sender: TObject);
+    procedure ComboBoxEditarEmailClienteExit(Sender: TObject);
+    procedure ComboBoxEditarEmailClienteSelect(Sender: TObject);
+    procedure ComboBoxEditarEmailArqExcelEnter(Sender: TObject);
+    procedure ComboBoxEditarEmailArqExcelExit(Sender: TObject);
+    procedure ComboBoxEditarEmailArqExcelSelect(Sender: TObject);
+    procedure ComboBoxEditarEmailGrupoCarteiraEnter(Sender: TObject);
+    procedure ComboBoxEditarEmailGrupoCarteiraExit(Sender: TObject);
+    procedure ComboBoxEditarEmailGrupoCarteiraSelect(Sender: TObject);
+    procedure btnEmailReativarClick(Sender: TObject);
+    procedure ComboBoxClienteClienteEnter(Sender: TObject);
+    procedure ComboBoxClienteClienteExit(Sender: TObject);
+    procedure ComboBoxClienteClienteSelect(Sender: TObject);
+    procedure ComboBoxClienteArqExcelEnter(Sender: TObject);
+    procedure ComboBoxClienteArqExcelExit(Sender: TObject);
+    procedure ComboBoxClienteArqExcelSelect(Sender: TObject);
+    procedure ComboBoxClienteGrupoCarteiraEnter(Sender: TObject);
+    procedure ComboBoxClienteGrupoCarteiraExit(Sender: TObject);
+    procedure ComboBoxClienteGrupoCarteiraSelect(Sender: TObject);
+    procedure btnClienteReativarClick(Sender: TObject);
   private
     { Private declarations }
     procedure BuscaDados; // Buscar os dados no banco pesquisa
@@ -372,6 +427,9 @@ var
 
 implementation
 
+uses
+  Unit1;
+
 {$R *.dfm}
 
 { TForm1 }
@@ -409,6 +467,16 @@ begin
   pgc_Geral.Pages[0].TabVisible:= True; // Colocando a aba de Pesquisa Visivel
   pgc_Geral.Pages[1].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
   pgc_Geral.Pages[2].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
+end;
+
+procedure TF_Principal.btnAddEmail1Click(Sender: TObject);
+begin
+    try
+       FrmTemp.ShowModal;
+    finally
+       FreeAndNil(FrmTemp);
+    end;
+
 end;
 
 procedure TF_Principal.btnAddEmailClick(Sender: TObject);
@@ -776,6 +844,10 @@ begin
   pgc_Geral.Pages[3].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
   pgc_Geral.Pages[5].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
 
+  MemoEmail.Clear;
+  //ComboEmailEnviado1.Clear;
+  ComboCarteiraEmailEnviado.Clear;
+
   pgc_Geral.ActivePageIndex:= 4;    // Definindo qual aba abre por padrao
   btnVoltar.Enabled:= True;
 end;
@@ -916,6 +988,159 @@ begin
 
 end;
 
+procedure TF_Principal.btnClienteReativarClick(Sender: TObject);
+var
+  qry: TADOQuery;
+  strSQL: string;
+begin
+{$REGION 'Processo de Voltar os Registros para Ativo'}
+ try
+   if ComboBoxClienteCliente.Text <> '' then
+      begin
+         strSQL:= ' UPDATE hh.Lista_Email ';
+         strSQL:= strSQL + ' SET ONOFF = 1 ';
+         strsql:= strsql + ' where 1=1 '; //Email like ' + #39 + ComboBoxClienteCliente.Text + #37 + #39;
+
+         if ComboBoxClienteCliente.Text <> '' then
+          begin
+             strSQL:= strSQL + ' and  cliente = ' + #39 + ComboBoxClienteCliente.Text + #39;
+          end;
+
+         if ComboBoxClienteArqExcel.Text <> '' then
+          begin
+             strSQL:= strSQL + ' and  HH_Excel  = ' + #39 + ComboBoxClienteArqExcel.Text + #39;
+          end;
+
+         if ComboBoxClienteGrupoCarteira.Text <> '' then
+          begin
+             strSQL:= strSQL + ' and  Grupo_Carteira = ' + #39 + ComboBoxClienteGrupoCarteira.Text + #39;
+          end;
+
+         F_Principal.AdoQ_Excluir.Close;
+         F_Principal.AdoQ_Excluir.SQL.Clear;
+         F_Principal.AdoQ_Excluir.SQL.Add(strSQL);
+         F_Principal.AdoQ_Excluir.ExecSQL;
+
+      end;
+ except
+   on E:Exception do
+      Begin
+         Showmessage('Erro Arrumar:4 ' + E.Message);
+         Exit;
+      End;
+ end; {$ENDREGION 'Processo de Voltar os Registros para Ativo'}
+
+ {$REGION 'Alimentar a grid de exclusão'}
+  strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+  strsql:= strsql + ' from hh.Lista_Email ';
+  strsql:= strsql + ' where cliente = ' + #39 + ComboBoxClienteCliente.Text + #39;
+
+  if ComboBoxClienteArqExcel.Text <> '' then
+   begin
+      strSQL:= strSQL + ' and  HH_Excel  = ' + #39 + ComboBoxClienteArqExcel.Text + #39;
+   end;
+
+  if ComboBoxClienteGrupoCarteira.Text <> '' then
+   begin
+      strSQL:= strSQL + ' and  Grupo_Carteira = ' + #39 + ComboBoxClienteGrupoCarteira.Text + #39;
+   end;
+
+   F_Principal.AdoQ_Excluir.Close;
+   F_Principal.AdoQ_Excluir.SQL.Clear;
+   F_Principal.AdoQ_Excluir.SQL.Add(strSQL);
+   F_Principal.AdoQ_Excluir.Open;  {$ENDREGION 'Alimentar a grid de exclusão'}
+
+{$REGION 'Verificando quantidade de registros para mostrar nos textos'}
+//Verificar se é registro unico
+   if F_Principal.AdoQ_Excluir.RecordCount = 1 then
+      begin
+         F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar - '
+         + F_Principal.AdoQ_Excluir.RecordCount.ToString + ' Conta Reativada '; // Mostrar quantidade de Registros
+         lblMudancaRegistrosAntes2.Visible:= True;
+         lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+         lblMudancaRegistros1.Caption:= F_Principal.AdoQ_Excluir.RecordCount.ToString + ' Registro ';
+      end
+   else
+      if F_Principal.AdoQ_Excluir.RecordCount = 0 then
+        begin
+            F_Principal.statPesquisa.Panels[1].Text:= '';
+        end
+      else
+        begin
+          F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar - '
+          + F_Principal.AdoQ_Excluir.RecordCount.ToString + ' Contas Reativadas'; // Mostrar quantidade de Registros
+          lblMudancaRegistrosAntes2.Visible:= True;
+          lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+          lblMudancaRegistros1.Caption:= F_Principal.AdoQ_Excluir.RecordCount.ToString + ' Registros ';
+        end; {$ENDREGION 'Verificando quantidade de registros para mostrar nos textos'}
+
+   // Colocar o Form no centro
+   F_Principal.Height:= 832;
+   F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
+   F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
+
+   pnlPosMudanca.Height:= 253;
+   pnlPosMudanca.Top:= 146;
+   pnlPosMudanca.Visible:= True;
+
+  // pnlGridEscluir.Height:= 253;
+   pnlAntesMudanca.Align:= alClient;
+
+   lblAntesMudanca1.Visible:= True;
+
+   ComboBoxClienteCliente.Clear;
+   ComboBoxClienteArqExcel.Clear;
+   ComboBoxClienteGrupoCarteira.Clear;
+   ComboBoxClienteArqExcel.Enabled:= False;
+   ComboBoxClienteGrupoCarteira.Enabled:= False;
+
+   lblMudancaRegistros1.Visible:= True;
+
+   pnlVoltarporCliente.Top:= 49;
+
+   btnClienteReativar.Enabled:= False;
+
+{$REGION 'Busca para alimentar Combo Cliente'}
+   try
+   // Criando Um ADOQUERY Em Tempo de Execução pegar Cliente  Apos Reativar ja alimenta o combo para caso queira realizar outro ja.
+     qry:= TADOQuery.Create(nil);
+     qry.Connection:= F_Principal.con_Geral;
+
+   // Criando o Select
+     strSql:= 'select distinct Cliente from hh.Lista_Email where ONOFF = 0 Order by cliente' ;
+
+     with qry do
+         begin
+           Close;
+           SQL.Clear;
+           SQL.Add(strSql);
+           Open;
+           First;
+           if (qry.RecordCount = 0) then // Se não encontrar dados
+              begin
+                 mensagem:= ' Não Existe Cliente Cadastrado, ' + #13
+                          +'Favor Verificar com Ad. Do Banco.';
+                 Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+              end
+           else
+             begin
+               ComboBoxClienteCliente.Clear;
+                while not qry.Eof do
+                  begin
+                     ComboBoxClienteCliente.Items.Add(qry.FieldByName('Cliente').AsAnsiString);
+                     qry.Next;
+                  end;
+             end;
+         end;
+   Except
+     on E:Exception do
+        Begin
+           Showmessage('Erro Arrumar:4 ' + E.Message);
+           Exit;
+        End;
+   End; {$ENDREGION 'Busca para alimentar Combo Cliente'}
+end;
+
 procedure TF_Principal.btnEditarClick(Sender: TObject);
 begin
 
@@ -995,12 +1220,127 @@ begin
 
 end;
 
+procedure TF_Principal.btnEmailReativarClick(Sender: TObject);
+var
+  strSQL : string;
+begin
+
+  { if edtEditarPesq.Text <> '' then
+      begin
+         strSQL:= ' UPDATE hh.Lista_Email ';
+         strSQL:= strSQL + ' SET ONOFF = 1 ';
+         strsql:= strsql + ' where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+         strsql:= strsql + ' and ONOFF <> 1 ';
+
+         if ComboBoxEditarEmailCliente.Text <> '' then
+          begin
+             strSQL:= strSQL + ' and  cliente = ' + #39 + ComboBoxEditarEmailCliente.Text + #39;
+          end;
+
+         if ComboBoxEditarEmailArqExcel.Text <> '' then
+          begin
+             strSQL:= strSQL + ' and  HH_Excel  = ' + #39 + ComboBoxEditarEmailArqExcel.Text + #39;
+          end;
+
+         if ComboBoxEditarEmailGrupoCarteira.Text <> '' then
+          begin
+             strSQL:= strSQL + ' and  Grupo_Carteira = ' + #39 + ComboBoxEditarEmailGrupoCarteira.Text + #39;
+          end;
+
+         F_Principal.AdoQ_Excluir.Close;
+         F_Principal.AdoQ_Excluir.SQL.Clear;
+         F_Principal.AdoQ_Excluir.SQL.Add(strSQL);
+         F_Principal.AdoQ_Excluir.ExecSQL;
+
+      end; } // se precisar tirar temporario
+
+{$REGION 'Para mostrar Resultado da Grid Excluir'}
+  strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+  strsql:= strsql + ' from hh.Lista_Email ';
+  strsql:= strsql + ' where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+  strsql:= strsql + ' and ONOFF <> 1 ';
+
+  if ComboBoxEditarEmailCliente.Text <> '' then
+   begin
+      strSQL:= strSQL + ' and  cliente = ' + #39 + ComboBoxEditarEmailCliente.Text + #39;
+   end;
+
+  if ComboBoxEditarEmailArqExcel.Text <> '' then
+   begin
+      strSQL:= strSQL + ' and  HH_Excel  = ' + #39 + ComboBoxEditarEmailArqExcel.Text + #39;
+   end;
+
+  if ComboBoxEditarEmailGrupoCarteira.Text <> '' then
+   begin
+      strSQL:= strSQL + ' and  Grupo_Carteira = ' + #39 + ComboBoxEditarEmailGrupoCarteira.Text + #39;
+   end;
+
+   F_Principal.AdoQ_Excluir.Close;
+   F_Principal.AdoQ_Excluir.SQL.Clear;
+   F_Principal.AdoQ_Excluir.SQL.Add(strSQL);
+   F_Principal.AdoQ_Excluir.Open;
+{$ENDREGION 'Para mostrar Resultado da Grid Excluir'}
+
+{$REGION 'Verificar quantidade de Registro para Mostrar a Mensagem'}
+//Verificar se é registro unico
+   if F_Principal.AdoQ_Excluir.RecordCount = 1 then
+      begin
+         F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar - '
+         + F_Principal.AdoQ_Excluir.RecordCount.ToString + ' Conta Desativada '; // Mostrar quantidade de Registros
+         lblMudancaRegistrosAntes2.Visible:= True;
+         lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+         lblMudancaRegistros1.Visible:= True;
+         lblMudancaRegistros1.Caption:= F_Principal.AdoQ_Excluir.RecordCount.ToString + ' Registro ';
+      end
+   else
+      if F_Principal.AdoQ_Excluir.RecordCount = 0 then
+        begin
+            F_Principal.statPesquisa.Panels[1].Text:= '';
+        end
+      else
+        begin
+          F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar - '
+          + F_Principal.AdoQ_Excluir.RecordCount.ToString + ' Contas Desativadas'; // Mostrar quantidade de Registros
+          lblMudancaRegistrosAntes2.Visible:= True;
+          lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+          lblMudancaRegistros1.Visible:= True;
+          lblMudancaRegistros1.Caption:= F_Principal.AdoQ_Excluir.RecordCount.ToString + ' Registros ';
+        end;
+{$ENDREGION 'Verificar quantidade de Registro para Mostrar a Mensagem'}
+
+   F_Principal.Height:= 832;
+   F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
+   F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
+
+   pnlPosMudanca.Top:= 146;
+   pnlPosMudanca.Visible:= True;
+   pnlPosMudanca.Height:= 253;
+
+   pnlAntesMudanca.Height:= 253;
+   pnlAntesMudanca.Align:= alClient;
+   lblMudanca1.Visible:= True;
+   lblAntesMudanca1.Visible:= True;
+
+   edtEditarPesq.Clear;
+   ComboBoxEditarEmailCliente.Clear;
+   ComboBoxEditarEmailArqExcel.Clear;
+   ComboBoxEditarEmailGrupoCarteira.Clear;
+   ComboBoxEditarEmailCliente.Enabled:= False;
+   ComboBoxEditarEmailArqExcel.Enabled:= False;
+   ComboBoxEditarEmailGrupoCarteira.Enabled:= False;
+
+   pnlVoltarporEmail.Top:= 49;
+
+   btnEmailReativar.Enabled:= False;
+   GridEditarAntesMudanca.Tag:= 0;
+end;
+
 procedure TF_Principal.btnExcluir1Click(Sender: TObject);
 var
   qry: TADOQuery;
   strSQL: string;
 begin
-  {
+
    if edtPesqExluir.Text <> '' then
       begin
          strSQL:= ' UPDATE hh.Lista_Email ';
@@ -1027,7 +1367,7 @@ begin
          AdoQ_Excluir.SQL.Add(strSQL);
          AdoQ_Excluir.ExecSQL;
 
-      end;  }
+      end;
 
   strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
   strsql:= strsql + ' from hh.Lista_Email ';
@@ -1076,10 +1416,13 @@ begin
    F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
    F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
 
-   pnlEdicao.Visible:= True;
    pnlEdicao.Height:= 253;
-   pnlGridEscluir.Height:= 253;
-   pnlGridEscluir.Align:= alClient;
+   pnlEdicao.Top:= 146;
+   pnlEdicao.Visible:= True;
+
+  // pnlGridEscluir.Height:= 253;
+   pnlGridExcluir.Align:= alClient;
+
    lblAntesMudanca.Visible:= True;
 
    ComboExcluirClienteCL.Clear;
@@ -1092,7 +1435,7 @@ begin
 
    pnlSemEmail.Top:= 49;
 
-   btnExcluir.Enabled:= False;
+   btnExcluir1.Enabled:= False;
 
 {$REGION 'Busca para alimentar Combo Cliente'}
    try
@@ -1141,7 +1484,7 @@ var
   strSQL : string;
 
 begin
-  {
+// se precisar tirar temporario              Voltar no final
    if edtPesqExluir.Text <> '' then
       begin
          strSQL:= ' UPDATE hh.Lista_Email ';
@@ -1169,8 +1512,9 @@ begin
          AdoQ_Excluir.SQL.Add(strSQL);
          AdoQ_Excluir.ExecSQL;
 
-      end;  }
+      end;  // se precisar tirar temporario
 
+{$REGION 'Para mostrar Resultado da Grid Excluir'}
   strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
   strsql:= strsql + ' from hh.Lista_Email ';
   strsql:= strsql + ' where Email like ' + #39 + edtPesqExluir.Text + #37 + #39;
@@ -1195,7 +1539,9 @@ begin
    AdoQ_Excluir.SQL.Clear;
    AdoQ_Excluir.SQL.Add(strSQL);
    AdoQ_Excluir.Open;
+{$ENDREGION 'Para mostrar Resultado da Grid Excluir'}
 
+{$REGION 'Verificar quantidade de Registro para Mostrar a Mensagem'}
 //Verificar se é registro unico
    if AdoQ_Excluir.RecordCount = 1 then
       begin
@@ -1218,22 +1564,28 @@ begin
           lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
           lblMudancaRegistros.Caption:= AdoQ_Excluir.RecordCount.ToString + ' Registros ';
         end;
+{$ENDREGION 'Verificar quantidade de Registro para Mostrar a Mensagem'}
 
    F_Principal.Height:= 832;
    F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
    F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
 
+   pnlEdicao.Top:= 146;
    pnlEdicao.Visible:= True;
    pnlEdicao.Height:= 253;
 
-   pnlGridEscluir.Height:= 253;
-   pnlGridEscluir.Align:= alBottom;
+   pnlGridExcluir.Height:= 253;
+   pnlGridExcluir.Align:= alClient;
    lblAntesMudanca.Visible:= True;
+   lblMudancaRegistros.Visible:= True;
 
    edtPesqExluir.Clear;
    ComboExcluirCliente.Clear;
    ComboExcluirHH.Clear;
    ComboExcluirCarteira.Clear;
+   ComboExcluirCliente.Enabled:= False;
+   ComboExcluirHH.Enabled:= False;
+   ComboExcluirCarteira.Enabled:= False;
 
    pnlPesqExcluir.Top:= 49;
 
@@ -1251,8 +1603,57 @@ begin
   pgc_Geral.Pages[4].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
   pgc_Geral.Pages[5].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
 
-  pgc_Geral.ActivePageIndex:= 1;    // Definindo qual aba abre por padrao
+
+  pnlPesqExcluir.Visible:= False;
+  pnlSemEmail.Visible:= False;
+  pnlEdicao.Visible:= False;
+  pnlGridExcluir.Visible:= False;
+
+
+ {
+  pnlSemEmail.Enabled:=False;
+
+  pnlPesqExcluir.Top:= 49;
+  pnlPesqExcluir.Visible:=True;
+
+
+  pnlGridEscluir.Top:= 243;
+
+
+  Height:= 657;
+  F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
+  F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
+
+  lblMudancaRegistros.Visible:= False;
+  lblMudancaRegistrosAntes.Visible:= False;
+  lblAntesMudanca.Visible:= False;
+  btnExcluir.Enabled:= False;
+
+  edtPesqExluir.Clear;
+  ComboExcluirCliente.Clear;
+  ComboExcluirHH.Clear;
+  ComboExcluirCarteira.Clear;
+  ComboExcluirClienteCL.Clear;
+  ComboExcluirArqExcCL.Clear;
+  ComboExcluirGCarteiraCL.Clear;
+  AdoQ_Pesquisa.Close;
+  statPesquisa.Panels[1].Text:= '';
+
+
+
+
+      }
+
+
+
+
+
+  rbExcluirEmail.Checked:= False;
+  rbExcluirArquivo.Checked:= False;
+
   btnVoltar.Enabled:= True;
+
+  pgc_Geral.ActivePageIndex:= 1;    // Definindo qual aba abre por padrao
 end;
 
 procedure TF_Principal.btnSalvar1Click(Sender: TObject);
@@ -1589,6 +1990,15 @@ begin
 
   pgc_Geral.ActivePageIndex:= 0;    // Definindo qual aba abre por padrao
   btnVoltar.Enabled:= False;
+  statPesquisa.Panels[1].Text:='';
+
+  F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
+  F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
+
+  AdoQ_Pesquisa.Close;
+  AdoQ_ADD.Close;
+  AdoQ_Grid.Close;
+  AdoQ_Excluir.Close;
 end;
 
 procedure TF_Principal.btnVoltarEmailsClick(Sender: TObject);
@@ -1601,7 +2011,7 @@ begin
   pgc_Geral.Pages[4].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
   pgc_Geral.Pages[1].TabVisible:= False; // Colocando a aba de Pesquisa Visivel
 
-  pgc_Geral.ActivePageIndex:= 1;    // Definindo qual aba abre por padrao
+  pgc_Geral.ActivePageIndex:= 5;    // Definindo qual aba abre por padrao
   btnVoltar.Enabled:= True;
 end;
 
@@ -1807,6 +2217,7 @@ var
   qry: TADOQuery;
 
 begin
+{$REGION 'Verificando se a apenas um e-mail para trabalhar'}
     try
     // Criando Um ADOQUERY Em Tempo de Execução pegar Cliente para verificar se é unico
       qry:= TADOQuery.Create(nil);
@@ -1830,6 +2241,8 @@ begin
                begin
                   btnExcluir.Enabled:= False;
                   ComboExcluirCliente.Enabled:= False;
+                  ComboExcluirHH.Enabled:= False;
+                  ComboExcluirCarteira.Enabled:= False;
                end;
           end;
     Except
@@ -1839,7 +2252,9 @@ begin
             Exit;
          End;
     End;
+{$ENDREGION 'Verificando se a apenas um e-mail para trabalhar'}
 
+{$REGION 'Filtrando para Alimentar a Grid de pesqusia'}
 // verificar se o campo nao esta vazio
   if Trim(edtPesqExluir.Text) <> '' then
     begin
@@ -1862,20 +2277,30 @@ begin
              if RecordCount = 1 then
                 begin
                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar '; // Mostrar quantidade de Registros
+                   lblMudancaRegistrosAntes.Visible:= True;
+                   lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+                   btnExcluir1.Enabled:= True;
                 end
              else
                 if RecordCount = 0 then
                   begin
                       statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                      lblMudancaRegistrosAntes.Visible:= False;
+                      btnExcluir1.Enabled:= False;
                   end
                 else
+                  begin
                     statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar '; // Mostrar quantidade de Registros
+                    lblMudancaRegistrosAntes.Visible:= True;
+                    lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                    btnExcluir1.Enabled:= True;
+                  end;
           end;
 
+    {$REGION 'Após ter verificado que só tem um email unico faz as açoes necessarias, e Alimenta o comboCliente'}
           if (UserUnico) = 1 then
             begin
             // Realizar Alguma Ação
-
               try
               // Criando Um ADOQUERY Em Tempo de Execução pegar Cliente
                 qry:= TADOQuery.Create(nil);
@@ -1917,14 +2342,16 @@ begin
               End;
               btnExcluir.Enabled:= True;
               ComboExcluirCliente.Enabled:= True;
+              AdoQ_Excluir.Close;
+              lblMudancaRegistros.Visible:= False;
             end
           else
             begin
                // btnExcluir.Enabled:= False;
                //ComboExcluirCliente.Enabled:= False;
-            end;
+            end;     {$ENDREGION 'Após ter verificado que só tem um email unico faz as açoes necessarias, e Alimenta o comboCarteira'}
     end;
-
+{$ENDREGION 'Filtrando para Alimentar a Grid de pesqusia'}
 end;
 
 procedure TF_Principal.checkONOFFEnter(Sender: TObject);
@@ -1939,11 +2366,11 @@ end;
 
 procedure TF_Principal.ComboEmailEnviadoEnter(Sender: TObject);
 begin
-  pnlEmailPesq.Enabled:= False;
-  MemoEmail.Text:= '';
+ // pnlEmailPesq.Enabled:= False;
+ // MemoEmail.Text:= '';
 
-  ComboEmailEnviado.Color:= clSkyBlue;
-  lblArqExcelEmail.Font.Style:= [TFontStyle.fsBold];
+ // ComboEmailEnviado.Color:= clSkyBlue;
+ // lblArqExcelEmail.Font.Style:= [TFontStyle.fsBold];
 end;
 
 procedure TF_Principal.ComboEmailEnviadoExit(Sender: TObject);
@@ -1952,67 +2379,67 @@ qry: TADOQuery;
 strSql, MensageAppMesBox, mensagem, ArqExcel: string;
 
 begin
-MensageAppMesBox:= 'Quem Recebe os E-mails';
 
-{$REGION 'Configurações da Tela e Busca Carteira'}
-if ComboEmailEnviado.Text <> '' then
-  begin
-  //Varificando se clicou em cancelar ou salvar
-    if sairsemerro = 'S' then
-        begin
-          ComboArqExcel.Color:= clWindow;
-          lblArqExcel.Font.Style:= [];
-          Exit;
-        end
-    else
-      begin
-      //Guardar o nome do arquivo de excel
-        ArqExcel:= ComboEmailEnviado.Text;
-        ComboCarteiraEmailEnviado.Enabled:= True;
-        ComboCarteiraEmailEnviado.SetFocus;
-        ComboCarteiraEmailEnviado.Items.Clear;
+  MensageAppMesBox:= 'Quem Recebe os E-mails';
 
-
-
-  {$REGION 'Buscar as Carteiras'}
-      try
-      // Criando Um ADOQUERY Em Tempo de Execução pegar carteiras
-        qry:= TADOQuery.Create(nil);
-        qry.Connection:= con_Geral;
-
-      // Criando o Select
-        strSql:= 'select distinct Grupo_Carteira from hh.Lista_Email where HH_Excel = ' + #39 + ArqExcel + #39;
-
-      with qry do
+  {$REGION 'Configurações da Tela e Busca Carteira'}
+  if ComboEmailEnviado.Text <> '' then
+    begin
+    //Varificando se clicou em cancelar ou salvar
+      if sairsemerro = 'S' then
           begin
-            Close;
-            SQL.Clear;
-            SQL.Add(strSql);
-            Open;
-            First;
-            if (qry.RecordCount = 0) then // Se não encontrar dados
-               begin
-                 ComboCarteiraEmailEnviado.Clear;
-                  mensagem:= ' Não Existe Grupo Carteira Cadastrado, ' + #13
-                           +'Favor Verificar com Ad. Do Banco.';
-                  Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
-               end
-            else
-              begin
-                 while not qry.Eof do
-                   begin
-                      ComboCarteiraEmailEnviado.Items.Add(qry.FieldByName('Grupo_Carteira').AsAnsiString);
-                      qry.Next;
-                   end;
-              end;
-          end;
-      finally
-        FreeAndNil(qry);
-      end; {$ENDREGION 'Buscar as Carteiras'}
-      end;
-  end;  {$ENDREGION 'Configurações da Tela e Busca Carteira'}
-  ComboEmailEnviado.Color:= clWindow;
-  lblArqExcelEmail.Font.Style:= [];
+            ComboArqExcel.Color:= clWindow;
+            lblArqExcel.Font.Style:= [];
+            Exit;
+          end
+      else
+        begin
+        //Guardar o nome do arquivo de excel
+          ArqExcel:= ComboEmailEnviado.Text;
+          ComboCarteiraEmailEnviado.Enabled:= True;
+          ComboCarteiraEmailEnviado.SetFocus;
+          ComboCarteiraEmailEnviado.Items.Clear;
+
+    {$REGION 'Buscar as Carteiras'}
+        try
+        // Criando Um ADOQUERY Em Tempo de Execução pegar carteiras
+          qry:= TADOQuery.Create(nil);
+          qry.Connection:= con_Geral;
+
+        // Criando o Select
+          strSql:= 'select distinct Grupo_Carteira from hh.Lista_Email where HH_Excel = ' + #39 + ArqExcel + #39;
+
+        with qry do
+            begin
+              Close;
+              SQL.Clear;
+              SQL.Add(strSql);
+              Open;
+              First;
+              if (qry.RecordCount = 0) then // Se não encontrar dados
+                 begin
+                   ComboCarteiraEmailEnviado.Clear;
+                    mensagem:= ' Não Existe Grupo Carteira Cadastrado, ' + #13
+                             +'Favor Verificar com Ad. Do Banco.';
+                    Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+                 end
+              else
+                begin
+                   while not qry.Eof do
+                     begin
+                        ComboCarteiraEmailEnviado.Items.Add(qry.FieldByName('Grupo_Carteira').AsAnsiString);
+                        qry.Next;
+                     end;
+                end;
+            end;
+        finally
+          FreeAndNil(qry);
+        end; {$ENDREGION 'Buscar as Carteiras'}
+        end;
+    end;  {$ENDREGION 'Configurações da Tela e Busca Carteira'}
+    ComboEmailEnviado.Color:= clWindow;
+    lblArqExcelEmail.Font.Style:= [];
+
 end;
 
 procedure TF_Principal.ComboEmailEnviadoSelect(Sender: TObject);
@@ -2080,27 +2507,17 @@ begin
              First;
 
           //Verificar se é registro unico
-             if AdoQ_Excluir.RecordCount = 1 then
+             if RecordCount = 1 then
                 begin
-                   statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar - '
-                   + AdoQ_Excluir.RecordCount.ToString + ' Conta Desativada '; // Mostrar quantidade de Registros
-                   lblMudancaRegistrosAntes.Visible:= True;
-                   lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
-                   lblMudancaRegistros.Caption:= AdoQ_Excluir.RecordCount.ToString + ' Registro ';
+                   statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar '; // Mostrar quantidade de Registros
                 end
              else
-                if AdoQ_Excluir.RecordCount = 0 then
+                if RecordCount = 0 then
                   begin
-                      statPesquisa.Panels[1].Text:= '';
+                      statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
                   end
                 else
-                  begin
-                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar - '
-                    + AdoQ_Excluir.RecordCount.ToString + ' Contas Desativadas'; // Mostrar quantidade de Registros
-                    lblMudancaRegistrosAntes.Visible:= True;
-                    lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
-                    lblMudancaRegistros.Caption:= AdoQ_Excluir.RecordCount.ToString + ' Registros ';
-                  end;
+                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar '; // Mostrar quantidade de Registros
           end;
     end;
 
@@ -2185,14 +2602,24 @@ begin
              if RecordCount = 1 then
                 begin
                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar '; // Mostrar quantidade de Registros
+                   lblMudancaRegistrosAntes.Visible:= True;
+                   lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+                   btnExcluir1.Enabled:= True;
                 end
              else
                 if RecordCount = 0 then
                   begin
-                      statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                      statPesquisa.Panels[1].Text:= ''; // Mostrar quantidade de Registros
+                      lblMudancaRegistrosAntes.Visible:= False;
+                      btnExcluir1.Enabled:= False;
                   end
                 else
+                  begin
                     statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar '; // Mostrar quantidade de Registros
+                    lblMudancaRegistrosAntes.Visible:= True;
+                    lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                    btnExcluir1.Enabled:= True;
+                  end;
           end;
     end;
 end;
@@ -2240,32 +2667,21 @@ begin
              if RecordCount = 1 then
                 begin
                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar '; // Mostrar quantidade de Registros
-                   lblMudancaRegistrosAntes.Visible:= True;
-                   lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
-                   btnExcluir1.Enabled:= True;
                 end
              else
                 if RecordCount = 0 then
                   begin
                       statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
-                      lblMudancaRegistrosAntes.Visible:= False;
-                      btnExcluir1.Enabled:= False;
                   end
                 else
-                  begin
                     statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar '; // Mostrar quantidade de Registros
-                    lblMudancaRegistrosAntes.Visible:= True;
-                    lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
-                    btnExcluir1.Enabled:= True;
-                  end;
           end;
 
           if (AdoQ_Pesquisa.RecordCount <> 0) then // Se não encontrar dados
              begin
-               // btnExcluir1.Enabled:= True;
+                btnExcluir1.Enabled:= True;
              end;
     end;
-
 
      try
      // Criando Um ADOQUERY Em Tempo de Execução pegar Arquivos de Excel
@@ -2315,6 +2731,11 @@ end;
 
 procedure TF_Principal.ComboExcluirClienteEnter(Sender: TObject);
 begin
+  ComboExcluirHH.Enabled:= False;
+  ComboExcluirHH.Clear;
+  ComboExcluirCarteira.Enabled:= False;
+  ComboExcluirCarteira.Clear;
+
   ComboExcluirCliente.Color:= clSkyBlue;
   lbl13.Font.Style:= [TFontStyle.fsBold];
 end;
@@ -2352,14 +2773,24 @@ begin
              if RecordCount = 1 then
                 begin
                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar '; // Mostrar quantidade de Registros
+                   lblMudancaRegistrosAntes.Visible:= True;
+                   lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+                   btnExcluir1.Enabled:= True;
                 end
              else
                 if RecordCount = 0 then
                   begin
-                      statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                      statPesquisa.Panels[1].Text:= ''; // Mostrar quantidade de Registros
+                      lblMudancaRegistrosAntes.Visible:= False;
+                      btnExcluir1.Enabled:= False;
                   end
                 else
+                  begin
                     statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar '; // Mostrar quantidade de Registros
+                    lblMudancaRegistrosAntes.Visible:= True;
+                    lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                    btnExcluir1.Enabled:= True;
+                  end;
           end;
     end;
 
@@ -2381,9 +2812,12 @@ begin
              First;
              if (qry.RecordCount = 0) then // Se não encontrar dados
                 begin
-                  ComboCarteiraEmailEnviado.Clear;
+                   btnExcluir.Enabled:= false;
+                   ComboExcluirCliente.Clear;
+                   ComboExcluirCliente.Enabled:= False;
+                   edtPesqExluir.SetFocus;
                    mensagem:= ' Não Existe Arquivo de Excel Cadastrado, ' + #13
-                            +'Favor Verificar com Ad. Do Banco.';
+                            +'Favor Verificar se o e-mail está correto.';
                    Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
                 end
              else
@@ -2394,10 +2828,9 @@ begin
                        ComboExcluirHH.Items.Add(qry.FieldByName('HH_Excel').AsAnsiString);
                        qry.Next;
                     end;
+                  ComboExcluirHH.Enabled:= True;
                end;
            end;
-
-        ComboExcluirHH.Enabled:= True;
      Except
        on E:Exception do
           Begin
@@ -2443,33 +2876,26 @@ begin
              First;
 
           //Verificar se é registro unico
-             if AdoQ_Excluir.RecordCount = 1 then
+             if RecordCount = 1 then
                 begin
-                   statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar - '
-                   + AdoQ_Excluir.RecordCount.ToString + ' Conta Desativada '; // Mostrar quantidade de Registros
-                   lblMudancaRegistrosAntes.Visible:= True;
-                   lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
-                   lblMudancaRegistros.Caption:= AdoQ_Excluir.RecordCount.ToString + ' Registro ';
+                   statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar '; // Mostrar quantidade de Registros
                 end
              else
-                if AdoQ_Excluir.RecordCount = 0 then
+                if RecordCount = 0 then
                   begin
-                      statPesquisa.Panels[1].Text:= '';
+                      statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
                   end
                 else
-                  begin
-                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar - '
-                    + AdoQ_Excluir.RecordCount.ToString + ' Contas Desativadas'; // Mostrar quantidade de Registros
-                    lblMudancaRegistrosAntes.Visible:= True;
-                    lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
-                    lblMudancaRegistros.Caption:= AdoQ_Excluir.RecordCount.ToString + ' Registros ';
-                  end;
+                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar '; // Mostrar quantidade de Registros
           end;
     end;
 end;
 
 procedure TF_Principal.ComboExcluirHHEnter(Sender: TObject);
 begin
+  ComboExcluirCarteira.Enabled:= False;
+  ComboExcluirCarteira.Clear;
+
   ComboExcluirHH.Color:= clSkyBlue;
   lbl14.Font.Style:= [TFontStyle.fsBold];
 end;
@@ -2509,14 +2935,24 @@ begin
              if RecordCount = 1 then
                 begin
                    statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar '; // Mostrar quantidade de Registros
+                   lblMudancaRegistrosAntes.Visible:= True;
+                   lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+                   btnExcluir1.Enabled:= True;
                 end
              else
                 if RecordCount = 0 then
                   begin
                       statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                      lblMudancaRegistrosAntes.Visible:= False;
+                      btnExcluir1.Enabled:= False;
                   end
                 else
+                  begin
                     statPesquisa.Panels[1].Text:= AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Desativar '; // Mostrar quantidade de Registros
+                    lblMudancaRegistrosAntes.Visible:= True;
+                    lblMudancaRegistrosAntes.Caption:= AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                    btnExcluir1.Enabled:= True;
+                  end;
           end;
     end;
 
@@ -2552,9 +2988,10 @@ begin
                       ComboExcluirCarteira.Items.Add(qry.FieldByName('Grupo_Carteira').AsAnsiString);
                       qry.Next;
                    end;
+                 ComboExcluirCarteira.Enabled:= True;
               end;
           end;
-      ComboExcluirCarteira.Enabled:= True;
+
     Except
       on E:Exception do
          Begin
@@ -2677,6 +3114,563 @@ MensageAppMesBox:= 'Adicionando E-mails no HH';
 
       ComboArqExcel.Color:= clWindow;
       lblArqExcel.Font.Style:= [];
+    end;
+end;
+
+procedure TF_Principal.ComboBoxClienteArqExcelEnter(Sender: TObject);
+var
+  strsql: string;
+begin
+  ComboBoxClienteGrupoCarteira.Clear;
+
+// verificar se o campo nao esta vazio
+  if Trim(ComboBoxClienteArqExcel.Text) <> '' then
+    begin
+       strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+       strsql:= strsql + ' from hh.Lista_Email ';
+       strSql:= strSql + ' where cliente = ' + #39 + ComboBoxClienteCliente.Text + #39;
+       strSql:= strSql + ' and HH_Excel = ' + #39 + ComboBoxClienteArqExcel.Text + #39;
+       strSql:= strSql + ' and onoff <> 1 order by Email';
+
+      // Para nao ficar digitando o adoquery
+       with F_Principal.AdoQ_Pesquisa do
+          begin
+             Close;
+             SQL.clear;
+             SQL.Add(strsql);
+             Open;
+             First;
+             F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString; // Mostrar quantidade de Registros
+          end;
+    end;
+
+  ComboBoxClienteArqExcel.Color:= clSkyBlue;
+  lbl143.Font.Style:= [TFontStyle.fsBold];
+end;
+
+procedure TF_Principal.ComboBoxClienteArqExcelExit(Sender: TObject);
+begin
+  ComboBoxClienteArqExcel.Color:= clWindow;
+  lbl143.Font.Style:= [];
+end;
+
+procedure TF_Principal.ComboBoxClienteArqExcelSelect(Sender: TObject);
+var
+  qry: TADOQuery;
+  strSQL: string;
+begin
+  strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+  strsql:= strsql + ' from hh.Lista_Email ';
+  strSql:= strSql + ' where cliente = ' + #39 + ComboBoxClienteCliente.Text + #39;
+  strSql:= strSql + ' and HH_Excel = ' + #39 + ComboBoxClienteArqExcel.Text + #39;
+  strSql:= strSql + ' and onoff <> 1 order by Email';
+
+// verificar se o campo nao esta vazio
+  if Trim(ComboBoxClienteArqExcel.Text) <> '' then
+    begin
+      // Para nao ficar digitando o adoquery
+       with F_Principal.AdoQ_Pesquisa do
+          begin
+             Close;
+             SQL.clear;
+             SQL.Add(strsql);
+             Open;
+             First;
+
+          //Verificar se é registro unico
+             if RecordCount = 1 then
+                begin
+                   F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar '; // Mostrar quantidade de Registros
+                end
+             else
+                if RecordCount = 0 then
+                  begin
+                      F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                  end
+                else
+                    F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
+          end;
+    end;
+
+    try
+    // Criando Um ADOQUERY Em Tempo de Execução pegar Grupo Carteira
+      qry:= TADOQuery.Create(nil);
+      qry.Connection:= F_Principal.con_Geral;
+
+    // Criando o Select
+       strSql:= 'select distinct Grupo_Carteira from hh.Lista_Email where cliente like ' + #39 + ComboBoxClienteCliente.Text + #37 + #39;
+       strSql:= strSql + ' and ONOFF <> 1 and HH_Excel = ' + #39 + ComboBoxClienteArqExcel.Text + #39;
+
+      with qry do
+          begin
+            Close;
+            SQL.Clear;
+            SQL.Add(strSql);
+            Open;
+            First;
+            if (qry.RecordCount = 0) then // Se não encontrar dados
+               begin
+                  mensagem:= ' Não Existe Grupo Carteira Cadastrado, ' + #13
+                           +'Favor Verificar com Ad. Do Banco.';
+                  Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+               end
+            else
+              begin
+                 while not qry.Eof do
+                   begin
+                      ComboBoxClienteGrupoCarteira.Items.Add(qry.FieldByName('Grupo_Carteira').AsAnsiString);
+                      qry.Next;
+                   end;
+              end;
+          end;
+      ComboBoxClienteGrupoCarteira.Enabled:= True;
+    Except
+      on E:Exception do
+         Begin
+            Showmessage('Erro Arrumar:6 ' + E.Message);
+            Exit;
+         End;
+    End;
+end;
+
+procedure TF_Principal.ComboBoxClienteClienteEnter(Sender: TObject);
+begin
+  ComboBoxClienteArqExcel.Clear;
+  ComboBoxClienteGrupoCarteira.Clear;
+  btnClienteReativar.Enabled:= False;
+  F_Principal.AdoQ_Pesquisa.Close;
+  lblMudancaRegistrosAntes2.Visible:= False;
+
+  ComboBoxClienteCliente.Color:= clSkyBlue;
+  lbl133.Font.Style:= [TFontStyle.fsBold];
+end;
+
+procedure TF_Principal.ComboBoxClienteClienteExit(Sender: TObject);
+begin
+  ComboBoxClienteCliente.Color:= clWindow;
+  lbl133.Font.Style:= [];
+end;
+
+procedure TF_Principal.ComboBoxClienteClienteSelect(Sender: TObject);
+var
+  qry : TADOQuery;
+  strSQL: string;
+begin
+  strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+  strsql:= strsql + ' from hh.Lista_Email ';
+  strSql:= strSql + ' where cliente = ' + #39 + ComboBoxClienteCliente.Text + #39;
+  strSql:= strSql + ' and OnOff <> 1  order by Email'  ;
+
+{$REGION 'Verifica se Não esta vazio e preenche informações de registros'}
+// verificar se o campo nao esta vazio
+  if Trim(ComboBoxClienteCliente.Text) <> '' then
+    begin
+      // Para nao ficar digitando o adoquery
+       with F_Principal.AdoQ_Pesquisa do
+          begin
+             Close;
+             SQL.clear;
+             SQL.Add(strsql);
+             Open;
+             First;
+
+          //Verificar se é registro unico
+             if RecordCount = 1 then
+                begin
+                   F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar '; // Mostrar quantidade de Registros
+                end
+             else
+                if RecordCount = 0 then
+                  begin
+                      F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                  end
+                else
+                    F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
+          end;
+
+          if (F_Principal.AdoQ_Pesquisa.RecordCount <> 0) then // Se não encontrar dados
+             begin
+                btnClienteReativar.Enabled:= True;
+             end;
+    end; {$ENDREGION 'Verifica se Não esta vazio e preenche informações de registros'}
+
+{$REGION 'Preenchendo o proximo ComboBOX'}
+     try
+     // Criando Um ADOQUERY Em Tempo de Execução pegar Arquivos de Excel
+       qry:= TADOQuery.Create(nil);
+       qry.Connection:= F_Principal.con_Geral;
+
+     // Criando o Select
+       strSql:= 'select distinct HH_Excel from hh.Lista_Email where cliente = ' + #39 + ComboBoxClienteCliente.Text + #39;
+       strSql:= strSql + ' and onoff <> 1 ';
+       strSql:= strSql + ' order by HH_Excel ';
+       with qry do
+           begin
+             Close;
+             SQL.Clear;
+             SQL.Add(strSql);
+             Open;
+             First;
+             if (qry.RecordCount = 0) then // Se não encontrar dados
+                begin
+                   mensagem:= ' Não Existe Arquivo de Excel Cadastrado, ' + #13
+                            +'Favor Verificar com Ad. Do Banco.';
+                   Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+                end
+             else
+               begin
+                  ComboBoxClienteArqExcel.Clear;
+                  while not qry.Eof do
+                    begin
+                       ComboBoxClienteArqExcel.Items.Add(qry.FieldByName('HH_Excel').AsAnsiString);
+                       qry.Next;
+                    end;
+               end;
+           end;
+
+        ComboBoxClienteArqExcel.Enabled:= True;
+     Except
+       on E:Exception do
+          Begin
+             Showmessage('Erro Arrumar:5 ' + E.Message);
+             Exit;
+          End;
+     End; {$ENDREGION 'Preenchendo o proximo ComboBOX'}
+//Fechar Componente
+  F_Principal.AdoQ_Excluir.Close;
+  lblMudancaRegistros1.Visible:= False;
+end;
+
+procedure TF_Principal.ComboBoxClienteGrupoCarteiraEnter(Sender: TObject);
+begin
+  ComboBoxClienteGrupoCarteira.Color:= clSkyBlue;
+  lbl153.Font.Style:= [TFontStyle.fsBold];
+end;
+
+procedure TF_Principal.ComboBoxClienteGrupoCarteiraExit(Sender: TObject);
+begin
+  ComboBoxClienteGrupoCarteira.Color:= clWindow;
+  lbl153.Font.Style:= [];
+end;
+
+procedure TF_Principal.ComboBoxClienteGrupoCarteiraSelect(Sender: TObject);
+var
+  strSQL: string;
+begin
+  strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+  strsql:= strsql + ' from hh.Lista_Email ';
+  strSql:= strSql + ' where cliente = ' + #39 + ComboBoxClienteCliente.Text + #39;
+  strSql:= strSql + ' and HH_Excel = ' + #39 + ComboBoxClienteArqExcel.Text + #39;
+  strSql:= strSql + ' and Grupo_Carteira = ' + #39 + ComboBoxClienteGrupoCarteira.Text + #39;
+  strSql:= strSql + ' and onoff <> 1 order by Email';
+
+// verificar se o campo nao esta vazio
+  if Trim(ComboBoxClienteArqExcel.Text) <> '' then
+    begin
+      // Para nao ficar digitando o adoquery
+       with F_Principal.AdoQ_Pesquisa do
+          begin
+             Close;
+             SQL.clear;
+             SQL.Add(strsql);
+             Open;
+             First;
+
+          //Verificar se é registro unico
+             if RecordCount = 1 then
+                begin
+                   F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar '; // Mostrar quantidade de Registros
+                end
+             else
+                if RecordCount = 0 then
+                  begin
+                      F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                  end
+                else
+                    F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
+          end;
+    end;
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailArqExcelEnter(Sender: TObject);
+begin
+  ComboBoxEditarEmailGrupoCarteira.Enabled:= False;
+  ComboBoxEditarEmailGrupoCarteira.Clear;
+
+  ComboBoxEditarEmailArqExcel.Color:= clSkyBlue;
+  lblEditarArqExcel.Font.Style:= [TFontStyle.fsBold];
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailArqExcelExit(Sender: TObject);
+begin
+  ComboBoxEditarEmailArqExcel.Color:= clWindow;
+  lblEditarArqExcel.Font.Style:= [];
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailArqExcelSelect(Sender: TObject);
+var
+  qry: TADOQuery;
+  strsql: string;
+begin
+  strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+  strsql:= strsql + ' from hh.Lista_Email ';
+  strsql:= strsql + ' where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+  strSql:= strSql + ' and cliente = ' + #39 + ComboBoxEditarEmailCliente.Text + #39;
+  strSql:= strSql + ' and HH_Excel = ' + #39 + ComboBoxEditarEmailArqExcel.Text + #39;
+  strsql:= strsql + ' and ONOFF <> 1 ';
+
+// verificar se o campo nao esta vazio
+  if Trim(ComboBoxEditarEmailArqExcel.Text) <> '' then
+    begin
+      // Para nao ficar digitando o adoquery
+       with F_Principal.AdoQ_Pesquisa do
+          begin
+             Close;
+             SQL.clear;
+             SQL.Add(strsql);
+             Open;
+             First;
+
+          //Verificar se é registro unico
+             if RecordCount = 1 then
+                begin
+                   F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar '; // Mostrar quantidade de Registros
+                   lblMudancaRegistrosAntes2.Visible:= True;
+                   lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+                   btnEmailReativar.Enabled:= True;
+                end
+             else
+                if RecordCount = 0 then
+                  begin
+                      F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                      lblMudancaRegistrosAntes2.Visible:= False;
+                      btnEmailReativar.Enabled:= False;
+                  end
+                else
+                  begin
+                    F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
+                    lblMudancaRegistrosAntes2.Visible:= True;
+                    lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                    btnEmailReativar.Enabled:= True;
+                  end;
+          end;
+    end;
+
+    try
+    // Criando Um ADOQUERY Em Tempo de Execução pegar Grupo Carteira
+      qry:= TADOQuery.Create(nil);
+      qry.Connection:= F_Principal.con_Geral;
+
+    // Criando o Select
+       strSql:= 'select distinct Grupo_Carteira from hh.Lista_Email where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+       strSql:= strSql + ' and ONOFF = 0 and cliente = ' + #39 + ComboBoxEditarEmailCliente.Text + #39;
+       strSql:= strSql + ' and HH_Excel = ' + #39 + ComboBoxEditarEmailArqExcel.Text + #39;
+
+      with qry do
+          begin
+            Close;
+            SQL.Clear;
+            SQL.Add(strSql);
+            Open;
+            First;
+            if (qry.RecordCount = 0) then // Se não encontrar dados
+               begin
+                // ComboCarteiraEmailEnviado.Clear;
+                  mensagem:= ' Não Existe Grupo Carteira Cadastrado, ' + #13
+                           +'Favor Verificar com Ad. Do Banco.';
+                  Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+               end
+            else
+              begin
+                 ComboBoxEditarEmailGrupoCarteira.Clear;
+                 while not qry.Eof do
+                   begin
+                      ComboBoxEditarEmailGrupoCarteira.Items.Add(qry.FieldByName('Grupo_Carteira').AsAnsiString);
+                      qry.Next;
+                   end;
+                 ComboBoxEditarEmailGrupoCarteira.Enabled:= True;
+              end;
+          end;
+
+    Except
+      on E:Exception do
+         Begin
+            Showmessage('Erro Arrumar:6 ' + E.Message);
+            Exit;
+         End;
+    End;
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailClienteEnter(Sender: TObject);
+begin
+  ComboBoxEditarEmailArqExcel.Enabled:= False;
+  ComboBoxEditarEmailArqExcel.Clear;
+  ComboBoxEditarEmailGrupoCarteira.Enabled:= False;
+  ComboBoxEditarEmailGrupoCarteira.Clear;
+
+  ComboBoxEditarEmailCliente.Color:= clSkyBlue;
+  lblEditarCliente.Font.Style:= [TFontStyle.fsBold];
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailClienteExit(Sender: TObject);
+begin
+  ComboBoxEditarEmailCliente.Color:= clWindow;
+  lblEditarCliente.Font.Style:= [];
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailClienteSelect(Sender: TObject);
+var
+  qry: TADOQuery;
+  strsql: string;
+begin
+  strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+  strsql:= strsql + ' from hh.Lista_Email ';
+  strsql:= strsql + ' where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+  strSql:= strSql + ' and cliente = ' + #39 + ComboBoxEditarEmailCliente.Text + #39;
+  strsql:= strsql + ' and ONOFF <> 1 ';
+
+// verificar se o campo nao esta vazio
+  if Trim(ComboBoxEditarEmailCliente.Text) <> '' then
+    begin
+      // Para nao ficar digitando o adoquery
+       with F_Principal.AdoQ_Pesquisa do
+          begin
+             Close;
+             SQL.clear;
+             SQL.Add(strsql);
+             Open;
+             First;
+
+          //Verificar se é registro unico
+             if RecordCount = 1 then
+                begin
+                   F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar '; // Mostrar quantidade de Registros
+                   lblMudancaRegistrosAntes2.Visible:= True;
+                   lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+                   btnEmailReativar.Enabled:= True;
+                end
+             else
+                if RecordCount = 0 then
+                  begin
+                      F_Principal.statPesquisa.Panels[1].Text:= ''; // Mostrar quantidade de Registros
+                      lblMudancaRegistrosAntes2.Visible:= False;
+                      btnEmailReativar.Enabled:= False;
+                  end
+                else
+                  begin
+                    F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
+                    lblMudancaRegistrosAntes2.Visible:= True;
+                    lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                    btnEmailReativar.Enabled:= True;
+                  end;
+          end;
+    end;
+
+     try
+     // Criando Um ADOQUERY Em Tempo de Execução pegar Arquivos de Excel
+       qry:= TADOQuery.Create(nil);
+       qry.Connection:= F_Principal.con_Geral;
+
+     // Criando o Select
+       strSql:= 'select distinct HH_Excel from hh.Lista_Email where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+       strSql:= strSql + ' and ONOFF = 0 and cliente = ' + #39 + ComboBoxEditarEmailCliente.Text + #39;
+
+       with qry do
+           begin
+             Close;
+             SQL.Clear;
+             SQL.Add(strSql);
+             Open;
+             First;
+             if (qry.RecordCount = 0) then // Se não encontrar dados
+                begin
+                   btnEmailReativar.Enabled:= false;
+                   ComboBoxEditarEmailCliente.Clear;
+                   ComboBoxEditarEmailCliente.Enabled:= False;
+                   edtEditarPesq.SetFocus;
+                   mensagem:= ' Não Existe Arquivo de Excel Cadastrado, ' + #13
+                            +'Favor Verificar se o e-mail está correto.';
+                   Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+                end
+             else
+               begin
+                  ComboBoxEditarEmailArqExcel.Clear;
+                  while not qry.Eof do
+                    begin
+                       ComboBoxEditarEmailArqExcel.Items.Add(qry.FieldByName('HH_Excel').AsAnsiString);
+                       qry.Next;
+                    end;
+                  ComboBoxEditarEmailArqExcel.Enabled:= True;
+               end;
+           end;
+     Except
+       on E:Exception do
+          Begin
+             Showmessage('Erro Arrumar:5 ' + E.Message);
+             Exit;
+          End;
+     End;
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailGrupoCarteiraEnter(Sender: TObject);
+begin
+  ComboBoxEditarEmailGrupoCarteira.Color:= clSkyBlue;
+  lblEditarGrupoCarteira.Font.Style:= [TFontStyle.fsBold];
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailGrupoCarteiraExit(Sender: TObject);
+begin
+  ComboBoxEditarEmailGrupoCarteira.Color:= clWindow;
+  lblEditarGrupoCarteira.Font.Style:= [];
+end;
+
+procedure TF_Principal.ComboBoxEditarEmailGrupoCarteiraSelect(Sender: TObject);
+var
+  strsql: string;
+begin
+  strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+  strsql:= strsql + ' from hh.Lista_Email ';
+  strsql:= strsql + ' where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+  strSql:= strSql + ' and cliente = ' + #39 + ComboBoxEditarEmailCliente.Text + #39;
+  strSql:= strSql + ' and HH_Excel = ' + #39 + ComboBoxEditarEmailArqExcel.Text + #39;
+  strSql:= strSql + ' and Grupo_Carteira = ' + #39 + ComboBoxEditarEmailGrupoCarteira.Text + #39;
+  strsql:= strsql + ' and ONOFF <> 1 ';
+
+// verificar se o campo nao esta vazio
+  if Trim(ComboBoxEditarEmailGrupoCarteira.Text) <> '' then
+    begin
+      // Para nao ficar digitando o adoquery
+       with F_Principal.AdoQ_Pesquisa do
+          begin
+             Close;
+             SQL.clear;
+             SQL.Add(strsql);
+             Open;
+             First;
+
+          //Verificar se é registro unico
+             if RecordCount = 1 then
+                begin
+                   F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar '; // Mostrar quantidade de Registros
+                   lblMudancaRegistrosAntes2.Visible:= True;
+                   lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+                   btnEmailReativar.Enabled:= True;
+                end
+             else
+                if RecordCount = 0 then
+                  begin
+                      F_Principal.statPesquisa.Panels[1].Text:= ''; // Mostrar quantidade de Registros
+                      lblMudancaRegistrosAntes2.Visible:= False;
+                      btnEmailReativar.Enabled:= False;
+                  end
+                else
+                  begin
+                    F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
+                    lblMudancaRegistrosAntes2.Visible:= True;
+                    lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                    btnEmailReativar.Enabled:= True;
+                  end;
+          end;
     end;
 end;
 
@@ -2934,6 +3928,175 @@ begin
   lblclientepc.Font.Style:= [];
 end;
 
+procedure TF_Principal.edtEditarPesqEnter(Sender: TObject);
+begin
+  btnEmailReativar.Enabled:= False;
+
+  ComboBoxEditarEmailCliente.Enabled:= False;
+  ComboBoxEditarEmailCliente.Clear;
+  ComboBoxEditarEmailArqExcel.Enabled:= False;
+  ComboBoxEditarEmailArqExcel.Clear;
+  ComboBoxEditarEmailGrupoCarteira.Enabled:= False;
+  ComboBoxEditarEmailGrupoCarteira.Clear;
+
+  edtEditarPesq.Color:= clSkyBlue;
+  lblEditarEmail.Font.Style:= [TFontStyle.fsBold];
+end;
+
+procedure TF_Principal.edtEditarPesqExit(Sender: TObject);
+begin
+  edtEditarPesq.Color:= clWindow;
+  lblEditarEmail.Font.Style:= [];
+end;
+
+procedure TF_Principal.edtEditarPesqKeyPress(Sender: TObject; var Key: Char);
+var
+  strsql, strsql1: string;
+  UserUnico: Integer;
+  qry: TADOQuery;
+begin
+  if Trim(edtEditarPesq.Text) <> '' then
+    begin
+
+    {$REGION 'Verificando se a apenas um e-mail para trabalhar'}
+        try
+        // Criando Um ADOQUERY Em Tempo de Execução pegar Cliente para verificar se é unico
+          qry:= TADOQuery.Create(nil);
+          qry.Connection:= F_Principal.con_Geral;
+
+        // Criando o Select
+          strsql1:= 'select distinct Email from hh.Lista_Email where ONOFF = 0 and Email like ' +#39+ edtEditarPesq.Text + #37 + #39;
+
+          with qry do
+              begin
+                Close;
+                SQL.Clear;
+                SQL.Add(strsql1);
+                Open;
+                First;
+
+                if (qry.RecordCount = 1) then
+                   begin
+                     UserUnico:= qry.RecordCount;
+                   end
+                else
+                   begin
+                      btnEmailReativar.Enabled:= False;
+                      ComboBoxEditarEmailCliente.Enabled:= False;
+                      ComboBoxEditarEmailArqExcel.Enabled:= False;
+                      ComboBoxEditarEmailGrupoCarteira.Enabled:= False;
+                   end;
+              end;
+        Except
+          on E:Exception do
+             Begin
+                Showmessage('Erro Arrumar:4 ' + E.Message);
+                Exit;
+             End;
+        End;
+    {$ENDREGION 'Verificando se a apenas um e-mail para trabalhar'}
+
+    {$REGION 'Filtrando para Alimentar a Grid de pesqusia'}
+    // verificar se o campo nao esta vazio
+      if Trim(edtEditarPesq.Text) <> '' then
+        begin
+        // Select Inicial
+          strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
+          strsql:= strsql + ' from hh.Lista_Email ';
+          strsql:= strsql + ' where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+          strsql:= strsql + ' and ONOFF <> 1 ';
+
+          // Para nao ficar digitando o adoquery
+           with F_Principal.AdoQ_Pesquisa do
+              begin
+                 Close;
+                 SQL.clear;
+                 SQL.Add(strsql);
+                 Open;
+                 First;
+
+              //Verificar se é registro unico
+                 if RecordCount = 1 then
+                    begin
+                       F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar '; // Mostrar quantidade de Registros
+                       lblMudancaRegistrosAntes2.Visible:= True;
+                       lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
+                       btnEmailReativar.Enabled:= True;
+                    end
+                 else
+                    if RecordCount = 0 then
+                      begin
+                          F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                          lblMudancaRegistrosAntes2.Visible:= False;
+                          btnEmailReativar.Enabled:= False;
+                      end
+                    else
+                      begin
+                        F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
+                        lblMudancaRegistrosAntes2.Visible:= True;
+                        lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                        btnEmailReativar.Enabled:= True;
+                      end;
+              end;
+
+        {$REGION 'Após ter verificado que só tem um email unico faz as açoes necessarias, e Alimenta o comboCliente'}
+              if (UserUnico) = 1 then
+                begin
+                // Realizar Alguma Ação
+                  try
+                  // Criando Um ADOQUERY Em Tempo de Execução pegar Cliente
+                    qry:= TADOQuery.Create(nil);
+                    qry.Connection:= F_Principal.con_Geral;
+
+                  // Criando o Select
+                    strSql:= 'select distinct Cliente from hh.Lista_Email where ONOFF = 0 and Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
+
+                    with qry do
+                        begin
+                          Close;
+                          SQL.Clear;
+                          SQL.Add(strSql);
+                          Open;
+                          First;
+                          if (qry.RecordCount = 0) then // Se não encontrar dados
+                             begin
+                             //  ComboCarteiraEmailEnviado.Clear;
+                                mensagem:= ' Não Existe Cliente Cadastrado, ' + #13
+                                         + ' Favor Verificar com Ad. Do Banco.';
+                                Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+                             end
+                          else
+                            begin
+                              ComboBoxEditarEmailCliente.Clear;
+                               while not qry.Eof do
+                                 begin
+                                    ComboBoxEditarEmailCliente.Items.Add(qry.FieldByName('Cliente').AsAnsiString);
+                                    qry.Next;
+                                 end;
+                            end;
+                        end;
+                  Except
+                    on E:Exception do
+                       Begin
+                          Showmessage('Erro Arrumar:4 ' + E.Message);
+                          Exit;
+                       End;
+                  End;
+                  btnEmailReativar.Enabled:= True;
+                  ComboBoxEditarEmailCliente.Enabled:= True;
+                  F_Principal.AdoQ_Excluir.Close;
+                  lblMudancaRegistros1.Visible:= False;
+                end
+              else
+                begin
+                   // btnExcluir.Enabled:= False;
+                   //ComboExcluirCliente.Enabled:= False;
+                end;     {$ENDREGION 'Após ter verificado que só tem um email unico faz as açoes necessarias, e Alimenta o comboCarteira'}
+        end;
+    {$ENDREGION 'Filtrando para Alimentar a Grid de pesqusia'}
+    end;
+end;
+
 procedure TF_Principal.edtEmailEnter(Sender: TObject);
 begin
   edtEmail.Color:= clSkyBlue;
@@ -2990,6 +4153,14 @@ end;
 
 procedure TF_Principal.edtPesqExluirEnter(Sender: TObject);
 begin
+  ComboExcluirCliente.Enabled:= False;
+  ComboExcluirHH.Enabled:= False;
+  ComboExcluirCarteira.Enabled:= False;
+
+  ComboExcluirCliente.Clear;
+  ComboExcluirHH.Clear;
+  ComboExcluirCarteira.Clear;
+
   edtPesqExluir.Color:= clSkyBlue;
   lbl12.Font.Style:= [TFontStyle.fsBold];
 end;
@@ -3020,7 +4191,10 @@ end;
 
 procedure TF_Principal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-   AdoQ_Pesquisa.Close;
+  AdoQ_Pesquisa.Close;
+  AdoQ_ADD.Close;
+  AdoQ_Grid.Close;
+  AdoQ_Excluir.Close;
 end;
 
 procedure TF_Principal.FormCreate(Sender: TObject);
@@ -3064,17 +4238,19 @@ begin
    lblPesquisaADD.Caption:= UsuarioConexao; // Colocar nome de usuario Temporario depois coloca o arquivo que vai trabalhar.
 
  // Verificando o usuario para bloquear ou liberar o botao de ADD novo HH
-  if (UsuarioConexao = 'lucas.tavares') or (UsuarioConexao = '1.1.12675') or (UsuarioConexao = 'lucas')  then
-    begin
-      btnADDNovoHH.Caption:= btnADDNovoHH.Caption + ' - ' + GetNetUserName;
-      btnADDNovoHH.Enabled:= True;
-    end
-  else
-    begin
-       btnADDNovoHH.Caption:= btnADDNovoHH.Caption + ' - ' + GetNetUserName;
-       btnADDNovoHH.Enabled:= False;
-    end;
-    Strinpesq:= '';
+{
+    if (UsuarioConexao = 'lucas.tavares') or (UsuarioConexao = '1.1.12675') or (UsuarioConexao = 'lucas')  then
+      begin
+        btnADDNovoHH.Caption:= btnADDNovoHH.Caption + ' - ' + GetNetUserName;
+        btnADDNovoHH.Enabled:= True;
+      end
+    else
+      begin
+         btnADDNovoHH.Caption:= btnADDNovoHH.Caption + ' - ' + GetNetUserName;
+         btnADDNovoHH.Enabled:= False;
+      end;
+      Strinpesq:= '';
+}
 
   UsuarioConexao:= 'Lucas Bisco Tavares';
  // Colocando o Forme no Tamanho
@@ -3101,7 +4277,7 @@ begin
   edtPesquisa.TextHint:= 'Pesquisa Por: Nome, E-mail, HH_Excel, Grupo_Carteira, ONOFF';
 
 // Jogar dados no rodape
-  statPesquisa.Panels[0].Text:= UsuarioConexao;
+  statPesquisa.Panels[0].Text:= 'Usuário Conectado: ' + UsuarioConexao;
 
   btnVoltar.Enabled:= False;
 
@@ -3150,15 +4326,22 @@ begin
 
             if (qry.RecordCount = 0) then // Se não encontrar dados
                begin
+                  statPesquisa.Panels[1].Text:='';
                   mensagem:= ' Não Existe Arquivos Cadastrado, ' + #13
-                           +'Favor Verificar com Ad. Do Banco.';
+                           + ' Favor Verificar com Ad. Do Banco.';
                   Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
                end
             else
               begin
-                  statPesquisa.Panels[1].Text:= qry.RecordCount.ToString; // Mostrar quantidade de Registros
+                 if (qry.RecordCount = 1) then
+                   begin
+                      statPesquisa.Panels[1].Text:= qry.RecordCount.ToString + ' e-mail Cadastrado para receber.'; // Mostrar quantidade de Registros
+                   end
+                 else
+                   begin
+                      statPesquisa.Panels[1].Text:= qry.RecordCount.ToString + ' e-mails Cadastrados para receber.'; // Mostrar quantidade de Registros
+                   end;
               end;
-
           end;
   Except
     on E:Exception do
@@ -3506,6 +4689,119 @@ begin
    btnCancelar.Enabled:= False;
 end;
 
+procedure TF_Principal.RadioButtonVoltarporEmailClick(Sender: TObject);
+begin
+{$REGION 'Ação - Volta por E-mail'}
+  GridEditarAntesMudanca.Tag:= 1;
+
+  pnlVoltarporCliente.Visible:= False;
+  pnlVoltarporCliente.Enabled:=False;
+
+  pnlVoltarporEmail.Top:= 49;
+  pnlVoltarporEmail.Visible:=True;
+  pnlVoltarporEmail.Enabled:= True;
+  edtEditarPesq.SetFocus;
+  pnlAntesMudanca.Visible:= True;
+  pnlAntesMudanca.Top:= 243;
+  pnlPosMudanca.Visible:= False;
+  Height:= 657;
+  F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
+  F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
+
+  lblMudancaRegistros1.Visible:= False;
+  lblMudancaRegistrosAntes2.Visible:= False;
+  lblAntesMudanca1.Visible:= False;
+  btnEmailReativar.Enabled:= False;
+
+  edtEditarPesq.Clear;
+  ComboBoxEditarEmailCliente.Clear;
+  ComboBoxEditarEmailArqExcel.Clear;
+  ComboBoxEditarEmailGrupoCarteira.Clear;
+  ComboBoxClienteCliente.Clear;
+  ComboBoxClienteArqExcel.Clear;
+  ComboBoxClienteGrupoCarteira.Clear;
+  F_Principal.AdoQ_Pesquisa.Close;
+  F_Principal.statPesquisa.Panels[1].Text:= '';
+{$ENDREGION 'Ação Volta por E-mail'}
+end;
+
+procedure TF_Principal.RadioButtonVoltClienteClick(Sender: TObject);
+var
+  qry: TADOQuery;
+  strSQL: string;
+begin
+   GridEditarAntesMudanca.Tag:= 2;
+
+   pnlVoltarporEmail.Visible:=False;
+   pnlVoltarporEmail.Enabled:= False;
+
+   pnlPosMudanca.Visible:= False;
+   Height:= 657;
+   F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
+   F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
+
+   lblMudancaRegistros1.Visible:= False;
+   lblMudancaRegistrosAntes2.Visible:= False;
+   lblAntesMudanca1.Visible:= False;
+   btnClienteReativar.Enabled:= False;
+
+   edtEditarPesq.Clear;
+   ComboBoxEditarEmailCliente.Clear;
+   ComboBoxEditarEmailArqExcel.Clear;
+   ComboBoxEditarEmailGrupoCarteira.Clear;
+   ComboBoxClienteCliente.Clear;
+   ComboBoxClienteArqExcel.Clear;
+   ComboBoxClienteGrupoCarteira.Clear;
+   F_Principal.AdoQ_Pesquisa.Close;
+
+   try
+   // Criando Um ADOQUERY Em Tempo de Execução pegar Cliente
+     qry:= TADOQuery.Create(nil);
+     qry.Connection:= F_Principal.con_Geral;
+
+   // Criando o Select
+     strSql:= 'select distinct Cliente from hh.Lista_Email where ONOFF = 0 Order by cliente' ;
+
+     with qry do
+         begin
+           Close;
+           SQL.Clear;
+           SQL.Add(strSql);
+           Open;
+           First;
+           if (qry.RecordCount = 0) then // Se não encontrar dados
+              begin
+                 mensagem:= ' Não Existe Cliente para Reativar, ' + #13
+                          + ' Tudo certo por aqui. ';
+                 Application.MessageBox(PChar(mensagem),PChar(MensageAppMesBox),MB_OK+MB_ICONINFORMATION);
+                 ComboBoxClienteCliente.Enabled:= False;
+              end
+           else
+             begin
+//               ComboExcluirCliente.Clear;
+                while not qry.Eof do
+                  begin
+                     ComboBoxClienteCliente.Items.Add(qry.FieldByName('Cliente').AsAnsiString);
+                     qry.Next;
+                  end;
+             end;
+         end;
+   Except
+     on E:Exception do
+        Begin
+           Showmessage('Erro Arrumar:4 ' + E.Message);
+           Exit;
+        End;
+   End;
+
+  pnlVoltarporCliente.Top:= 49;
+  pnlVoltarporCliente.Visible:= True;
+  pnlVoltarporCliente.Enabled:=True;
+  pnlAntesMudanca.Visible:= True;
+  pnlAntesMudanca.Align:= alClient;
+  F_Principal.statPesquisa.Panels[1].Text:= '';
+end;
+
 procedure TF_Principal.RadioGroupArquiExistClick(Sender: TObject);
 begin
    btnAdicionar.Tag:= 1;
@@ -3548,28 +4844,38 @@ var
   qry: TADOQuery;
   strSQL: string;
 begin
-  GridExcluir.Tag:= 2;
+   GridExcluir.Tag:= 2;
 
-  pnlPesqExcluir.Visible:=False;
-  pnlPesqExcluir.Enabled:= False;
+   pnlPesqExcluir.Visible:=False;
+   pnlPesqExcluir.Enabled:= False;
 
-  pnlEdicao.Visible:= False;
-  Height:= 657;
+   pnlEdicao.Visible:= False;
+   Height:= 657;
    F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
    F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
 
-  lblAntesMudanca.Visible:= False;
+   lblAntesMudanca.Visible:= False;
+   lblMudancaRegistros.Visible:= False;
+   lblMudancaRegistrosAntes.Visible:= False;
+   btnExcluir1.Enabled:= False;
 
-  edtPesqExluir.Clear;
-  ComboExcluirCliente.Clear;
-  ComboExcluirHH.Clear;
-  ComboExcluirCarteira.Clear;
-  ComboExcluirClienteCL.Clear;
-  ComboExcluirArqExcCL.Clear;
-  ComboExcluirGCarteiraCL.Clear;
-  AdoQ_Pesquisa.Close;
+   edtPesqExluir.Clear;
+   ComboExcluirCliente.Clear;
+   ComboExcluirHH.Clear;
+   ComboExcluirCarteira.Clear;
+   ComboExcluirClienteCL.Clear;
+   ComboExcluirArqExcCL.Clear;
+   ComboExcluirGCarteiraCL.Clear;
+   AdoQ_Pesquisa.Close;
 
+   pnlSemEmail.Top:= 49;
+   pnlSemEmail.Visible:= True;
+   pnlSemEmail.Enabled:=True;
+   pnlGridExcluir.Visible:= True;
+   pnlGridExcluir.Align:= alClient;
+   statPesquisa.Panels[1].Text:= '';
 
+{$REGION 'Voltar por e-mail Alimenta Combo de Cliente'}
    try
    // Criando Um ADOQUERY Em Tempo de Execução pegar Cliente
      qry:= TADOQuery.Create(nil);
@@ -3607,14 +4913,7 @@ begin
            Showmessage('Erro Arrumar:4 ' + E.Message);
            Exit;
         End;
-   End;
-
-  pnlSemEmail.Top:= 49;
-  pnlSemEmail.Visible:= True;
-  pnlSemEmail.Enabled:=True;
-  pnlGridEscluir.Visible:= True;
-  pnlGridEscluir.Align:= alClient;
-  statPesquisa.Panels[1].Text:= '';
+   End;  {$ENDREGION 'Voltar por e-mail Alimenta Combo de Cliente'}
 end;
 
 procedure TF_Principal.rbExcluirEmailClick(Sender: TObject);
@@ -3628,15 +4927,18 @@ begin
   pnlPesqExcluir.Visible:=True;
   pnlPesqExcluir.Enabled:= True;
   edtPesqExluir.SetFocus;
-  pnlGridEscluir.Visible:= True;
-  pnlGridEscluir.Top:= 243;
+  pnlGridExcluir.Visible:= True;
+  pnlGridExcluir.Top:= 243;
 
   pnlEdicao.Visible:= False;
   Height:= 657;
   F_Principal.Left:= (Screen.Width div 2) - (F_Principal.Width div 2);
   F_Principal.Top:= (Screen.Height div 2) - (F_Principal.Height div 2);
 
+  lblMudancaRegistros.Visible:= False;
+  lblMudancaRegistrosAntes.Visible:= False;
   lblAntesMudanca.Visible:= False;
+  btnExcluir.Enabled:= False;
 
   edtPesqExluir.Clear;
   ComboExcluirCliente.Clear;
@@ -3658,8 +4960,8 @@ begin
 
   pnlSemEmail.Visible:= False;
   pnlSemEmail.Enabled:=False;
-  pnlGridEscluir.Visible:= True;
-  pnlGridEscluir.Align:= alClient;
+  pnlGridExcluir.Visible:= True;
+  pnlGridExcluir.Align:= alClient;
 
   pnlEdicao.Visible:= False;
   Height:= 657;
@@ -3769,6 +5071,8 @@ strsql: string;
 
 begin
   btnVoltar.Enabled:= True;
+  ComboEmailEnviado.Clear;
+  EditPesqMemo.Clear;
 
 // Criando Um ADOQUERY Em Tempo de Execução
    qry:= TADOQuery.Create(nil);
@@ -3839,6 +5143,7 @@ begin
                end
             else
               begin
+                statPesquisa.Panels[1].Text:= AdoQ_Grid.RecordCount.ToString;
                //   DTS.DataSet:= qry;
                 //  GridArqCadastrados.DataSource:= DTS;
 
@@ -3885,6 +5190,11 @@ begin
                     end;
             end;
       end;
+end;
+
+procedure TF_Principal.tmrDataHoraPrincipalTimer(Sender: TObject);
+begin
+  statPesquisa.Panels[2].Text:= ' ' + FormatDateTime(' hh:nn:ss',Now) +' - ' +  FormatDateTime(' dddddd',Now);
 end;
 
 function TF_Principal.ValidarEmail(email: string): Boolean;

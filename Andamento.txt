@@ -17,10 +17,3 @@ envie um repositório existente a partir da linha de comando
 git remote add origin git@github.com:lucasbiscogit/Delphi_HH_Email.git
  git branch -M main 
 git push -u origin main
-
-
-$ git add.
-git: 'add.' is not a git command. See 'git --help'.
-
-The most similar command is
-        add
