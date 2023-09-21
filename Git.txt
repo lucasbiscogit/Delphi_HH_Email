@@ -1,0 +1,19 @@
+git@github.com:lucasbiscogit/Delphi_HH_Email.git
+
+
+crie um novo repositório na linha de comando
+echo "# Delphi_HH_Email" >> README.md 
+git init 
+git add README.md 
+git commit -m "first commit" 
+git branch -M main 
+git remote add origin git@github.com:lucasbiscogit/Delphi_HH_Email.git
+ git push -u origin principal
+
+
+
+
+envie um repositório existente a partir da linha de comando
+git remote add origin git@github.com:lucasbiscogit/Delphi_HH_Email.git
+ git branch -M main 
+git push -u origin main

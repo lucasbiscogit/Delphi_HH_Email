@@ -184,7 +184,7 @@ object F_Principal: TF_Principal
     Width = 927
     Height = 758
     Hint = 'Fechar'
-    ActivePage = SheetPesquisa
+    ActivePage = TabSheetSheetEdicao
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 2

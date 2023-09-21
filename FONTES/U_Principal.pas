@@ -1225,7 +1225,7 @@ var
   strSQL : string;
 begin
 
-  { if edtEditarPesq.Text <> '' then
+   if edtEditarPesq.Text <> '' then
       begin
          strSQL:= ' UPDATE hh.Lista_Email ';
          strSQL:= strSQL + ' SET ONOFF = 1 ';
@@ -1252,13 +1252,13 @@ begin
          F_Principal.AdoQ_Excluir.SQL.Add(strSQL);
          F_Principal.AdoQ_Excluir.ExecSQL;
 
-      end; } // se precisar tirar temporario
+      end;  // se precisar tirar temporario
 
 {$REGION 'Para mostrar Resultado da Grid Excluir'}
   strsql:= 'select ID, Nome, Email, HH_Excel, Grupo_Carteira GCarteira, Cliente,  Case onoff when 1 then ''Verdadeiro'' else ''Falso'' end Recebe ' ;
   strsql:= strsql + ' from hh.Lista_Email ';
   strsql:= strsql + ' where Email like ' + #39 + edtEditarPesq.Text + #37 + #39;
-  strsql:= strsql + ' and ONOFF <> 1 ';
+  strsql:= strsql + ' and ONOFF = 1 ';
 
   if ComboBoxEditarEmailCliente.Text <> '' then
    begin
@@ -1282,7 +1282,7 @@ begin
 {$ENDREGION 'Para mostrar Resultado da Grid Excluir'}
 
 {$REGION 'Verificar quantidade de Registro para Mostrar a Mensagem'}
-//Verificar se é registro unico
+//Verificar se é registro unico - Somente para mensagem
    if F_Principal.AdoQ_Excluir.RecordCount = 1 then
       begin
          F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Desativar - '
@@ -3955,7 +3955,7 @@ var
   UserUnico: Integer;
   qry: TADOQuery;
 begin
-  if Trim(edtEditarPesq.Text) <> '' then
+   if Trim(edtEditarPesq.Text) <> '' then
     begin
 
     {$REGION 'Verificando se a apenas um e-mail para trabalhar'}
@@ -4016,27 +4016,32 @@ begin
                  First;
 
               //Verificar se é registro unico
-                 if RecordCount = 1 then
+                 if RecordCount >= 1 then
+                    begin
+                       GridExcluir.Tag := 1;
+                    end
+                 else
+                   if RecordCount = 1 then
                     begin
                        F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Conta Para Reativar '; // Mostrar quantidade de Registros
                        lblMudancaRegistrosAntes2.Visible:= True;
                        lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registro ';
                        btnEmailReativar.Enabled:= True;
                     end
-                 else
-                    if RecordCount = 0 then
-                      begin
-                          F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
-                          lblMudancaRegistrosAntes2.Visible:= False;
-                          btnEmailReativar.Enabled:= False;
-                      end
-                    else
-                      begin
-                        F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
-                        lblMudancaRegistrosAntes2.Visible:= True;
-                        lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
-                        btnEmailReativar.Enabled:= True;
-                      end;
+                   else
+                        if RecordCount = 0 then
+                          begin
+                              F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ''; // Mostrar quantidade de Registros
+                              lblMudancaRegistrosAntes2.Visible:= False;
+                              btnEmailReativar.Enabled:= False;
+                          end
+                        else
+                          begin
+                            F_Principal.statPesquisa.Panels[1].Text:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Contas Para Reativar '; // Mostrar quantidade de Registros
+                            lblMudancaRegistrosAntes2.Visible:= True;
+                            lblMudancaRegistrosAntes2.Caption:= F_Principal.AdoQ_Pesquisa.RecordCount.ToString + ' Registros ';
+                            btnEmailReativar.Enabled:= True;
+                          end;
               end;
 
         {$REGION 'Após ter verificado que só tem um email unico faz as açoes necessarias, e Alimenta o comboCliente'}
@@ -4461,6 +4466,7 @@ end;
 
 procedure TF_Principal.GridExcluirDblClick(Sender: TObject);
 begin
+
   if GridExcluir.Tag = 1 then
     begin
       edtPesqExluir.Text:= (GridExcluir.DataSource.DataSet.FieldByName('email').AsString);
@@ -4470,18 +4476,19 @@ begin
       ComboExcluirCliente.Items.Add (GridExcluir.DataSource.DataSet.FieldByName('cliente').AsString);
       ComboExcluirCliente.ItemIndex:= 0;
 
-      ComboExcluirHH.Clear;
-      ComboExcluirHH.Enabled:= True;
-      ComboExcluirHH.Items.Add (GridExcluir.DataSource.DataSet.FieldByName('HH_Excel').AsString);
-      ComboExcluirHH.ItemIndex:= 0;
+     // ComboExcluirHH.Clear;
+    //  ComboExcluirHH.Enabled:= True;
+     // ComboExcluirHH.Items.Add (GridExcluir.DataSource.DataSet.FieldByName('HH_Excel').AsString);
+     // ComboExcluirHH.ItemIndex:= 0;
 
-      ComboExcluirCarteira.Clear;
-      ComboExcluirCarteira.Enabled:= True;
-      ComboExcluirCarteira.Items.Add (GridExcluir.DataSource.DataSet.FieldByName('GCarteira').AsString);
-      ComboExcluirCarteira.ItemIndex:= 0;
+    //  ComboExcluirCarteira.Clear;
+     // ComboExcluirCarteira.Enabled:= True;
+     // ComboExcluirCarteira.Items.Add (GridExcluir.DataSource.DataSet.FieldByName('GCarteira').AsString);
+     // ComboExcluirCarteira.ItemIndex:= 0;
 
-      ComboExcluirCarteira.OnSelect(Sender);
-      btnexcluir.Enabled:= True;
+//      ComboExcluirCarteira.OnSelect(Sender);
+     // ComboBoxEditarEmailGrupoCarteira.OnSelect(Sender);
+     // btnexcluir.Enabled:= True;
     end;
 
 end;
